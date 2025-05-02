@@ -4,7 +4,6 @@
 
 {
   inputs,
-  config,
   lib,
   pkgs,
   ...

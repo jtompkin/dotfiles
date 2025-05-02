@@ -7,6 +7,10 @@
       url = "github:nix-community/disko/latest";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixos-wsl = {
+      url = "github:nix-community/NixOS-WSL/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -23,15 +27,20 @@
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
-        system = system;
+        inherit system;
         overlays = [ nixgl.overlay ];
       };
     in
     {
-      nixosConfigurations.imperfect = pkgs.lib.nixosSystem {
-        system = system;
+      nixosConfigurations."imperfect" = pkgs.lib.nixosSystem {
+        inherit system;
         specialArgs = { inherit inputs; };
         modules = [ hosts/imperfect/configuration.nix ];
+      };
+      nixosConfigurations."nixos-wsl" = pkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = { inherit inputs; };
+        modules = [ hosts/nixos-wsl/configuration.nix ];
       };
       homeConfigurations."deck" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.${system};
