@@ -21,23 +21,19 @@
     inputs@{
       nixpkgs,
       home-manager,
-      nixgl,
       ...
     }:
     let
       system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
-        overlays = [ nixgl.overlay ];
-      };
     in
     {
-      nixosConfigurations."imperfect" = pkgs.lib.nixosSystem {
+      nixosConfigurations."imperfect" = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = { inherit inputs; };
         modules = [ hosts/imperfect/configuration.nix ];
       };
-      nixosConfigurations."nixos-wsl" = pkgs.lib.nixosSystem {
+      # WSL2
+      nixosConfigurations."nixos" = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = { inherit inputs; };
         modules = [ hosts/nixos-wsl/configuration.nix ];
