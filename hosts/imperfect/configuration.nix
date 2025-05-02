@@ -52,6 +52,7 @@
           umount "$MNTPOINT"
         '';
   };
+
   networking = {
     hostName = "imperfect";
     networkmanager.enable = true;
@@ -85,7 +86,7 @@
   users.users.josh = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
-    hashedPasswordFile = "./password.sha512";
+    hashedPassword = lib.mkDefault (lib.fileContents ./password.sha512);
   };
 
   home-manager = {
