@@ -65,7 +65,7 @@
     };
 
     oh-my-posh = {
-      enable = true;
+      enable = false;
       enableZshIntegration = true;
       useTheme = "space";
     };
@@ -146,6 +146,8 @@
       enableZshIntegration = true;
       enableSshSupport = true;
       pinentry.package = pkgs.pinentry-tty;
+      defaultCacheTtl = 3600;
+      defaultCacheTtlSsh = 3600;
       extraConfig = ''
         allow-loopback-pinentry
       '';
