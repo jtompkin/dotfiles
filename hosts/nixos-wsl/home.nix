@@ -34,7 +34,7 @@
         ssh-vm = "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
         scp-vm = "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
       };
-      initExtra = # sh
+      initContent = # sh
         ''
           eval "$(batpipe)"
           alias -g -- --belp='--help 2>&1 | bat --language=help --style=plain'
@@ -55,11 +55,6 @@
           src = pkgs.zsh-vi-mode;
           file = "share/zsh-vi-mode/zsh-vi-mode.plugin.zsh";
         }
-        #{
-        #  name = "autopair";
-        #  src = pkgs.zsh-autopair;
-        #  file = "share/zsh-autopair/zsh-autopair.plugin.zsh";
-        #}
       ];
     };
 
@@ -70,7 +65,7 @@
     };
 
     oh-my-posh = {
-      enable = false;
+      enable = true;
       enableZshIntegration = true;
       useTheme = "space";
     };
@@ -131,11 +126,17 @@
       changeDirWidgetCommand = "";
     };
 
+    gpg = {
+      enable = true;
+      settings = {
+        pinentry-mode = "loopback";
+      };
+    };
+
     neovim = import nvim/config.nix { inherit pkgs; };
 
     fd.enable = true;
     ripgrep.enable = true;
-    gpg.enable = true;
     home-manager.enable = true;
   };
 
@@ -144,7 +145,10 @@
       enable = true;
       enableZshIntegration = true;
       enableSshSupport = true;
-      pinentryPackage = pkgs.pinentry-tty;
+      pinentry.package = pkgs.pinentry-tty;
+      extraConfig = ''
+        allow-loopback-pinentry
+      '';
       sshKeys = [
         "B5BE9A6227DB43612DCA51604EF35ABB0FD50B27"
       ];
