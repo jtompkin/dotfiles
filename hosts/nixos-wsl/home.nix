@@ -33,6 +33,7 @@
         fd = "fd --one-file-system";
         ssh-vm = "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
         scp-vm = "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
+        rebuild = "sudo git -C /etc/nixos pull && sudo nixos-rebuild switch";
       };
       initContent = # sh
         ''
