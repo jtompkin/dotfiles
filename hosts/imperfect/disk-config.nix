@@ -77,10 +77,6 @@ in
                   mountpoint = "/persist";
                   mountOptions = btrfsOptions [ ];
                 };
-                "@var@log" = {
-                  mountpoint = "/var/log";
-                  mountOptions = btrfsOptions [ ];
-                };
               };
             };
           };
@@ -95,5 +91,4 @@ in
     };
   };
   fileSystems."/persist".neededForBoot = true;
-  fileSystems."/var/log".neededForBoot = true;
 }
