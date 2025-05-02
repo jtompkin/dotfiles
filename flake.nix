@@ -27,6 +27,7 @@
       system = "x86_64-linux";
     in
     {
+      # VirtualBox vm
       nixosConfigurations."imperfect" = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = { inherit inputs; };
@@ -38,6 +39,7 @@
         specialArgs = { inherit inputs; };
         modules = [ hosts/nixos-wsl/configuration.nix ];
       };
+      # Steam Deck
       homeConfigurations."deck" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.${system};
         extraSpecialArgs = { inherit inputs; };
