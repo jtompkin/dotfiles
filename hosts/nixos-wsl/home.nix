@@ -23,7 +23,6 @@
     zsh = {
       enable = true;
       shellAliases = {
-        hm = "home-manager";
         cat = "bat --paging=never";
         ls = "ls --color=tty --group-directories-first";
         l = "ls -lAhpv";
@@ -34,6 +33,7 @@
         ssh-vm = "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
         scp-vm = "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
         rebuild = "sudo git -C /etc/nixos pull && sudo nixos-rebuild switch";
+        update = "sudo nix flake update --flake /etc/nixos && cp /etc/nixos/flake.lock ~/Projects/dotfiles";
       };
       initContent = # sh
         ''
