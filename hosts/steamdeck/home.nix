@@ -53,7 +53,7 @@ in
       enable = true;
       shellAliases = {
         hm = "home-manager";
-        hms = "home-manager switch";
+        hmsw = "home-manager --flake 'github:jtompkin/dotfiles#deck' switch";
         cat = "bat --paging=never";
         ls = "ls --color=tty --group-directories-first";
         l = "ls -lAhpv";
