@@ -23,6 +23,7 @@ in
       dust
       nix-index
       nerd-fonts.meslo-lg
+      waydroid
 
       goclacker
       (config.lib.nixGL.wrap (
