@@ -77,6 +77,6 @@
     home-manager.enable = true;
   };
   wayland.windowManager.sway = {
-    enable = true;
+    enable = false;
   };
 }
