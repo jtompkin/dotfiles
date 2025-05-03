@@ -53,6 +53,7 @@ in
       enable = true;
       shellAliases = {
         hm = "home-manager";
+        hms = "home-manager switch";
         cat = "bat --paging=never";
         ls = "ls --color=tty --group-directories-first";
         l = "ls -lAhpv";
@@ -62,7 +63,7 @@ in
         ssh-vm = "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
         scp-vm = "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
       };
-      initExtra =
+      initContent =
         # sh
         ''
           eval "$(batpipe)"
