@@ -124,8 +124,9 @@
 
     displayManager = {
       sddm = {
-        enable = false;
+        enable = true;
         wayland.enable = true;
+        autoNumlock = true;
       };
     };
   };
