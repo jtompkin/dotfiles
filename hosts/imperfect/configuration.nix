@@ -108,6 +108,10 @@
     };
   };
 
+  programs = {
+    sway.enable = true;
+  };
+
   services = {
     openssh.enable = true;
 
