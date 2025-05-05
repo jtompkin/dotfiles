@@ -23,6 +23,7 @@ in
       dust
       nix-index
       nerd-fonts.meslo-lg
+      waydroid
 
       goclacker
       (config.lib.nixGL.wrap (
@@ -53,6 +54,7 @@ in
       enable = true;
       shellAliases = {
         hm = "home-manager";
+        hmsw = "home-manager --flake 'github:jtompkin/dotfiles#deck' switch";
         cat = "bat --paging=never";
         ls = "ls --color=tty --group-directories-first";
         l = "ls -lAhpv";
@@ -62,7 +64,7 @@ in
         ssh-vm = "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
         scp-vm = "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
       };
-      initExtra =
+      initContent =
         # sh
         ''
           eval "$(batpipe)"
@@ -182,7 +184,7 @@ in
       enable = true;
       enableZshIntegration = true;
       enableSshSupport = true;
-      pinentryPackage = pkgs.pinentry-qt;
+      pinentry.package = pkgs.pinentry-qt;
       sshKeys = [
         "B5BE9A6227DB43612DCA51604EF35ABB0FD50B27"
       ];
