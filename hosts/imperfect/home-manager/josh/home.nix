@@ -76,7 +76,7 @@
     ripgrep.enable = true;
     home-manager.enable = true;
   };
-  wayland.windowManager.sway = {
-    enable = false;
-  };
+  #wayland.windowManager.sway = {
+  #  enable = true;
+  #};
 }

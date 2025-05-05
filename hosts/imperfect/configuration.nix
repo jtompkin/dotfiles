@@ -122,12 +122,12 @@
       };
     };
 
-    displayManager = {
-      sddm = {
-        enable = false;
-        wayland.enable = true;
-      };
-    };
+    #displayManager = {
+    #  sddm = {
+    #    enable = true;
+    #    wayland.enable = true;
+    #  };
+    #};
   };
 
   system.stateVersion = "25.05";
