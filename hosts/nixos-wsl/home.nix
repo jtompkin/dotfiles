@@ -87,6 +87,7 @@
         ''
           set -g status-position top
           bind-key C-t set status
+          set-option -a terminal-features 'xterm-256color:RGB'
         '';
       plugins = with pkgs.tmuxPlugins; [
         sensible
