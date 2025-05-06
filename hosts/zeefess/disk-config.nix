@@ -35,7 +35,7 @@
       zroot = {
         type = "zpool";
         rootFsOptions = {
-          mountpoint = "none";
+          mountpoint = null;
           compression = "zstd";
           acltype = "posixacl";
           xattr = "sa";
@@ -52,7 +52,7 @@
         datasets = {
           "local" = {
             type = "zfs_fs";
-            mountpoint = "none";
+            mountpoint = null;
           };
           "local/root" = {
             type = "zfs_fs";
@@ -70,7 +70,7 @@
           };
           "safe" = {
             type = "zfs_fs";
-            mountpoint = "none";
+            mountpoint = null;
           };
           "safe/home" = {
             type = "zfs_fs";
