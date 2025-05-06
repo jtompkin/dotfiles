@@ -35,7 +35,7 @@
   };
 
   networking = {
-    hostID = "ea51e3e9";
+    hostId = "ea51e3e9";
     hostName = "zeefess";
     networkmanager.enable = true;
   };
