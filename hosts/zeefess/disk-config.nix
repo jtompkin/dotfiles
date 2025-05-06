@@ -20,11 +20,27 @@
                 ];
               };
             };
+            encryptedSwap = {
+              size = "1G";
+              content = {
+                type = "swap";
+                randomEncryption = true;
+                priority = 100;
+              };
+            };
+            plainSwap = {
+              size = "1G";
+              content = {
+                type = "swap";
+                discardPolicy = "both";
+                resumeDevice = true;
+              };
+            };
             zfs = {
               size = "100%";
               content = {
                 type = "zfs";
-                pool = "zroot";
+                pool = "rpool";
               };
             };
           };
@@ -32,11 +48,11 @@
       };
     };
     zpool = {
-      zroot = {
+      rpool = {
         type = "zpool";
         rootFsOptions = {
           mountpoint = "none";
-          compression = "zstd";
+          compression = "on";
           acltype = "posixacl";
           xattr = "sa";
           relatime = "on";
@@ -54,33 +70,37 @@
             type = "zfs_fs";
             mountpoint = null;
           };
-          "local/root" = {
-            type = "zfs_fs";
-            mountpoint = "/";
-            postCreateHook =
-              # sh
-              ''
-                zfs snapshot zroot/local/root@blank
-              '';
-          };
           "local/nix" = {
             type = "zfs_fs";
             options.mountpoint = "/nix";
             mountpoint = "/nix";
           };
-          "safe" = {
+          "system" = {
             type = "zfs_fs";
             mountpoint = null;
           };
-          "safe/home" = {
+          "system/root" = {
             type = "zfs_fs";
-            options.mountpoint = "/home";
-            mountpoint = "/home";
+            mountpoint = "/";
+            postCreateHook =
+              # sh
+              ''
+                zfs snapshot zroot/system/root@blank
+              '';
           };
-          "safe/persist" = {
+          "system/persist" = {
             type = "zfs_fs";
             options.mountpoint = "/persist";
             mountpoint = "/persist";
+          };
+          "user" = {
+            type = "zfs_fs";
+            mountpoint = null;
+          };
+          "user/home" = {
+            type = "zfs_fs";
+            options.mountpoint = "/home";
+            mountpoint = "/home";
           };
         };
       };
