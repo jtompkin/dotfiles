@@ -109,13 +109,13 @@
       };
     };
 
-    displayManager = {
-      sddm = {
-        enable = true;
-        wayland.enable = true;
-        autoNumlock = true;
-      };
-    };
+    #displayManager = {
+    #  sddm = {
+    #    enable = true;
+    #    wayland.enable = true;
+    #    autoNumlock = true;
+    #  };
+    #};
   };
 
   virtualisation = {
