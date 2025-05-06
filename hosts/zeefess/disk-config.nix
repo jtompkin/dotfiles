@@ -20,20 +20,22 @@
                 ];
               };
             };
-            encryptedSwap = {
+            luksSwap = {
               size = "1G";
               content = {
-                type = "swap";
-                randomEncryption = true;
-                priority = 100;
-              };
-            };
-            plainSwap = {
-              size = "1G";
-              content = {
-                type = "swap";
-                discardPolicy = "both";
-                resumeDevice = true;
+                type = "luks";
+                name = "swapcrypt";
+                extraOpenArgs = [ ];
+                askPassword = true;
+                settings = {
+                  allowDiscards = true;
+                };
+                content = {
+                  type = "swap";
+                  discardPolicy = "both";
+                  priority = 100;
+                  resumeDevice = true;
+                };
               };
             };
             zfs = {
