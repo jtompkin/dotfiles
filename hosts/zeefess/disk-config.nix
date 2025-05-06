@@ -85,7 +85,7 @@
             postCreateHook =
               # sh
               ''
-                zfs snapshot zroot/system/root@blank
+                zfs snapshot rpool/system/root@blank
               '';
           };
           "system/persist" = {

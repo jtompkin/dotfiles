@@ -30,7 +30,7 @@
     initrd.postResumeCommands =
       lib.mkAfter # sh
         ''
-          zfs rollback -r zroot/local/root@blank
+          zfs rollback -r rpool/system/root@blank
         '';
   };
 
