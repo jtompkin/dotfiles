@@ -22,25 +22,20 @@
       home-manager,
       ...
     }:
-    let
-      system = "x86_64-linux";
-    in
     {
-      # VirtualBox vm
+      # VirtualBox x86_64-linux vm
       nixosConfigurations."imperfect" = nixpkgs.lib.nixosSystem {
-        inherit system;
         specialArgs = { inherit inputs; };
         modules = [ hosts/imperfect/configuration.nix ];
       };
       # WSL2
       nixosConfigurations."nixos" = nixpkgs.lib.nixosSystem {
-        inherit system;
         specialArgs = { inherit inputs; };
         modules = [ hosts/nixos-wsl/configuration.nix ];
       };
       # Steam Deck
       homeConfigurations."deck" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.${system};
+        pkgs = nixpkgs.legacyPackages."x86_64-linux";
         extraSpecialArgs = { inherit inputs; };
         modules = [ hosts/steamdeck/home.nix ];
       };

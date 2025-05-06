@@ -133,7 +133,7 @@
       };
     };
 
-    neovim = import nvim/config.nix { inherit pkgs; };
+    neovim = import ../../configs/apps/neovim/full { inherit pkgs; };
 
     fd.enable = true;
     ripgrep.enable = true;

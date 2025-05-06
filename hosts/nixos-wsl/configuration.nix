@@ -13,17 +13,15 @@
 
 {
   imports = with inputs; [
-    # include NixOS-WSL modules
     nixos-wsl.nixosModules.default
     home-manager.nixosModules.home-manager
   ];
 
+  nixpkgs.hostPlatform = "x86_64-linux";
+
   environment = {
     systemPackages = with pkgs; [
       vim
-    ];
-    pathsToLink = [
-      "/share/zsh"
     ];
   };
 

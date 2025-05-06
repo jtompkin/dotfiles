@@ -7,7 +7,6 @@
 }:
 let
   goclacker = (import pkgs/goclacker { pkgs = pkgs; }).goclacker;
-  neovimCfg = import nvim/config.nix { pkgs = pkgs; };
 in
 {
   home = {
@@ -173,7 +172,7 @@ in
       package = config.lib.nixGL.wrap pkgs.mpv;
     };
 
-    neovim = neovimCfg;
+    neovim = import ../../configs/apps/neovim/full { inherit pkgs; };
     fd.enable = true;
     ripgrep.enable = true;
     home-manager.enable = true;

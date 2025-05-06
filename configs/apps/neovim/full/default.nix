@@ -1,3 +1,4 @@
+# home-manager configuration for neovim
 { pkgs, ... }:
 {
   enable = true;
@@ -18,7 +19,8 @@
     {
       plugin = nvim-autopairs;
       type = "lua";
-      config = # Lua
+      config =
+        # Lua
         ''require("nvim-autopairs").setup({})'';
     }
     {
@@ -71,16 +73,14 @@
   ];
   extraPackages = with pkgs; [
     # LSPs
-    #nil # Nix
-    nixd # Nix
-    lua-language-server # Lua
-    pyright # Python
-    gopls # Go
+    nixd # # Nix
+    lua-language-server # # Lua
+    pyright # # Python
+    gopls # # Go
     # Formatters
-    #alejandra # Nix
-    nixfmt-rfc-style # Nix
-    stylua # Lua
-    black # Python
+    nixfmt-rfc-style # # Nix
+    stylua # # Lua
+    black # # Python
   ];
   extraLuaConfig =
     builtins.readFile ./set.lua + builtins.readFile ./remap.lua + builtins.readFile ./autocmd.lua;
