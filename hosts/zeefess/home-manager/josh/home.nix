@@ -40,10 +40,6 @@
         }
       ];
     };
-    oh-my-posh = {
-      enable = true;
-      useTheme = "space";
-    };
     tmux = {
       enable = true;
       keyMode = "vi";

@@ -97,29 +97,6 @@
 
   services = {
     openssh.enable = true;
-
-    snapper = {
-      configs = {
-        home = {
-          SUBVOLUME = "/home";
-          ALLOW_USERS = [ "josh" ];
-          TIMELINE_CREATE = true;
-          TIMELINE_CLEANUP = true;
-        };
-      };
-    };
-
-    #displayManager = {
-    #  sddm = {
-    #    enable = true;
-    #    wayland.enable = true;
-    #    autoNumlock = true;
-    #  };
-    #};
-  };
-
-  virtualisation = {
-    waydroid.enable = true;
   };
 
   system.stateVersion = "25.05";
