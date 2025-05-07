@@ -7,9 +7,14 @@ lspconfig.nixd.setup({
 	settings = {
 		nixd = {
 			options = {
-				--home_manager = {
-				--	expr = string.format([[(builtins.getFlake "")]]),
-				--},
+				home_manager = {
+					expr = string.format(
+						[[(builtins.getFlake "%s").homeConfigurations."%s@%s".options]],
+						vim.fn.expand("~/dotfiles"),
+						vim.env.USER,
+						vim.fn.hostname()
+					),
+				},
 				nixos = {
 					expr = string.format(
 						[[(builtins.getFlake "%s").nixosConfigurations."%s".options]],

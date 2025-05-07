@@ -42,6 +42,11 @@
         specialArgs = { inherit inputs; };
         modules = [ hosts/nixos-wsl/configuration.nix ];
       };
+      # Dummy for completion
+      homeConfigurations."nixos@josh" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages."x86_64-linux";
+        extraSpecialArgs = { inherit inputs; };
+      };
       # Steam Deck
       homeConfigurations."deck" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages."x86_64-linux";

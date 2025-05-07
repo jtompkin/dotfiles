@@ -7,9 +7,11 @@
 
 {
   inputs,
-  pkgs,
   ...
 }:
+let
+  pkgs = import inputs.nixpkgs { };
+in
 {
   imports = with inputs; [
     nixos-wsl.nixosModules.default
