@@ -7,10 +7,11 @@
 
 {
   inputs,
-  pkgs,
   ...
 }:
-
+let
+  pkgs = inputs.nixpkgs;
+in
 {
   imports = with inputs; [
     nixos-wsl.nixosModules.default
@@ -26,10 +27,13 @@
     ];
   };
 
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+  nix = {
+    settings.experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+    nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+  };
 
   wsl = {
     enable = true;

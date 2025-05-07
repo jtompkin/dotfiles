@@ -4,22 +4,22 @@ lspconfig.pyright.setup({ capabilities = capabilities })
 lspconfig.gopls.setup({ capabilities = capabilities })
 lspconfig.nixd.setup({
 	capabilities = capabilities,
-	--settings = {
-	--	nixd = {
-	--		options = {
-	--			home_manager = {
-	--				expr = "(import <home-manager/modules> { configuration = ~/.config/home-manager/home.nix; pkgs = import <nixpkgs> {}; }).options",
-	--			},
-	--			nixos = {
-	--				expr = string.format(
-	--					[[(builtins.getFlake "%s").nixosConfigurations."%s".options]],
-	--					vim.fn.expand("~/dotfiles"),
-	--					vim.fn.hostname()
-	--				),
-	--			},
-	--		},
-	--	},
-	--},
+	settings = {
+		nixd = {
+			options = {
+				--home_manager = {
+				--	expr = string.format([[(builtins.getFlake "")]]),
+				--},
+				nixos = {
+					expr = string.format(
+						[[(builtins.getFlake "%s").nixosConfigurations."%s".options]],
+						vim.fn.expand("~/dotfiles"),
+						vim.fn.hostname()
+					),
+				},
+			},
+		},
+	},
 })
 lspconfig.lua_ls.setup({
 	capabilities = capabilities,
