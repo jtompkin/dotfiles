@@ -7,11 +7,9 @@
 
 {
   inputs,
+  pkgs,
   ...
 }:
-let
-  pkgs = inputs.nixpkgs;
-in
 {
   imports = with inputs; [
     nixos-wsl.nixosModules.default
