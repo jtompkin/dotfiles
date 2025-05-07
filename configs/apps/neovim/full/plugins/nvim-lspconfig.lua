@@ -9,10 +9,8 @@ lspconfig.nixd.setup({
 			options = {
 				home_manager = {
 					expr = string.format(
-						[[(builtins.getFlake "%s").homeConfigurations."%s@%s".options]],
-						vim.fn.expand("~/dotfiles"),
-						vim.env.USER,
-						vim.fn.hostname()
+						[[(builtins.getFlake "%s").homeConfigurations."completion".options]],
+						vim.fn.expand("~/dotfiles")
 					),
 				},
 				nixos = {

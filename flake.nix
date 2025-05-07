@@ -42,16 +42,24 @@
         specialArgs = { inherit inputs; };
         modules = [ hosts/nixos-wsl/configuration.nix ];
       };
-      # Dummy for completion
-      homeConfigurations."nixos@josh" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages."x86_64-linux";
-        extraSpecialArgs = { inherit inputs; };
-      };
       # Steam Deck
-      homeConfigurations."deck" = home-manager.lib.homeManagerConfiguration {
+      homeConfigurations."steamdeck@deck" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages."x86_64-linux";
         extraSpecialArgs = { inherit inputs; };
         modules = [ hosts/steamdeck/home.nix ];
+      };
+      # Dummy for completion
+      homeConfigurations."completion" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages."x86_64-linux";
+        modules = [
+          {
+            home = {
+              username = "none";
+              homeDirectory = "/home/none";
+              stateVersion = "24.11";
+            };
+          }
+        ];
       };
     };
 }
