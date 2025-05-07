@@ -38,7 +38,6 @@
         ''
           eval "$(batpipe)"
           alias -g -- --belp='--help 2>&1 | bat --language=help --style=plain'
-          type uv &>/dev/null && eval "$(uv generate-shell-completion zsh)"
         '';
       oh-my-zsh = {
         enable = true;
@@ -65,7 +64,7 @@
     };
 
     oh-my-posh = {
-      enable = false;
+      enable = true;
       enableZshIntegration = true;
       useTheme = "space";
     };

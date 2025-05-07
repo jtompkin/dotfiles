@@ -27,6 +27,7 @@
       ...
     }:
     {
+      nix.nixPath = [ "nixpkgs=${nixpkgs}" ];
       # VirtualBox x86_64-linux vm
       nixosConfigurations."imperfect" = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };
