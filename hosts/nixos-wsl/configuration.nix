@@ -10,10 +10,13 @@
   pkgs,
   ...
 }:
-
+#let
+#  pkgs = import inputs.nixpkgs { };
+#in
 {
   imports = with inputs; [
     nixos-wsl.nixosModules.default
+    lix-module.nixosModules.default
     home-manager.nixosModules.home-manager
   ];
 
@@ -23,12 +26,16 @@
     systemPackages = with pkgs; [
       vim
     ];
+    pathsToLink = [ "/share/zsh" ];
   };
 
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+  nix = {
+    settings.experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+    nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+  };
 
   wsl = {
     enable = true;

@@ -14,6 +14,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    lix-module = {
+      url = "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0-3.tar.gz";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     impermanence.url = "github:nix-community/impermanence";
   };
   outputs =
@@ -39,10 +43,23 @@
         modules = [ hosts/nixos-wsl/configuration.nix ];
       };
       # Steam Deck
-      homeConfigurations."deck" = home-manager.lib.homeManagerConfiguration {
+      homeConfigurations."steamdeck@deck" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages."x86_64-linux";
         extraSpecialArgs = { inherit inputs; };
         modules = [ hosts/steamdeck/home.nix ];
+      };
+      # Dummy for completion
+      homeConfigurations."completion" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages."x86_64-linux";
+        modules = [
+          {
+            home = {
+              username = "none";
+              homeDirectory = "/home/none";
+              stateVersion = "24.11";
+            };
+          }
+        ];
       };
     };
 }
