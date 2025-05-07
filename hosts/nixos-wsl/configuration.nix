@@ -26,6 +26,7 @@
     systemPackages = with pkgs; [
       vim
     ];
+    pathsToLink = [ "/share/zsh" ];
   };
 
   nix = {
