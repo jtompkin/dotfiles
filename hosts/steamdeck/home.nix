@@ -51,7 +51,7 @@
       enable = true;
       shellAliases = {
         hm = "home-manager";
-        hmsw = "home-manager --flake 'github:jtompkin/dotfiles#steamdeck@deck' switch";
+        hmsw = "home-manager --flake 'github:jtompkin/dotfiles#deck@steamdeck' switch";
         cat = "bat --paging=never";
         ls = "ls --color=tty --group-directories-first";
         l = "ls -lAhpv";
