@@ -182,6 +182,8 @@
       enable = true;
       enableZshIntegration = true;
       enableSshSupport = true;
+      defaultCacheTtl = 3600;
+      defaultCacheTtlSsh = 3600;
       pinentry.package = pkgs.pinentry-qt;
       sshKeys = [
         "B5BE9A6227DB43612DCA51604EF35ABB0FD50B27"
