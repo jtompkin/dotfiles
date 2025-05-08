@@ -173,24 +173,6 @@
         "url": "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0-3.tar.gz"
       }
     },
-    "my-apps": {
-      "inputs": {
-        "flake-parts": "flake-parts",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-kB18tKv4IHisVdCSi2QQq+XaZSi3fEFJuiBdXT4/6Jc=",
-        "path": "/nix/store/13vlp18vi2vm68l8sz4m5qqknrn7hlr8-source/apps",
-        "type": "path"
-      },
-      "original": {
-        "path": "/nix/store/13vlp18vi2vm68l8sz4m5qqknrn7hlr8-source/apps",
-        "type": "path"
-      }
-    },
     "nixgl": {
       "inputs": {
         "flake-utils": "flake-utils_2",
@@ -281,10 +263,10 @@
     "root": {
       "inputs": {
         "disko": "disko",
+        "flake-parts": "flake-parts",
         "home-manager": "home-manager",
         "impermanence": "impermanence",
         "lix-module": "lix-module",
-        "my-apps": "my-apps",
         "nixgl": "nixgl",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_2"

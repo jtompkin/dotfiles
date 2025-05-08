@@ -129,7 +129,7 @@
 
     gpg.enable = true;
 
-    neovim = inputs.my-apps.configs."x86_64-linux".neovim.full;
+    neovim = inputs.self.configs."x86_64-linux".neovim.full;
 
     fd.enable = true;
     ripgrep.enable = true;
