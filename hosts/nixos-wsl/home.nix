@@ -12,10 +12,10 @@ in
     username = "josh";
     homeDirectory = "/home/josh";
     stateVersion = "24.11";
-    packages = with pkgs inputs.self.packages.${system}; [
+    packages = with pkgs; [
       entr
       dust
-      goclacker
+      inputs.self.packages.${system}.goclacker
     ];
     file = {
     };
