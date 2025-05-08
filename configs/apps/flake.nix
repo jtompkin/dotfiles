@@ -4,7 +4,7 @@
   };
 
   outputs =
-    { nixpkgs }:
+    { nixpkgs, ... }:
     let
       pkgs = import nixpkgs { };
     in
