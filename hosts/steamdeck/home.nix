@@ -171,7 +171,7 @@
       package = config.lib.nixGL.wrap pkgs.mpv;
     };
 
-    neovim = import inputs.neovim-full { inherit pkgs; };
+    neovim = inputs.configs.apps.neovim.full;
     fd.enable = true;
     ripgrep.enable = true;
     home-manager.enable = true;

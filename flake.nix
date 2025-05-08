@@ -19,9 +19,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     impermanence.url = "github:nix-community/impermanence";
-    neovim-full = {
-      url = "./configs/apps/neovim/full";
-      flake = false;
+    configs = {
+      url = "./configs/apps";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
   outputs =
