@@ -4,14 +4,18 @@
   inputs,
   ...
 }:
+let
+  system = "x86_64-linux";
+in
 {
   home = {
     username = "josh";
     homeDirectory = "/home/josh";
     stateVersion = "24.11";
-    packages = with pkgs; [
+    packages = with pkgs inputs.self.packages.${system}; [
       entr
       dust
+      goclacker
     ];
     file = {
     };
@@ -129,7 +133,7 @@
 
     gpg.enable = true;
 
-    neovim = inputs.self.configs."x86_64-linux".neovim.full;
+    neovim = inputs.self.configs.${system}.neovim.full;
 
     fd.enable = true;
     ripgrep.enable = true;

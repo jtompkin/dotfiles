@@ -76,6 +76,9 @@
               full = import ./apps/configs/neovim/full { inherit pkgs; };
             };
           };
+          packages = {
+            goclacker = pkgs.callPackage ./apps/pkgs/goclacker/package.nix { };
+          };
         };
     };
 }
