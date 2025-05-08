@@ -5,10 +5,8 @@
   lib,
   ...
 }:
-let
-  goclacker = (import pkgs/goclacker { pkgs = pkgs; }).goclacker;
-in
 {
+  nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
   home = {
     username = "deck";
     homeDirectory = "/home/deck";
@@ -24,7 +22,7 @@ in
       nerd-fonts.meslo-lg
       waydroid
 
-      goclacker
+      (import pkgs/goclacker { inherit pkgs; }).goclacker
       (config.lib.nixGL.wrap (
         rstudioWrapper.override {
           packages = with rPackages; [
@@ -53,7 +51,7 @@ in
       enable = true;
       shellAliases = {
         hm = "home-manager";
-        hmsw = "home-manager --flake 'github:jtompkin/dotfiles#deck' switch";
+        hmsw = "home-manager --flake 'github:jtompkin/dotfiles#steamdeck@deck' switch";
         cat = "bat --paging=never";
         ls = "ls --color=tty --group-directories-first";
         l = "ls -lAhpv";
@@ -112,10 +110,11 @@ in
       enable = true;
       keyMode = "vi";
       shell = lib.getExe pkgs.zsh;
-      extraConfig = ''
-        set -g status-position top
-        bind-key C-t set status
-      '';
+      extraConfig = # tmux
+        ''
+          set -g status-position top
+          bind-key C-t set status
+        '';
       plugins = with pkgs.tmuxPlugins; [
         sensible
         pain-control
@@ -172,7 +171,7 @@ in
       package = config.lib.nixGL.wrap pkgs.mpv;
     };
 
-    neovim = import ../../configs/apps/neovim/full { inherit pkgs; };
+    neovim = import inputs.neovim-full { inherit pkgs; };
     fd.enable = true;
     ripgrep.enable = true;
     home-manager.enable = true;
@@ -195,6 +194,10 @@ in
   };
 
   xdg = {
+    enable = true;
+    configFile = {
+      stylua.source = ../../dotfiles/.config/stylua;
+    };
     desktopEntries = {
       RStudio = {
         name = "RStudio";

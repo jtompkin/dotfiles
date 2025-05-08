@@ -15,9 +15,8 @@ lspconfig.nixd.setup({
 				},
 				nixos = {
 					expr = string.format(
-						[[(builtins.getFlake "%s").nixosConfigurations."%s".options]],
-						vim.fn.expand("~/dotfiles"),
-						vim.fn.hostname()
+						[[(builtins.getFlake "%s").nixosConfigurations."nixos".options]],
+						vim.fn.expand("~/dotfiles")
 					),
 				},
 			},

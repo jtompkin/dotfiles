@@ -19,6 +19,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     impermanence.url = "github:nix-community/impermanence";
+    neovim-full = {
+      url = "./configs/apps/neovim/full";
+      flake = false;
+    };
   };
   outputs =
     inputs@{
@@ -37,13 +41,14 @@
         specialArgs = { inherit inputs; };
         modules = [ hosts/zeefess/configuration.nix ];
       };
+      # QEMU x86_64-linux vm
       # WSL2
       nixosConfigurations."nixos" = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };
         modules = [ hosts/nixos-wsl/configuration.nix ];
       };
       # Steam Deck
-      homeConfigurations."steamdeck@deck" = home-manager.lib.homeManagerConfiguration {
+      homeConfigurations."deck@steamdeck" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages."x86_64-linux";
         extraSpecialArgs = { inherit inputs; };
         modules = [ hosts/steamdeck/home.nix ];

@@ -92,11 +92,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1746585355,
-        "narHash": "sha256-p+3fK8HEYC+0q4gPKSE4OSRxqt5H/tWZkB9wF7aaWOY=",
+        "lastModified": 1746632058,
+        "narHash": "sha256-Mp5Bbvb+YlFEZ76C/0wFS6C1lRfH3D60u465wFNlnS0=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "35535345be0be7dbae2e9b787c6cf790f8c893d5",
+        "rev": "708074ae6db9e0468e4f48477f856e8c2d059795",
         "type": "github"
       },
       "original": {
@@ -154,6 +154,18 @@
         "type": "tarball",
         "url": "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0-3.tar.gz"
       }
+    },
+    "neovim-full": {
+      "flake": false,
+      "locked": {
+        "path": "./configs/apps/neovim/full",
+        "type": "path"
+      },
+      "original": {
+        "path": "./configs/apps/neovim/full",
+        "type": "path"
+      },
+      "parent": []
     },
     "nixgl": {
       "inputs": {
@@ -233,6 +245,7 @@
         "home-manager": "home-manager",
         "impermanence": "impermanence",
         "lix-module": "lix-module",
+        "neovim-full": "neovim-full",
         "nixgl": "nixgl",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_2"
