@@ -153,7 +153,7 @@
   xdg = {
     enable = true;
     configFile = {
-      stylua.source = config/stylua;
+      stylua.source = ../../dotfiles/.config/stylua;
     };
   };
 }
