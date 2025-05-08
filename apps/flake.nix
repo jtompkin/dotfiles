@@ -16,7 +16,7 @@
         {
           configs = {
             neovim = {
-              full = import neovim/full { inherit pkgs; };
+              full = import configs/neovim/full { inherit pkgs; };
             };
           };
         };

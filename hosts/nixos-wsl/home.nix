@@ -1,6 +1,7 @@
 {
   lib,
   pkgs,
+  inputs,
   ...
 }:
 {
@@ -126,14 +127,9 @@
       changeDirWidgetCommand = "";
     };
 
-    gpg = {
-      enable = true;
-      settings = {
-        pinentry-mode = "loopback";
-      };
-    };
+    gpg.enable = true;
 
-    neovim = import ../../configs/apps/neovim/full { inherit pkgs; };
+    neovim = inputs.my-apps.configs."x86_64-linux".neovim.full;
 
     fd.enable = true;
     ripgrep.enable = true;
@@ -145,12 +141,9 @@
       enable = true;
       enableZshIntegration = true;
       enableSshSupport = true;
-      pinentry.package = pkgs.pinentry-tty;
+      pinentry.package = pkgs.pinentry-qt;
       defaultCacheTtl = 3600;
       defaultCacheTtlSsh = 3600;
-      extraConfig = ''
-        allow-loopback-pinentry
-      '';
       sshKeys = [
         "B5BE9A6227DB43612DCA51604EF35ABB0FD50B27"
       ];

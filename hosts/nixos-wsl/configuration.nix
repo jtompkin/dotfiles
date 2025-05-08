@@ -43,6 +43,7 @@
     useGlobalPkgs = true;
     useUserPackages = true;
     users."josh" = ./home.nix;
+    extraSpecialArgs = { inherit inputs; };
   };
 
   virtualisation = {
