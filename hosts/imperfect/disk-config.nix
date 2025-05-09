@@ -36,7 +36,6 @@ in
                 type = "luks";
                 name = "nixcrypt";
                 extraOpenArgs = [ ];
-                passwordFile = "/tmp/secret.key";
                 settings = {
                   allowDiscards = true;
                 };
@@ -84,9 +83,11 @@ in
             };
           };
           swap = {
-            size = "1G";
+            size = "8G";
             content = {
               type = "swap";
+              discardPolicy = "both";
+              resumeDevice = true;
             };
           };
         };
