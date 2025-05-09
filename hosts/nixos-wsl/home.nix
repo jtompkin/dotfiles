@@ -37,7 +37,8 @@ in
         fd = "fd --one-file-system";
         ssh-vm = "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
         scp-vm = "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
-        rebuild = "nixos-rebuild switch --flake github:jtompkin/dotfiles#nixos --use-remote-sudo";
+        rebuild = "nixos-rebuild --flake github:jtompkin/dotfiles#nixos --use-remote-sudo switch";
+        rebuild-local = "nixos-rebuild --flake '/home/josh/dotfiles#nixos' --use-remote-sudo switch";
       };
       initContent = # sh
         ''
