@@ -29,6 +29,7 @@
         ll = "ls -lhpv";
         info = "info --vi-keys";
         fd = "fd --one-file-system";
+        ssh-vm = "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
       };
       initContent = ''
         eval "$(batpipe)"

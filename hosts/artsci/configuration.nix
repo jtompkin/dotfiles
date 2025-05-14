@@ -9,6 +9,8 @@
     vim
     iterm2
     tigervnc
+    utm
+    qbittorrent
   ];
   users.users.benoitja = {
     home = "/Users/benoitja";

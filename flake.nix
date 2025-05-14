@@ -81,7 +81,7 @@
         };
       };
       perSystem =
-        { system, pkgs, ... }:
+        { pkgs, ... }:
         {
           configs = {
             neovim = {
