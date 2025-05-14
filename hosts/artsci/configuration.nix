@@ -1,30 +1,27 @@
 {
   inputs,
   pkgs,
+  config,
   ...
-}: {
-  #inports = [
-  #  inputs.home-manager.darwinModules.home-manager
-  #];
+}:
+{
   environment.systemPackages = with pkgs; [
     vim
     iterm2
     tigervnc
-    (rstudioWrapper.override {
-      packages = with rPackages; [
-        tidyverse
-      ];
-    })
   ];
   users.users.benoitja = {
     home = "/Users/benoitja";
   };
-  #home-manager = {
-  #  useGlobalPkgs = true;
-  #  useUserPackages = true;
-  #  users.benoitja = ./home.nix;
-  #  extraSpecialArgs = {inherit inputs;};
-  #};
+  home-manager = {
+    users."benoitja" = ./home.nix;
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    extraSpecialArgs = {
+      inherit inputs;
+      cfg = config;
+    };
+  };
   nix.settings.experimental-features = "nix-command flakes";
   system.configurationRevision = inputs.self.rev or inputs.self.dirtyRev or null;
   system.stateVersion = 6;

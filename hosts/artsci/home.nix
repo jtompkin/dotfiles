@@ -1,8 +1,8 @@
 {
   inputs,
   lib,
-  config,
   pkgs,
+  cfg,
   ...
 }:
 {
@@ -14,7 +14,7 @@
       entr
       dust
       coreutils
-      inputs.self.packages."aarch64-darwin".goclacker
+      inputs.self.packages.${cfg.nixpkgs.hostPlatform.system}.goclacker
     ];
   };
   programs = {
@@ -108,7 +108,7 @@
       changeDirWidgetCommand = "";
     };
 
-    neovim = inputs.self.configs."aarch64-darwin".neovim.full;
+    neovim = inputs.self.configs.${cfg.nixpkgs.hostPlatform.system}.neovim.full;
 
     fd.enable = true;
     ripgrep.enable = true;
