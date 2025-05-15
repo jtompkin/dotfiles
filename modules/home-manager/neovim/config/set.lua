@@ -42,5 +42,3 @@ vim.opt.colorcolumn = "88"
 vim.opt.mouse = "n"
 
 vim.opt.spelllang = "en_us"
-
-vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
