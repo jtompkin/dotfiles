@@ -1,10 +1,14 @@
 {
   inputs,
+  extraModulesPath,
   lib,
   pkgs,
   ...
 }:
 {
+  imports = [
+    (extraModulesPath + "/home-manager/neovim/neovim.nix")
+  ];
   home = {
     stateVersion = "24.11";
     username = "josh";

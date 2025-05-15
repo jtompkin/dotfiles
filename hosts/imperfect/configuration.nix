@@ -3,6 +3,7 @@
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
 {
+  extraModulesPath,
   inputs,
   lib,
   pkgs,
@@ -79,7 +80,7 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    extraSpecialArgs = { inherit inputs; };
+    extraSpecialArgs = { inherit inputs extraModulesPath; };
     users.josh = ./home-manager/josh/home.nix;
   };
 

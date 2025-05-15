@@ -1,7 +1,7 @@
 {
   inputs,
+  extraModulesPath,
   pkgs,
-  config,
   ...
 }:
 {
@@ -19,10 +19,7 @@
     users."benoitja" = ./home.nix;
     useGlobalPkgs = true;
     useUserPackages = true;
-    extraSpecialArgs = {
-      inherit inputs;
-      cfg = config;
-    };
+    extraSpecialArgs = { inherit inputs extraModulesPath; };
   };
   nix.settings.experimental-features = "nix-command flakes";
   system.configurationRevision = inputs.self.rev or inputs.self.dirtyRev or null;
