@@ -5,23 +5,14 @@
   ...
 }:
 let
-  inherit (lib) mkIf;
+  inherit (lib) mkIf mkMerge mkBefore;
   cfg = config.programs.sharedNeovim;
-  pluginsNeedCfg = [
-    "nvim-lspconfig"
-    "nightfox-nvim"
-    "conform-nvim"
-    "nvim-autopairs"
-    "harpoon2"
-    "lualine-nvim"
-    "neogit"
-    "nvim-cmp"
-    "fzf-lua"
-    "cellular-automaton-nvim"
-    "which-key-nvim"
-  ];
   mkPluginCfg = name: {
-    plugin = pkgs.vimPlugins.${name};
+    plugin =
+      {
+        "nvim-treesitter" = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
+      }
+      .${name} or pkgs.vimPlugins.${name};
     type = "lua";
     config = builtins.readFile ./shared-neovim/plugins/${name}.lua;
   };
@@ -47,11 +38,6 @@ in
       plugins = mkIf cfg.full (
         with pkgs.vimPlugins;
         [
-          {
-            plugin = nvim-treesitter.withAllGrammars;
-            type = "lua";
-            config = builtins.readFile ./shared-neovim/plugins/nvim-treesitter.lua;
-          }
           # neogit dependencies
           diffview-nvim
           # nvim-cmp dependencies
@@ -64,7 +50,21 @@ in
           # fzf-lua dependencies
           nvim-web-devicons
         ]
-        ++ lib.map mkPluginCfg pluginsNeedCfg
+        ++ lib.pipe (builtins.readDir ./shared-neovim/plugins) [
+          (lib.filterAttrs (name: type: (lib.hasSuffix ".lua" name && type == "regular")))
+          lib.attrNames
+          (lib.map (lib.removeSuffix ".lua"))
+          (lib.map mkPluginCfg)
+        ]
+        #++ lib.map mkPluginCfg (
+        #  lib.map (lib.removeSuffix ".lua") (
+        #    lib.attrNames (
+        #      lib.filterAttrs (name: type: (type == "regular" && lib.hasSuffix ".lua" name)) (
+        #        builtins.readDir ./shared-neovim/plugins
+        #      )
+        #    )
+        #  )
+        #)
       );
       extraPackages =
         with pkgs;
@@ -79,9 +79,16 @@ in
           stylua # # Lua
           black # # Python
         ];
-      extraLuaConfig = lib.concatMapStrings lib.readFile (
-        lib.filesystem.listFilesRecursive ./shared-neovim/config
-      );
+      extraLuaConfig = lib.mkMerge [
+        (mkBefore
+          # lua
+          ''
+            vim.g.mapleader = " "
+            vim.g.maplocalleader = "\\"
+          ''
+        )
+        (lib.concatMapStrings lib.readFile (lib.filesystem.listFilesRecursive ./shared-neovim/config))
+      ];
     };
   };
 }

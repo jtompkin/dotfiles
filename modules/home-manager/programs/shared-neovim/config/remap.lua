@@ -1,5 +1,5 @@
 -- remap.lua
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex, { desc = "Return to file exporer." })
+vim.keymap.set("n", "<leader>pv", vim.cmd.Explore, { desc = "Return to file exporer." })
 vim.keymap.set(
 	"n",
 	"<F3>",
