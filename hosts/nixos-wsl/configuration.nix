@@ -37,6 +37,7 @@
   wsl = {
     enable = true;
     defaultUser = "josh";
+    interop.includePath = false;
   };
 
   home-manager = {

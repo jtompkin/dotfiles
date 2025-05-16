@@ -10,7 +10,7 @@ let
 in
 {
   imports = [
-    (extraModulesPath + "/home-manager/neovim/neovim.nix")
+    (extraModulesPath + "/home-manager/programs/shared-neovim.nix")
   ];
   home = {
     username = "josh";
@@ -76,9 +76,11 @@ in
     };
 
     oh-my-posh = {
-      enable = false;
+      enable = true;
       enableZshIntegration = true;
-      useTheme = "space";
+      settings = builtins.fromTOML (
+        builtins.unsafeDiscardStringContext (builtins.readFile ./themes/my_space.omp.toml)
+      );
     };
 
     zoxide = {
