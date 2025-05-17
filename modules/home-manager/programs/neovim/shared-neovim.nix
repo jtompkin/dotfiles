@@ -6,7 +6,7 @@
 }:
 let
   inherit (lib) mkIf mkMerge mkBefore;
-  cfg = config.programs.sharedNeovim;
+  cfg = config.programs.neovim;
   mkPluginCfg = name: {
     type = "lua";
     plugin =
@@ -24,23 +24,16 @@ let
 in
 {
   options = {
-    programs.sharedNeovim = {
-      enable = lib.mkEnableOption "Whether to enable shared neovim module";
-      full = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        example = false;
-        description = "Whether to build neovim with all plugins (default) or just basic configuration";
-      };
-    };
+    programs.neovim.shared.enable = lib.mkEnableOption "Whether to enable shared neovim configuration";
+    programs.neovim.shared.minimal = lib.mkEnableOption "Whether to build neovim with all plugins (false) or just basic configuration (true)";
   };
-  config = mkIf cfg.enable {
+  config = mkIf cfg.shared.enable {
     programs.neovim = {
       enable = true;
       defaultEditor = true;
       viAlias = true;
       vimAlias = true;
-      plugins = mkIf cfg.full (
+      plugins = mkIf (!cfg.shared.minimal) (
         with pkgs.vimPlugins;
         [
           # neogit dependencies
@@ -64,7 +57,7 @@ in
       );
       extraPackages =
         with pkgs;
-        mkIf cfg.full [
+        mkIf (!cfg.shared.minimal) [
           # LSPs
           nixd # # Nix
           lua-language-server # # Lua

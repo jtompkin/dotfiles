@@ -1,6 +1,5 @@
 {
   inputs,
-  extraModulesPath,
   config,
   pkgs,
   lib,
@@ -9,7 +8,6 @@
 {
   imports = [
     inputs.self.homeManagerModules.shared-neovim
-    #(extraModulesPath + "/home-manager/programs/shared-neovim.nix")
   ];
   nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
   home = {
@@ -176,7 +174,7 @@
       package = config.lib.nixGL.wrap pkgs.mpv;
     };
 
-    sharedNeovim.enable = true;
+    neovim.shared.enable = true;
     fd.enable = true;
     ripgrep.enable = true;
     home-manager.enable = true;
