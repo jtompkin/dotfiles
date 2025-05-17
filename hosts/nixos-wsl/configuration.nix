@@ -7,7 +7,6 @@
 
 {
   inputs,
-  extraModulesPath,
   pkgs,
   ...
 }:
@@ -44,7 +43,7 @@
     useGlobalPkgs = true;
     useUserPackages = true;
     users."josh" = ./home.nix;
-    extraSpecialArgs = { inherit inputs extraModulesPath; };
+    extraSpecialArgs = { inherit inputs; };
   };
 
   virtualisation = {

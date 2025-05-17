@@ -31,7 +31,6 @@
     }:
     let
       extraModulesPath = ./modules;
-      defaultSpecialArgs = { inherit inputs extraModulesPath; };
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [
@@ -41,18 +40,18 @@
       flake = {
         # VirtualBox x86_64-linux vm
         nixosConfigurations."imperfect" = nixpkgs.lib.nixosSystem {
-          specialArgs = defaultSpecialArgs;
+          specialArgs = { inherit inputs; };
           modules = [ hosts/imperfect/configuration.nix ];
         };
         # VirtualBox x86_64-linux vm with zfs
         nixosConfigurations."zeefess" = nixpkgs.lib.nixosSystem {
-          specialArgs = defaultSpecialArgs;
+          specialArgs = { inherit inputs; };
           modules = [ hosts/zeefess/configuration.nix ];
         };
         # QEMU x86_64-linux vm
         # WSL2
         nixosConfigurations."nixos" = nixpkgs.lib.nixosSystem {
-          specialArgs = defaultSpecialArgs;
+          specialArgs = { inherit inputs; };
           modules = [ hosts/nixos-wsl/configuration.nix ];
         };
         # External HDD
@@ -63,25 +62,27 @@
         # Steam Deck
         homeConfigurations."deck@steamdeck" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages."x86_64-linux";
-          extraSpecialArgs = defaultSpecialArgs;
+          extraSpecialArgs = { inherit inputs; };
           modules = [ hosts/steamdeck/home.nix ];
         };
         # lab mac
         darwinConfigurations."ArtSci-0KPQC4CF" = nix-darwin.lib.darwinSystem {
-          specialArgs = defaultSpecialArgs;
+          specialArgs = { inherit inputs; };
           modules = [
             hosts/artsci/configuration.nix
             home-manager.darwinModules.home-manager
           ];
         };
-        homeManagerModules.shared-neovim = import (
+        homeManagerModules.sharedNeovim = import (
           extraModulesPath + "/home-manager/programs/neovim/shared-neovim.nix"
         );
         # Dummy for completion
         homeConfigurations."completion" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages."x86_64-linux";
+          extraSpecialArgs = { inherit inputs; };
           modules = [
             {
+              imports = [ inputs.self.homeManagerModules.sharedNeovim ];
               home = {
                 username = "none";
                 homeDirectory = "/home/none";

@@ -1,13 +1,12 @@
 {
   inputs,
-  extraModulesPath,
   lib,
   pkgs,
   ...
 }:
 {
   imports = [
-    (extraModulesPath + "/home-manager/neovim/neovim.nix")
+    inputs.self.homeManagerModules.sharedNeovim
   ];
   home = {
     username = "benoitja";

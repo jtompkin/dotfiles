@@ -7,7 +7,7 @@
 }:
 {
   imports = [
-    inputs.self.homeManagerModules.shared-neovim
+    inputs.self.homeManagerModules.sharedNeovim
   ];
   nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
   home = {

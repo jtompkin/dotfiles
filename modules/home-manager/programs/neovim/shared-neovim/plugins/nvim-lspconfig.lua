@@ -9,17 +9,9 @@ lspconfig.nixd.setup({
 			options = {
 				home_manager = {
 					expr = [[(builtins.getFlake "github:jtompkin/dotfiles").homeConfigurations."completion".options]],
-					--expr = string.format(
-					--	[[(builtins.getFlake "%s").homeConfigurations."completion".options]],
-					--	vim.fn.expand("~/dotfiles")
-					--),
 				},
 				nixos = {
 					expr = [[(builtins.getFlake "github:jtompkin/dotfiles").nixosConfigurations."nixos".options]],
-					--expr = string.format(
-					--	[[(builtins.getFlake "%s").nixosConfigurations."nixos".options]],
-					--	vim.fn.expand("~/dotfiles")
-					--),
 				},
 			},
 		},

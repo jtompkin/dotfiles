@@ -24,8 +24,8 @@ let
 in
 {
   options = {
-    programs.neovim.shared.enable = lib.mkEnableOption "Whether to enable shared neovim configuration";
-    programs.neovim.shared.minimal = lib.mkEnableOption "Whether to build neovim with all plugins (false) or just basic configuration (true)";
+    programs.neovim.shared.enable = lib.mkEnableOption "shared neovim configuration";
+    programs.neovim.shared.minimal = lib.mkEnableOption "building neovim with all plugins (false) or just basic configuration (true)";
   };
   config = mkIf cfg.shared.enable {
     programs.neovim = {

@@ -1,6 +1,5 @@
 {
   inputs,
-  extraModulesPath,
   lib,
   pkgs,
   ...
@@ -10,7 +9,7 @@ let
 in
 {
   imports = [
-    (extraModulesPath + "/home-manager/programs/shared-neovim.nix")
+    inputs.self.homeManagerModules.sharedNeovim
   ];
   home = {
     username = "josh";
