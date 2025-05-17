@@ -8,7 +8,8 @@
 }:
 {
   imports = [
-    (extraModulesPath + "/home-manager/programs/shared-neovim.nix")
+    inputs.self.homeManagerModules.shared-neovim
+    #(extraModulesPath + "/home-manager/programs/shared-neovim.nix")
   ];
   nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
   home = {

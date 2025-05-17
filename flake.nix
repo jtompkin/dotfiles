@@ -74,6 +74,9 @@
             home-manager.darwinModules.home-manager
           ];
         };
+        homeManagerModules.shared-neovim = import (
+          extraModulesPath + "/home-manager/programs/shared-neovim.nix"
+        );
         # Dummy for completion
         homeConfigurations."completion" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages."x86_64-linux";
