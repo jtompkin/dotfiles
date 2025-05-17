@@ -6,7 +6,7 @@
 }:
 let
   inherit (lib) mkIf mkMerge mkBefore;
-  cfg = config.programs.neovim;
+  cfg = config.programs.neovim.shared;
   mkPluginCfg = name: {
     type = "lua";
     plugin =
@@ -16,9 +16,9 @@ let
       .${name} or pkgs.vimPlugins.${name};
     config =
       let
-        cfgPath = ./shared-neovim/plugins/${name}.lua;
+        cfgPath = ./shared/plugins/${name}.lua;
       in
-      if lib.pathIsRegularFile cfgPath then builtins.readFile cfgPath else "";
+      if lib.pathIsRegularFile cfgPath then lib.readFile cfgPath else "";
   };
   readDirPaths = dir: lib.mapAttrsToList (name: _type: dir + "/${name}") (builtins.readDir dir);
 in
@@ -27,13 +27,13 @@ in
     programs.neovim.shared.enable = lib.mkEnableOption "shared neovim configuration";
     programs.neovim.shared.minimal = lib.mkEnableOption "building neovim with all plugins (false) or just basic configuration (true)";
   };
-  config = mkIf cfg.shared.enable {
+  config = mkIf cfg.enable {
     programs.neovim = {
       enable = true;
       defaultEditor = true;
       viAlias = true;
       vimAlias = true;
-      plugins = mkIf (!cfg.shared.minimal) (
+      plugins = mkIf (!cfg.minimal) (
         with pkgs.vimPlugins;
         [
           # neogit dependencies
@@ -48,7 +48,7 @@ in
           # fzf-lua dependencies
           nvim-web-devicons
         ]
-        ++ lib.pipe (builtins.readDir ./shared-neovim/plugins) [
+        ++ lib.pipe (builtins.readDir ./shared/plugins) [
           (lib.filterAttrs (name: type: lib.hasSuffix ".lua" name && type == "regular"))
           lib.attrNames
           (lib.map (lib.removeSuffix ".lua"))
@@ -57,7 +57,7 @@ in
       );
       extraPackages =
         with pkgs;
-        mkIf (!cfg.shared.minimal) [
+        mkIf (!cfg.minimal) [
           # LSPs
           nixd # # Nix
           lua-language-server # # Lua
@@ -73,7 +73,7 @@ in
           vim.g.mapleader = " "
           vim.g.maplocalleader = "\\"
         '')
-        (lib.pipe (readDirPaths ./shared-neovim/config) [
+        (lib.pipe (readDirPaths ./shared/config) [
           (lib.filter (name: lib.hasSuffix ".lua" name))
           (lib.concatMapStrings lib.readFile)
         ])

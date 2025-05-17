@@ -9,7 +9,7 @@ let
 in
 {
   imports = [
-    inputs.self.homeManagerModules.sharedNeovim
+    inputs.self.homeManagerModules.neovim.shared
   ];
   home = {
     username = "josh";
@@ -19,7 +19,6 @@ in
       entr
       dust
       inputs.self.packages.${system}.goclacker
-      #inputs.self.packages.${system}.neovim-full
     ];
     file = {
     };
@@ -141,7 +140,7 @@ in
 
     gpg.enable = true;
 
-    sharedNeovim.enable = true;
+    neovim.shared.enable = true;
     fd.enable = true;
     ripgrep.enable = true;
     home-manager.enable = true;

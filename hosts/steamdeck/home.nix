@@ -7,7 +7,7 @@
 }:
 {
   imports = [
-    inputs.self.homeManagerModules.sharedNeovim
+    inputs.self.homeManagerModules.neovim.shared
   ];
   nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
   home = {
@@ -25,7 +25,6 @@
       nerd-fonts.meslo-lg
       waydroid
 
-      #(import pkgs/goclacker { inherit pkgs; }).goclacker
       (config.lib.nixGL.wrap (
         rstudioWrapper.override {
           packages = with rPackages; [

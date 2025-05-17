@@ -73,8 +73,8 @@
             home-manager.darwinModules.home-manager
           ];
         };
-        homeManagerModules.sharedNeovim = import (
-          extraModulesPath + "/home-manager/programs/neovim/shared-neovim.nix"
+        homeManagerModules.neovim.shared = import (
+          extraModulesPath + "/home-manager/programs/neovim/shared.nix"
         );
         # Dummies for completion
         nixosConfigurations."completion" = nixpkgs.lib.nixosSystem {
@@ -94,7 +94,7 @@
           extraSpecialArgs = { inherit inputs; };
           modules = [
             {
-              imports = [ inputs.self.homeManagerModules.sharedNeovim ];
+              imports = [ inputs.self.homeManagerModules.neovim.shared ];
               home = {
                 username = "none";
                 homeDirectory = "/home/none";

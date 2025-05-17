@@ -6,7 +6,7 @@
 }:
 {
   imports = [
-    inputs.self.homeManagerModules.sharedNeovim
+    inputs.self.homeManagerModules.neovim.shared
   ];
   home = {
     username = "benoitja";
@@ -111,7 +111,7 @@
       changeDirWidgetCommand = "";
     };
 
-    #neovim = inputs.self.configs.${cfg.nixpkgs.hostPlatform.system}.neovim.full;
+    neovim.shared.enable = true;
 
     fd.enable = true;
     ripgrep.enable = true;

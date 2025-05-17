@@ -6,7 +6,7 @@
 }:
 {
   imports = [
-    inputs.self.homeManagerModules.sharedNeovim
+    inputs.self.homeManagerModules.neovim.shared
   ];
   home = {
     stateVersion = "24.11";
