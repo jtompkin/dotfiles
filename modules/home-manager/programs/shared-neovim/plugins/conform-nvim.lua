@@ -15,3 +15,5 @@ require("conform").setup({
 vim.keymap.set("n", "<leader>ff", function()
 	require("conform").format({ async = true })
 end)
+
+vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"

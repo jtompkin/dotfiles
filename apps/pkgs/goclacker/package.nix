@@ -2,7 +2,6 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  hello,
 }:
 buildGoModule rec {
   pname = "goclacker";
@@ -22,8 +21,4 @@ buildGoModule rec {
     platforms = platforms.all;
     mainProgram = "goclacker";
   };
-
-  buildInputs = [
-    hello
-  ];
 }

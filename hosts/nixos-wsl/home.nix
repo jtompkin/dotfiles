@@ -1,13 +1,17 @@
 {
+  inputs,
+  extraModulesPath,
   lib,
   pkgs,
-  inputs,
   ...
 }:
 let
   system = "x86_64-linux";
 in
 {
+  imports = [
+    (extraModulesPath + "/home-manager/programs/shared-neovim.nix")
+  ];
   home = {
     username = "josh";
     homeDirectory = "/home/josh";
@@ -16,6 +20,7 @@ in
       entr
       dust
       inputs.self.packages.${system}.goclacker
+      #inputs.self.packages.${system}.neovim-full
     ];
     file = {
     };
@@ -39,6 +44,7 @@ in
         scp-vm = "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
         rebuild = "nixos-rebuild --flake github:jtompkin/dotfiles#nixos --use-remote-sudo switch";
         rebuild-local = "nixos-rebuild --flake '/home/josh/dotfiles#nixos' --use-remote-sudo switch";
+        pkgdoc = "nix edit -f '<nixpkgs>'";
       };
       initContent = # sh
         ''
@@ -70,9 +76,11 @@ in
     };
 
     oh-my-posh = {
-      enable = false;
+      enable = true;
       enableZshIntegration = true;
-      useTheme = "space";
+      settings = builtins.fromTOML (
+        builtins.unsafeDiscardStringContext (builtins.readFile ./themes/my_space.omp.toml)
+      );
     };
 
     zoxide = {
@@ -134,8 +142,7 @@ in
 
     gpg.enable = true;
 
-    neovim = inputs.self.configs.${system}.neovim.full;
-
+    sharedNeovim.enable = true;
     fd.enable = true;
     ripgrep.enable = true;
     home-manager.enable = true;

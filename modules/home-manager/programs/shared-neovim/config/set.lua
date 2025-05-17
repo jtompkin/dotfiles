@@ -1,6 +1,4 @@
-vim.g.mapleader = " "
-vim.g.maplocalleader = "\\"
-
+-- set.lua
 vim.g.netrw_browse_split = 0
 vim.g.netrw_banner = 0
 vim.g.netrw_winsize = 25
@@ -42,5 +40,3 @@ vim.opt.colorcolumn = "88"
 vim.opt.mouse = "n"
 
 vim.opt.spelllang = "en_us"
-
-vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"

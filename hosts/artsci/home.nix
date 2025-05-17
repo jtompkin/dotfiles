@@ -1,11 +1,14 @@
 {
   inputs,
+  extraModulesPath,
   lib,
   pkgs,
-  cfg,
   ...
 }:
 {
+  imports = [
+    (extraModulesPath + "/home-manager/neovim/neovim.nix")
+  ];
   home = {
     username = "benoitja";
     homeDirectory = "/Users/benoitja";
@@ -14,7 +17,7 @@
       entr
       dust
       coreutils
-      inputs.self.packages.${cfg.nixpkgs.hostPlatform.system}.goclacker
+      inputs.self.packages."aarch64-darwin".goclacker
     ];
   };
   programs = {
@@ -109,7 +112,7 @@
       changeDirWidgetCommand = "";
     };
 
-    neovim = inputs.self.configs.${cfg.nixpkgs.hostPlatform.system}.neovim.full;
+    #neovim = inputs.self.configs.${cfg.nixpkgs.hostPlatform.system}.neovim.full;
 
     fd.enable = true;
     ripgrep.enable = true;

@@ -7,6 +7,7 @@
 
 {
   inputs,
+  extraModulesPath,
   pkgs,
   ...
 }:
@@ -36,13 +37,14 @@
   wsl = {
     enable = true;
     defaultUser = "josh";
+    interop.includePath = false;
   };
 
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
     users."josh" = ./home.nix;
-    extraSpecialArgs = { inherit inputs; };
+    extraSpecialArgs = { inherit inputs extraModulesPath; };
   };
 
   virtualisation = {

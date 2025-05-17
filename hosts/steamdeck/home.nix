@@ -1,11 +1,15 @@
 {
   inputs,
+  extraModulesPath,
   config,
   pkgs,
   lib,
   ...
 }:
 {
+  imports = [
+    (extraModulesPath + "/home-manager/neovim/neovim.nix")
+  ];
   nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
   home = {
     username = "deck";
@@ -22,7 +26,7 @@
       nerd-fonts.meslo-lg
       waydroid
 
-      (import pkgs/goclacker { inherit pkgs; }).goclacker
+      #(import pkgs/goclacker { inherit pkgs; }).goclacker
       (config.lib.nixGL.wrap (
         rstudioWrapper.override {
           packages = with rPackages; [
@@ -171,7 +175,7 @@
       package = config.lib.nixGL.wrap pkgs.mpv;
     };
 
-    neovim = inputs.my-apps.configs."x86_64-linux".neovim.full;
+    sharedNeovim.enable = true;
     fd.enable = true;
     ripgrep.enable = true;
     home-manager.enable = true;
