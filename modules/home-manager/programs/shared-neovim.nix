@@ -78,7 +78,7 @@ in
             vim.g.maplocalleader = "\\"
           ''
         )
-        (lib.pipe (lib.filesystem.listFilesRecursive) [
+        (lib.pipe (lib.filesystem.listFilesRecursive ./.) [
           (lib.filter (p: lib.hasSuffix ".lua" p))
           (lib.concatMapStrings lib.readFile)
         ])

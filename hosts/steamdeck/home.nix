@@ -8,7 +8,7 @@
 }:
 {
   imports = [
-    (extraModulesPath + "/home-manager/neovim/neovim.nix")
+    (extraModulesPath + "/home-manager/programs/shared-neovim.nix")
   ];
   nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
   home = {
@@ -54,7 +54,7 @@
     zsh = {
       enable = true;
       shellAliases = {
-        hm = "home-manager";
+        hm = "home-manager --flake '/home/deck/dotfiles'";
         hmsw = "home-manager --flake 'github:jtompkin/dotfiles#deck@steamdeck' switch";
         cat = "bat --paging=never";
         ls = "ls --color=tty --group-directories-first";
