@@ -8,14 +8,19 @@ let
   inherit (lib) mkIf mkMerge mkBefore;
   cfg = config.programs.sharedNeovim;
   mkPluginCfg = name: {
+    type = "lua";
     plugin =
       {
         "nvim-treesitter" = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
       }
       .${name} or pkgs.vimPlugins.${name};
-    type = "lua";
-    config = builtins.readFile ./shared-neovim/plugins/${name}.lua;
+    config =
+      let
+        cfgPath = ./shared-neovim/plugins/${name}.lua;
+      in
+      if lib.pathIsRegularFile cfgPath then builtins.readFile cfgPath else "";
   };
+  readDirPaths = dir: lib.mapAttrsToList (name: _type: dir + "/${name}") (builtins.readDir dir);
 in
 {
   options = {
@@ -71,15 +76,12 @@ in
           black # # Python
         ];
       extraLuaConfig = mkMerge [
-        (mkBefore
-          # lua
-          ''
-            vim.g.mapleader = " "
-            vim.g.maplocalleader = "\\"
-          ''
-        )
-        (lib.pipe (lib.filesystem.listFilesRecursive ./.) [
-          (lib.filter (p: lib.hasSuffix ".lua" p))
+        (mkBefore ''
+          vim.g.mapleader = " "
+          vim.g.maplocalleader = "\\"
+        '')
+        (lib.pipe (readDirPaths ./shared-neovim/config) [
+          (lib.filter (name: lib.hasSuffix ".lua" name))
           (lib.concatMapStrings lib.readFile)
         ])
       ];
