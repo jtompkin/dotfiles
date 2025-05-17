@@ -52,6 +52,11 @@
           specialArgs = { inherit inputs; };
           modules = [ hosts/nixos-wsl/configuration.nix ];
         };
+        # External HDD
+        nixosConfigurations."spinny" = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs; };
+          modules = [ hosts/spinny/configuration.nix ];
+        };
         # Steam Deck
         homeConfigurations."deck@steamdeck" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages."x86_64-linux";
