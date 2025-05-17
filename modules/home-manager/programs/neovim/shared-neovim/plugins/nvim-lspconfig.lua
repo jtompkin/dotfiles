@@ -11,7 +11,7 @@ lspconfig.nixd.setup({
 					expr = [[(builtins.getFlake "github:jtompkin/dotfiles").homeConfigurations."completion".options]],
 				},
 				nixos = {
-					expr = [[(builtins.getFlake "github:jtompkin/dotfiles").nixosConfigurations."nixos".options]],
+					expr = [[(builtins.getFlake "github:jtompkin/dotfiles").nixosConfigurations."completion".options]],
 				},
 			},
 		},

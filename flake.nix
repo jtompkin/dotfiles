@@ -76,7 +76,19 @@
         homeManagerModules.sharedNeovim = import (
           extraModulesPath + "/home-manager/programs/neovim/shared-neovim.nix"
         );
-        # Dummy for completion
+        # Dummies for completion
+        nixosConfigurations."completion" = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs; };
+          modules = [
+            {
+              imports = [
+                inputs.nixos-wsl.nixosModules.default
+                inputs.home-manager.nixosModules.home-manager
+              ];
+              nixpkgs.hostPlatform.system = "x86_64-linux";
+            }
+          ];
+        };
         homeConfigurations."completion" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages."x86_64-linux";
           extraSpecialArgs = { inherit inputs; };
