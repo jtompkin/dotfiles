@@ -51,20 +51,11 @@ in
           nvim-web-devicons
         ]
         ++ lib.pipe (builtins.readDir ./shared-neovim/plugins) [
-          (lib.filterAttrs (name: type: (lib.hasSuffix ".lua" name && type == "regular")))
+          (lib.filterAttrs (name: type: lib.hasSuffix ".lua" name && type == "regular"))
           lib.attrNames
           (lib.map (lib.removeSuffix ".lua"))
           (lib.map mkPluginCfg)
         ]
-        #++ lib.map mkPluginCfg (
-        #  lib.map (lib.removeSuffix ".lua") (
-        #    lib.attrNames (
-        #      lib.filterAttrs (name: type: (type == "regular" && lib.hasSuffix ".lua" name)) (
-        #        builtins.readDir ./shared-neovim/plugins
-        #      )
-        #    )
-        #  )
-        #)
       );
       extraPackages =
         with pkgs;
@@ -79,7 +70,7 @@ in
           stylua # # Lua
           black # # Python
         ];
-      extraLuaConfig = lib.mkMerge [
+      extraLuaConfig = mkMerge [
         (mkBefore
           # lua
           ''
@@ -87,7 +78,10 @@ in
             vim.g.maplocalleader = "\\"
           ''
         )
-        (lib.concatMapStrings lib.readFile (lib.filesystem.listFilesRecursive ./shared-neovim/config))
+        (lib.pipe (lib.filesystem.listFilesRecursive) [
+          (lib.filter (p: lib.hasSuffix ".lua" p))
+          (lib.concatMapStrings lib.readFile)
+        ])
       ];
     };
   };
