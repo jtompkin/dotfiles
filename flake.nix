@@ -75,7 +75,7 @@
           ];
         };
         homeManagerModules.shared-neovim = import (
-          extraModulesPath + "/home-manager/programs/shared-neovim.nix"
+          extraModulesPath + "/home-manager/programs/neovim/shared-neovim.nix"
         );
         # Dummy for completion
         homeConfigurations."completion" = home-manager.lib.homeManagerConfiguration {
