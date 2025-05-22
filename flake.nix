@@ -49,6 +49,9 @@
       #  modules = [ hosts/nixos-wsl/configuration.nix ];
       #};
       nixosConfigurations."franken" = lib.mkNixosConfiguration { } ./hosts/x86_64-linux/franken;
+      nixosConfigurations."completion" = lib.mkNixosConfiguration { } {
+        nixpkgs.hostPlatform = "x86_64-linux";
+      };
       # External HDD
       nixosConfigurations."spinny" = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };
@@ -69,35 +72,23 @@
         ];
       };
       nixosModules.lib = extraModulesPath + "/common/lib.nix";
-      #{ ... }:
-      #{
-      #  imports = [ (extraModulesPath + "/common/lib.nix") ];
-      #};
-      #nixosModules.basic-system =
-      #  { ... }:
-      #  {
-      #    imports = [
-      #      (extraModulesPath + "/common/basic-system.nix")
-      #      config.flake.nixosModules.lib
-      #    ];
-      #  };
       homeManagerModules.neovim.shared = import (
         extraModulesPath + "/home-manager/programs/neovim/shared.nix"
       );
       # Dummies for completion
-      nixosConfigurations."completion" = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs; };
-        modules = [
-          {
-            imports = [
-              inputs.nixos-wsl.nixosModules.default
-              inputs.home-manager.nixosModules.home-manager
-              inputs.self.nixosModules.lib
-            ];
-            nixpkgs.hostPlatform.system = "x86_64-linux";
-          }
-        ];
-      };
+      #nixosConfigurations."completion" = nixpkgs.lib.nixosSystem {
+      #  specialArgs = { inherit inputs; };
+      #  modules = [
+      #    {
+      #      imports = [
+      #        inputs.nixos-wsl.nixosModules.default
+      #        inputs.home-manager.nixosModules.home-manager
+      #        inputs.self.nixosModules.lib
+      #      ];
+      #      nixpkgs.hostPlatform.system = "x86_64-linux";
+      #    }
+      #  ];
+      #};
       homeConfigurations."completion" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages."x86_64-linux";
         extraSpecialArgs = { inherit inputs; };

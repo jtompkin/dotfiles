@@ -14,7 +14,7 @@ in
   config = mkIf cfg.enable {
     nixpkgs.hostPlatform = config.wunkus.settings.system;
     environment = {
-      systemPackages = with pkgs; [ vim ];
+      systemPackages = mkDefault [ pkgs.vim ];
     };
     nix.settings.experimental-features = mkDefault [
       "nix-command"
@@ -22,7 +22,7 @@ in
     ];
     users = {
       users.${username} = {
-        isNormalUser = mkDefault true;
+        isNormalUser = true;
         extraGroups = [ "wheel" ];
       };
     };
