@@ -6,16 +6,10 @@
 # https://github.com/nix-community/NixOS-WSL
 
 {
-  inputs,
   pkgs,
   ...
 }:
 {
-  imports = with inputs; [
-    nixos-wsl.nixosModules.default
-    home-manager.nixosModules.home-manager
-  ];
-
   nixpkgs.hostPlatform = "x86_64-linux";
 
   environment = {
@@ -30,7 +24,7 @@
       "nix-command"
       "flakes"
     ];
-    nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+    #nixPath = [ "nixpkgs=${pkgs}" ];
   };
 
   wsl = {
@@ -40,10 +34,7 @@
   };
 
   home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = true;
     users."josh" = ./home.nix;
-    extraSpecialArgs = { inherit inputs; };
   };
 
   virtualisation = {

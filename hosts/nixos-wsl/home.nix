@@ -1,5 +1,4 @@
 {
-  inputs,
   lib,
   pkgs,
   ...
@@ -8,10 +7,7 @@ let
   system = "x86_64-linux";
 in
 {
-  imports = [
-    inputs.self.homeManagerModules.neovim.shared
-    inputs.self.nixosModules.lib
-  ];
+  wunkus.presets.programs.neovim.enable = true;
   home = {
     username = "josh";
     homeDirectory = "/home/josh";
@@ -19,7 +15,7 @@ in
     packages = with pkgs; [
       entr
       dust
-      inputs.self.packages.${system}.goclacker
+      #inputs.self.packages.${system}.goclacker
     ];
     file = {
     };
@@ -141,7 +137,6 @@ in
 
     gpg.enable = true;
 
-    neovim.shared.enable = true;
     fd.enable = true;
     ripgrep.enable = true;
     home-manager.enable = true;

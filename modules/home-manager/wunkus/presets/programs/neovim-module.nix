@@ -6,16 +6,14 @@
 }:
 let
   inherit (lib) mkIf mkMerge mkBefore;
-  inherit (config.lib.custom) listLuaFiles mkNeovimPluginCfgFromFile;
-  cfg = config.programs.neovim.shared;
+  inherit (config.lib.lib) listLuaFiles mkNeovimPluginCfgFromFile;
+  cfg = config.wunkus.presets.programs.neovim;
 in
 {
-  imports = [
-
-  ];
   options = {
-    programs.neovim.shared.enable = lib.mkEnableOption "shared neovim configuration";
-    programs.neovim.shared.minimal = lib.mkEnableOption "building neovim with all plugins (false) or just basic configuration (true)";
+    wunkus.presets.programs.neovim.enable = lib.mkEnableOption "Neovim preset configuration";
+    wunkus.presets.programs.neovim.minimal =
+      lib.mkEnableOption "building neovim with all plugins (false) or just basic configuration (true)";
   };
   config = mkIf cfg.enable {
     programs.neovim = {
@@ -41,7 +39,7 @@ in
         ++ map (mkNeovimPluginCfgFromFile pkgs.vimPlugins {
           # Add plugin mappings here, otherwise basename of file is plugin name
           "nvim-treesitter" = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
-        }) (listLuaFiles ./shared/plugins)
+        }) (listLuaFiles ./neovim/plugins)
       );
       extraPackages =
         with pkgs;
@@ -61,8 +59,12 @@ in
           vim.g.mapleader = " "
           vim.g.maplocalleader = "\\"
         '')
-        (lib.concatMapStrings lib.readFile (listLuaFiles ./shared/config))
+        (lib.concatMapStrings lib.readFile (listLuaFiles ./neovim/config))
       ];
+    };
+    xdg = {
+      enable = true;
+      configFile.stylua.source = ./neovim/stylua;
     };
   };
 }
