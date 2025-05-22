@@ -10,6 +10,7 @@ in
 {
   imports = [
     inputs.self.homeManagerModules.neovim.shared
+    inputs.self.nixosModules.lib
   ];
   home = {
     username = "josh";

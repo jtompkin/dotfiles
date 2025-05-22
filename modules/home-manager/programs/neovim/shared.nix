@@ -6,23 +6,13 @@
 }:
 let
   inherit (lib) mkIf mkMerge mkBefore;
+  inherit (config.lib.custom) listLuaFiles mkNeovimPluginCfgFromFile;
   cfg = config.programs.neovim.shared;
-  mkPluginCfg = name: {
-    type = "lua";
-    plugin =
-      {
-        "nvim-treesitter" = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
-      }
-      .${name} or pkgs.vimPlugins.${name};
-    config =
-      let
-        cfgPath = ./shared/plugins/${name}.lua;
-      in
-      if lib.pathIsRegularFile cfgPath then lib.readFile cfgPath else "";
-  };
-  readDirPaths = dir: lib.mapAttrsToList (name: _type: dir + "/${name}") (builtins.readDir dir);
 in
 {
+  imports = [
+
+  ];
   options = {
     programs.neovim.shared.enable = lib.mkEnableOption "shared neovim configuration";
     programs.neovim.shared.minimal = lib.mkEnableOption "building neovim with all plugins (false) or just basic configuration (true)";
@@ -48,12 +38,10 @@ in
           # fzf-lua dependencies
           nvim-web-devicons
         ]
-        ++ lib.pipe (builtins.readDir ./shared/plugins) [
-          (lib.filterAttrs (name: type: lib.hasSuffix ".lua" name && type == "regular"))
-          lib.attrNames
-          (lib.map (lib.removeSuffix ".lua"))
-          (lib.map mkPluginCfg)
-        ]
+        ++ map (mkNeovimPluginCfgFromFile pkgs.vimPlugins {
+          # Add plugin mappings here, otherwise basename of file is plugin name
+          "nvim-treesitter" = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
+        }) (listLuaFiles ./shared/plugins)
       );
       extraPackages =
         with pkgs;
@@ -73,10 +61,7 @@ in
           vim.g.mapleader = " "
           vim.g.maplocalleader = "\\"
         '')
-        (lib.pipe (readDirPaths ./shared/config) [
-          (lib.filter (name: lib.hasSuffix ".lua" name))
-          (lib.concatMapStrings lib.readFile)
-        ])
+        (lib.concatMapStrings lib.readFile (listLuaFiles ./shared/config))
       ];
     };
   };
