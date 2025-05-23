@@ -43,6 +43,13 @@ let
     listLuaFiles = listFilesSuffix ".lua";
     listNixFiles = listFilesSuffix ".nix";
     listModuleFiles = listFilesSuffix "-module.nix";
+    listDefaultFiles =
+      dir: lib.filter (file: baseNameOf file == "default.nix") (lib.filesystem.listFilesRecursive dir);
+    genImportsFromDir =
+      dir:
+      lib.genAttrs (map (file: baseNameOf (dirOf file)) (listDefaultFiles dir)) (
+        name: import (dir + "/${name}")
+      );
 
     # Generate a Neovim plugin config suitable for home-manager containing configuration
     # from a file
@@ -80,11 +87,21 @@ let
         ];
       };
 
-    libModule =
-      { ... }:
-      {
-        lib.lib = extra;
+    mkHomeManagerConfiguration =
+      specialArgs: system: module:
+      inputs.home-manager.lib.homeManagerConfiguration {
+        pkgs = inputs.nixpkgs.legacyPackages.${system};
+        extraSpecialArgs = { } // specialArgs;
+        modules = [
+          libModule
+          { imports = listModuleFiles ../modules/home-manager; }
+          module
+        ];
       };
+
+    libModule = {
+      lib.lib = extra;
+    };
   };
 in
 lib // extra

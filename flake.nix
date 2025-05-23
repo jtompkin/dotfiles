@@ -44,14 +44,7 @@
       };
       # QEMU x86_64-linux vm
       # WSL2
-      #nixosConfigurations."nixos" = lib.nixosSystem {
-      #  specialArgs = { inherit inputs; };
-      #  modules = [ hosts/nixos-wsl/configuration.nix ];
-      #};
       nixosConfigurations."franken" = lib.mkNixosConfiguration { } ./hosts/x86_64-linux/franken;
-      nixosConfigurations."completion" = lib.mkNixosConfiguration { } {
-        nixpkgs.hostPlatform = "x86_64-linux";
-      };
       # External HDD
       nixosConfigurations."spinny" = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };
@@ -71,37 +64,19 @@
           home-manager.darwinModules.home-manager
         ];
       };
+      nixosConfigurations."completion" = lib.mkNixosConfiguration { } {
+        nixpkgs.hostPlatform = "x86_64-linux";
+      };
+      homeConfigurations."completion" = lib.mkHomeManagerConfiguration { } "x86_64-linux" {
+        home = {
+          username = "none";
+          homeDirectory = "/home/none";
+          stateVersion = "25.05";
+        };
+      };
       nixosModules.lib = extraModulesPath + "/common/lib.nix";
       homeManagerModules.neovim.shared = import (
         extraModulesPath + "/home-manager/programs/neovim/shared.nix"
       );
-      # Dummies for completion
-      #nixosConfigurations."completion" = nixpkgs.lib.nixosSystem {
-      #  specialArgs = { inherit inputs; };
-      #  modules = [
-      #    {
-      #      imports = [
-      #        inputs.nixos-wsl.nixosModules.default
-      #        inputs.home-manager.nixosModules.home-manager
-      #        inputs.self.nixosModules.lib
-      #      ];
-      #      nixpkgs.hostPlatform.system = "x86_64-linux";
-      #    }
-      #  ];
-      #};
-      homeConfigurations."completion" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages."x86_64-linux";
-        extraSpecialArgs = { inherit inputs; };
-        modules = [
-          {
-            imports = [ inputs.self.homeManagerModules.neovim.shared ];
-            home = {
-              username = "none";
-              homeDirectory = "/home/none";
-              stateVersion = "24.11";
-            };
-          }
-        ];
-      };
     };
 }
