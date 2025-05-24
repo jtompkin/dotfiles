@@ -8,12 +8,12 @@ lspconfig.nixd.setup({
 		nixd = {
 			options = {
 				home_manager = {
-					--expr = [[(builtins.getFlake "github:jtompkin/dotfiles").homeConfigurations."completion".options]],
-					expr = [[(builtins.getFlake "/home/josh/dotfiles").homeConfigurations."completion".options]],
+					expr = [[(builtins.getFlake "github:jtompkin/dotfiles").homeConfigurations."completion".options]],
+					--expr = [[(builtins.getFlake "/home/josh/dotfiles").homeConfigurations."completion".options]],
 				},
 				nixos = {
-					--expr = [[(builtins.getFlake "github:jtompkin/dotfiles").nixosConfigurations."completion".options]],
-					expr = [[(builtins.getFlake "/home/josh/dotfiles").nixosConfigurations."completion".options]],
+					expr = [[(builtins.getFlake "github:jtompkin/dotfiles").nixosConfigurations."completion".options]],
+					--expr = [[(builtins.getFlake "/home/josh/dotfiles").nixosConfigurations."completion".options]],
 				},
 			},
 		},

@@ -13,6 +13,7 @@ in
   options.wunkus.profiles.minimal.enable = lib.mkEnableOption "minimal Linux config";
   config = mkIf cfg.enable {
     nixpkgs.hostPlatform = config.wunkus.settings.system;
+    time.timeZone = mkDefault "America/New_York";
     environment = {
       systemPackages = mkDefault [ pkgs.vim ];
     };
@@ -23,7 +24,7 @@ in
     users = {
       users.${username} = {
         isNormalUser = true;
-        extraGroups = [ "wheel" ];
+        extraGroups = mkDefault [ "wheel" ];
       };
     };
   };

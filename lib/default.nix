@@ -10,6 +10,7 @@ let
     darwinSystems = lib.filter (lib.hasSuffix "-darwin") allSystems;
 
     forSystems = systems: lib.genAttrs systems;
+    mapGenAttrs = f: names: lib.genAttrs names f;
     forAllSystems = lib.genAttrs allSystems;
 
     # flattenAttrset taken from: https://github.com/nmasur/dotfiles
