@@ -92,23 +92,23 @@ let
       abort "Not implemented";
 
     genConfigsFromModules =
-      configMaker: specialArgs: modules:
+      modules: specialArgs:
+      let
+        getConfigMaker =
+          system: host:
+          if lib.elem system const.darwinSystems then
+            mkDarwinConfiguration
+          else if lib.hasInfix "@" host then
+            mkHomeManagerConfiguration
+          else
+            mkNixosConfiguration;
+      in
       flattenAttrset (
         lib.genAttrs (lib.attrNames modules) (
           system:
-          let
-            getConfigMaker =
-              { system, host }:
-              if lib.elem system const.darwinSystems then
-                mkDarwinConfiguration
-              else if lib.hasInfix "@" host then
-                mkHomeManagerConfiguration
-              else
-                mkNixosConfiguration;
-          in
           lib.mapAttrs (
             host: module:
-            getConfigMaker { inherit system host; } {
+            getConfigMaker system host {
               inherit
                 specialArgs
                 system

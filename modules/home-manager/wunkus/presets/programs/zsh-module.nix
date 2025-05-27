@@ -15,7 +15,7 @@ in
     programs = {
       zsh = {
         enable = true;
-        shellAliases = mkDefault {
+        shellAliases = {
           cat = mkIf config.programs.bat.enable "bat --paging=never";
           fd = mkIf config.programs.fd.enable "fd --one-file-system";
           ls = "ls --color=tty --group-directories-first";
