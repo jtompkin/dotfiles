@@ -52,6 +52,26 @@
         "type": "github"
       }
     },
+    "goclacker": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1748379828,
+        "narHash": "sha256-GTKIoISPQ54Wrv3+oL617cSShtdw7xfA5tVW+l0ssZQ=",
+        "owner": "jtompkin",
+        "repo": "goclacker",
+        "rev": "7f35512bd9c5c9510cf9d1db353d4c8a1358a303",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jtompkin",
+        "repo": "goclacker",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -183,6 +203,7 @@
     "root": {
       "inputs": {
         "disko": "disko",
+        "goclacker": "goclacker",
         "home-manager": "home-manager",
         "impermanence": "impermanence",
         "nix-darwin": "nix-darwin",
