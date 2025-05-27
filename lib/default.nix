@@ -45,7 +45,7 @@ let
     mkNixosConfiguration =
       {
         system ? null,
-        specialArgs,
+        specialArgs ? { },
         module,
       }:
       lib.nixosSystem {
@@ -57,10 +57,12 @@ let
           inputs.nixos-wsl.nixosModules.default
           libModule
           { imports = listModuleFiles ../modules/nixos; }
-          { nixpkgs.overlays = [ inputs.goclacker.overlays.default ]; }
           {
             home-manager = {
-              sharedModules = [ libModule ] ++ listModuleFiles ../modules/home-manager;
+              sharedModules = [
+                libModule
+                inputs.goclacker.homeModules.default
+              ] ++ listModuleFiles ../modules/home-manager;
               extraSpecialArgs = { } // specialArgs;
               useUserPackages = lib.mkDefault true;
               useGlobalPkgs = lib.mkDefault true;
@@ -81,6 +83,7 @@ let
         extraSpecialArgs = { } // specialArgs;
         modules = [
           libModule
+          inputs.goclacker.homeModules.default
           { imports = listModuleFiles ../modules/home-manager; }
           { nixpkgs.overlays = [ inputs.goclacker.overlays.default ]; }
           module

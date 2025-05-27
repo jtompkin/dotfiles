@@ -10,6 +10,7 @@ in
 {
   options.wunkus.profiles.comfy.enable = lib.mkEnableOption "comfy home-manager profile";
   config = mkIf cfg.enable {
+    programs.goclacker.enable = mkDefault true;
     wunkus.presets = {
       programs = {
         zsh.enable = mkDefault true;

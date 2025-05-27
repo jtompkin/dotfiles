@@ -32,7 +32,7 @@
       ...
     }:
     let
-      extraModulesPath = ./modules;
+      # extraModulesPath = ./modules;
       lib = import ./lib inputs;
     in
     {
@@ -59,13 +59,13 @@
             specialArgs = { inherit inputs; };
             modules = [ hosts/spinny/configuration.nix ];
           };
-          "completion" = lib.mkNixosConfiguration {
-            system = "x86_64-linux";
-            specialArgs = { };
-            module = {
-              nixpkgs.hostPlatform = "x86_64-linux";
-            };
-          };
+          # "completion" = lib.mkNixosConfiguration {
+          #   system = "x86_64-linux";
+          #   specialArgs = { };
+          #   module = {
+          #     nixpkgs.hostPlatform = "x86_64-linux";
+          #   };
+          # };
         };
       homeConfigurations = lib.flattenAttrset (lib.genConfigsFromModules lib.const.homeModules { }) // {
         "deck@steamdeck" = home-manager.lib.homeManagerConfiguration {
@@ -73,20 +73,20 @@
           extraSpecialArgs = { inherit inputs; };
           modules = [ hosts/steamdeck/home.nix ];
         };
-        "completion" = lib.mkHomeManagerConfiguration {
-          system = "x86_64-linux";
-          module = {
-            home = {
-              username = "none";
-              homeDirectory = "/home/none";
-              stateVersion = "25.05";
-            };
-          };
-          specialArgs = { };
-        };
-        homeManagerModules.neovim.shared = import (
-          extraModulesPath + "/home-manager/programs/neovim/shared.nix"
-        );
+        # "completion" = lib.mkHomeManagerConfiguration {
+        #   system = "x86_64-linux";
+        #   module = {
+        #     home = {
+        #       username = "none";
+        #       homeDirectory = "/home/none";
+        #       stateVersion = "25.05";
+        #     };
+        #   };
+        #   specialArgs = { };
+        # };
+        # homeManagerModules.neovim.shared = import (
+        #   extraModulesPath + "/home-manager/programs/neovim/shared.nix"
+        # );
       };
       darwinConfigurations."ArtSci-0KPQC4CF" = nix-darwin.lib.darwinSystem {
         specialArgs = { inherit inputs; };
