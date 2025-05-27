@@ -57,6 +57,7 @@ let
           inputs.nixos-wsl.nixosModules.default
           libModule
           { imports = listModuleFiles ../modules/nixos; }
+          { nixpkgs.overlays = [ inputs.goclacker.overlays.default ]; }
           {
             home-manager = {
               sharedModules = [ libModule ] ++ listModuleFiles ../modules/home-manager;
@@ -81,6 +82,7 @@ let
         modules = [
           libModule
           { imports = listModuleFiles ../modules/home-manager; }
+          { nixpkgs.overlays = [ inputs.goclacker.overlays.default ]; }
           module
         ];
       };

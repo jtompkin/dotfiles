@@ -18,6 +18,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    goclacker = {
+      url = "github:jtompkin/goclacker";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     impermanence.url = "github:nix-community/impermanence";
   };
   outputs =
@@ -55,8 +59,12 @@
             specialArgs = { inherit inputs; };
             modules = [ hosts/spinny/configuration.nix ];
           };
-          "completion" = lib.mkNixosConfiguration { } {
-            nixpkgs.hostPlatform = "x86_64-linux";
+          "completion" = lib.mkNixosConfiguration {
+            system = "x86_64-linux";
+            specialArgs = { };
+            module = {
+              nixpkgs.hostPlatform = "x86_64-linux";
+            };
           };
         };
       homeConfigurations = lib.flattenAttrset (lib.genConfigsFromModules lib.const.homeModules { }) // {
@@ -65,12 +73,16 @@
           extraSpecialArgs = { inherit inputs; };
           modules = [ hosts/steamdeck/home.nix ];
         };
-        "completion" = lib.mkHomeManagerConfiguration { } "x86_64-linux" {
-          home = {
-            username = "none";
-            homeDirectory = "/home/none";
-            stateVersion = "25.05";
+        "completion" = lib.mkHomeManagerConfiguration {
+          system = "x86_64-linux";
+          module = {
+            home = {
+              username = "none";
+              homeDirectory = "/home/none";
+              stateVersion = "25.05";
+            };
           };
+          specialArgs = { };
         };
         homeManagerModules.neovim.shared = import (
           extraModulesPath + "/home-manager/programs/neovim/shared.nix"
