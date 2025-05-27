@@ -1,3 +1,4 @@
+-- cellular-automaton-nvim.lua
 -- CellularAutomaton remaps
 vim.keymap.set(
 	"n",

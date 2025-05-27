@@ -1,3 +1,4 @@
+-- nvim-cmp.lua
 local cmp = require("cmp")
 local luasnip = require("luasnip")
 cmp.setup({
@@ -6,7 +7,8 @@ cmp.setup({
 		if vim.api.nvim_get_mode().mode == "c" then
 			return true
 		else
-			return not context.in_treesitter_capture("comment") and not context.in_syntax_group("Comment")
+			return not context.in_treesitter_capture("comment")
+				and not context.in_syntax_group("Comment")
 		end
 	end,
 	snippet = {

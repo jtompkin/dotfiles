@@ -1,3 +1,4 @@
+-- lualine-nvim.lua
 require("lualine").setup({
 	sections = {
 		lualine_a = { "mode" },

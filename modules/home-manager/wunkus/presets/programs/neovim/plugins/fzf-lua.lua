@@ -1,3 +1,4 @@
+-- fzf-lua.lua
 -- fzf-lua remaps
 local fzf = require("fzf-lua")
 vim.keymap.set("n", "<leader>pf", fzf.files, { desc = "Show files using fzf." })

@@ -1,3 +1,4 @@
+-- neogit.lua
 require("neogit").setup({
 	mappings = {
 		finder = {
