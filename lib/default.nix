@@ -1,3 +1,4 @@
+# This file requires "nixpkgs" to be in inputs
 inputs:
 let
   lib = inputs.nixpkgs.lib;
@@ -14,7 +15,7 @@ let
       darwinModules = lib.genAttrs const.darwinSystems (
         filterHostsFromSystem (negate (lib.hasInfix "@"))
       );
-      homeManagerModules = forAllSystems (filterHostsFromSystem (lib.hasInfix "@"));
+      homeModules = forAllSystems (filterHostsFromSystem (lib.hasInfix "@"));
     };
 
     negate = predicate: x: !(predicate x);
@@ -22,9 +23,7 @@ let
     filterHostsFromSystem =
       predicate: system: lib.filterAttrs (host: module: predicate host) const.allSystemModules.${system};
 
-    # flattenAttrset taken from: https://github.com/nmasur/dotfiles
     # { x86_64-linux = { franken = { ... } } } -> { franken = { ... } }
-    #flattenAttrset = attrs: builtins.foldl' lib.mergeAttrs { } (builtins.attrValues attrs);
     flattenAttrset = attrs: lib.mergeAttrsList (lib.attrValues attrs);
 
     listFilesSuffix =
@@ -35,6 +34,8 @@ let
     listDefaultFiles =
       dir: lib.filter (file: baseNameOf file == "default.nix") (lib.filesystem.listFilesRecursive dir);
 
+    # Recurse into dir and return attrset of imported default.nix files as values and
+    # their containing directory as keys
     genImportsFromDir =
       dir:
       lib.genAttrs (map (file: baseNameOf (dirOf file)) (listDefaultFiles dir)) (
@@ -47,7 +48,7 @@ let
         specialArgs,
         module,
       }:
-      inputs.nixpkgs.lib.nixosSystem {
+      lib.nixosSystem {
         inherit specialArgs;
         modules = [
           inputs.home-manager.nixosModules.home-manager
@@ -103,20 +104,18 @@ let
           else
             mkNixosConfiguration;
       in
-      flattenAttrset (
-        lib.genAttrs (lib.attrNames modules) (
-          system:
-          lib.mapAttrs (
-            host: module:
-            getConfigMaker system host {
-              inherit
-                specialArgs
-                system
-                module
-                ;
-            }
-          ) modules.${system}
-        )
+      lib.genAttrs (lib.attrNames modules) (
+        system:
+        lib.mapAttrs (
+          host: module:
+          getConfigMaker system host {
+            inherit
+              specialArgs
+              system
+              module
+              ;
+          }
+        ) modules.${system}
       );
 
     # Generate a Neovim plugin config suitable for home-manager containing configuration

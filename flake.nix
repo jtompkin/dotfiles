@@ -42,15 +42,7 @@
       # completion : Dummy for lsp       : x86_64-linux (fake)
       nixosConfigurations =
         # TODO: replace old configs with shiny new format
-        # lib.flattenAttrset (
-        #   lib.genAttrs (lib.attrNames lib.const.nixosModules) (
-        #     system:
-        #     lib.mapAttrs (
-        #       host: module: lib.mkNixosConfiguration { } system module
-        #     ) lib.const.nixosModules.${system}
-        #   )
-        # )
-        lib.genConfigsFromModules lib.const.nixosModules { } // {
+        lib.flattenAttrset (lib.genConfigsFromModules lib.const.nixosModules { }) // {
           "imperfect" = nixpkgs.lib.nixosSystem {
             specialArgs = { inherit inputs; };
             modules = [ hosts/imperfect/configuration.nix ];
@@ -67,7 +59,7 @@
             nixpkgs.hostPlatform = "x86_64-linux";
           };
         };
-      homeConfigurations = lib.genConfigsFromModules lib.const.homeManagerModules { } // {
+      homeConfigurations = lib.flattenAttrset (lib.genConfigsFromModules lib.const.homeModules { }) // {
         "deck@steamdeck" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages."x86_64-linux";
           extraSpecialArgs = { inherit inputs; };
