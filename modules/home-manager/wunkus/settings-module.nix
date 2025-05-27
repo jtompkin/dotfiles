@@ -3,7 +3,7 @@
   options.wunkus.settings = {
     username = lib.mkOption {
       type = lib.types.str;
-      description = "Username of the big-boss-man of this system";
+      description = "Username of the this user";
     };
     host = lib.mkOption {
       type = lib.types.str;

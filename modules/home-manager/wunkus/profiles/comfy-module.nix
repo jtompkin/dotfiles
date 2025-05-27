@@ -14,6 +14,7 @@ in
       programs = {
         zsh.enable = mkDefault true;
         tmux.enable = mkDefault true;
+        tmux.minimal = false;
         neovim.enable = mkDefault true;
         shellExtras.enable = mkDefault true;
         git.enable = mkDefault true;

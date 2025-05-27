@@ -25,6 +25,7 @@ in
       programs = {
         zsh.enable = mkDefault true;
         tmux.enable = mkDefault true;
+        tmux.minimal = mkDefault true;
       };
     };
   };
