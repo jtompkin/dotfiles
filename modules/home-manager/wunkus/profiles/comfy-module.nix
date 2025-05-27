@@ -8,13 +8,14 @@ let
   inherit (lib) mkIf mkDefault;
 in
 {
-  options.wunkus.profiles.comfy.enable = lib.mkEnableOption "Comfy home-manager";
+  options.wunkus.profiles.comfy.enable = lib.mkEnableOption "comfy home-manager profile";
   config = mkIf cfg.enable {
+    programs.goclacker.enable = mkDefault true;
     wunkus.presets = {
       programs = {
         zsh.enable = mkDefault true;
-        zsh.oh-my-zsh = mkDefault true;
         tmux.enable = mkDefault true;
+        tmux.minimal = false;
         neovim.enable = mkDefault true;
         shellExtras.enable = mkDefault true;
         git.enable = mkDefault true;

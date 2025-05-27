@@ -5,7 +5,12 @@
   ...
 }:
 let
-  inherit (lib) mkIf mkMerge mkBefore;
+  inherit (lib)
+    mkIf
+    mkMerge
+    mkBefore
+    mkDefault
+    ;
   inherit (config.lib.lib) listLuaFiles mkNeovimPluginCfgFromFile;
   cfg = config.wunkus.presets.programs.neovim;
 in
@@ -17,10 +22,10 @@ in
   };
   config = mkIf cfg.enable {
     programs.neovim = {
-      enable = true;
-      defaultEditor = true;
-      viAlias = true;
-      vimAlias = true;
+      enable = mkDefault true;
+      defaultEditor = mkDefault true;
+      viAlias = mkDefault true;
+      vimAlias = mkDefault true;
       plugins = mkIf (!cfg.minimal) (
         with pkgs.vimPlugins;
         [
@@ -63,8 +68,7 @@ in
       ];
     };
     xdg = {
-      enable = true;
-      configFile.stylua.source = ./neovim/stylua;
+      configFile.stylua.source = mkDefault ./neovim/stylua;
     };
   };
 }

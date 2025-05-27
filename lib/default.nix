@@ -1,55 +1,126 @@
+# This file requires "nixpkgs" to be in inputs
 inputs:
 let
   lib = inputs.nixpkgs.lib;
   extra = rec {
-    allSystems = [
-      "x86_64-linux"
-      "aarch64-darwin"
-    ];
-    linuxSystems = lib.filter (lib.hasSuffix "-linux") allSystems;
-    darwinSystems = lib.filter (lib.hasSuffix "-darwin") allSystems;
+    const = {
+      allSystems = [
+        "x86_64-linux"
+        "aarch64-darwin"
+      ];
+      linuxSystems = lib.filter (lib.hasSuffix "-linux") const.allSystems;
+      darwinSystems = lib.filter (lib.hasSuffix "-darwin") const.allSystems;
+      allSystemModules = forAllSystems (system: genImportsFromDir ../hosts/${system});
+      nixosModules = lib.genAttrs const.linuxSystems (filterHostsFromSystem (negate (lib.hasInfix "@")));
+      darwinModules = lib.genAttrs const.darwinSystems (
+        filterHostsFromSystem (negate (lib.hasInfix "@"))
+      );
+      homeModules = forAllSystems (filterHostsFromSystem (lib.hasInfix "@"));
+    };
 
-    forSystems = systems: lib.genAttrs systems;
-    mapGenAttrs = f: names: lib.genAttrs names f;
-    forAllSystems = lib.genAttrs allSystems;
+    negate = predicate: x: !(predicate x);
+    forAllSystems = f: lib.genAttrs const.allSystems f;
+    filterHostsFromSystem =
+      predicate: system: lib.filterAttrs (host: module: predicate host) const.allSystemModules.${system};
 
-    # flattenAttrset taken from: https://github.com/nmasur/dotfiles
-    flattenAttrset = attrs: builtins.foldl' lib.mergeAttrs { } (builtins.attrValues attrs);
-
-    genAttrsFromFiles =
-      files: f:
-      let
-        attrLists = lib.pipe files [
-          (map (lib.match "\./?([^.]*)(\..*$)"))
-          (map lib.head)
-          (map (lib.splitString "/"))
-        ];
-      in
-      map (lib.foldl' (acc: elem: acc // { ${elem} = f elem; }) { }) attrLists;
-    #files: f:
-    #let
-    #  attrLists = lib.pipe files [
-    #    (map (lib.match "\./?([^.]*)(\..*$)"))
-    #    (map lib.head)
-    #    (map (lib.splitString "/"))
-    #  ];
-    #in
-    ##map (map (name: lib.nameValuePair name (f name))) attrLists;
-    #map flattenAttrset (map (names: lib.genAttrs names f) attrLists);
-
-    listFilesFromDir = dir: map (lib.path.removePrefix dir) (lib.filesystem.listFilesRecursive dir);
+    # { x86_64-linux = { franken = { ... } } } -> { franken = { ... } }
+    flattenAttrset = attrs: lib.mergeAttrsList (lib.attrValues attrs);
 
     listFilesSuffix =
       suffix: dir: lib.filter (lib.hasSuffix suffix) (lib.filesystem.listFilesRecursive dir);
-    listLuaFiles = listFilesSuffix ".lua";
-    listNixFiles = listFilesSuffix ".nix";
-    listModuleFiles = listFilesSuffix "-module.nix";
+    listLuaFiles = dir: listFilesSuffix ".lua" dir;
+    listNixFiles = dir: listFilesSuffix ".nix" dir;
+    listModuleFiles = dir: listFilesSuffix "-module.nix" dir;
     listDefaultFiles =
       dir: lib.filter (file: baseNameOf file == "default.nix") (lib.filesystem.listFilesRecursive dir);
+
+    # Recurse into dir and return attrset of imported default.nix files as values and
+    # their containing directory as keys
     genImportsFromDir =
       dir:
       lib.genAttrs (map (file: baseNameOf (dirOf file)) (listDefaultFiles dir)) (
         name: import (dir + "/${name}")
+      );
+
+    mkNixosConfiguration =
+      {
+        system ? null,
+        specialArgs ? { },
+        module,
+      }:
+      lib.nixosSystem {
+        inherit specialArgs;
+        modules = [
+          inputs.home-manager.nixosModules.home-manager
+          inputs.disko.nixosModules.disko
+          inputs.impermanence.nixosModules.impermanence
+          inputs.nixos-wsl.nixosModules.default
+          libModule
+          { imports = listModuleFiles ../modules/nixos; }
+          {
+            home-manager = {
+              sharedModules = [
+                libModule
+                inputs.goclacker.homeModules.default
+              ] ++ listModuleFiles ../modules/home-manager;
+              extraSpecialArgs = { } // specialArgs;
+              useUserPackages = lib.mkDefault true;
+              useGlobalPkgs = lib.mkDefault true;
+            };
+          }
+          module
+        ];
+      };
+
+    mkHomeManagerConfiguration =
+      {
+        system,
+        specialArgs,
+        module,
+      }:
+      inputs.home-manager.lib.homeManagerConfiguration {
+        pkgs = inputs.nixpkgs.legacyPackages.${system};
+        extraSpecialArgs = { } // specialArgs;
+        modules = [
+          libModule
+          inputs.goclacker.homeModules.default
+          { imports = listModuleFiles ../modules/home-manager; }
+          { nixpkgs.overlays = [ inputs.goclacker.overlays.default ]; }
+          module
+        ];
+      };
+    mkDarwinConfiguration =
+      {
+        system,
+        specialArgs,
+        module,
+      }:
+      abort "Not implemented";
+
+    genConfigsFromModules =
+      modules: specialArgs:
+      let
+        getConfigMaker =
+          system: host:
+          if lib.elem system const.darwinSystems then
+            mkDarwinConfiguration
+          else if lib.hasInfix "@" host then
+            mkHomeManagerConfiguration
+          else
+            mkNixosConfiguration;
+      in
+      lib.genAttrs (lib.attrNames modules) (
+        system:
+        lib.mapAttrs (
+          host: module:
+          getConfigMaker system host {
+            inherit
+              specialArgs
+              system
+              module
+              ;
+          }
+        ) modules.${system}
       );
 
     # Generate a Neovim plugin config suitable for home-manager containing configuration
@@ -63,41 +134,6 @@ let
         type = "lua";
         plugin = pluginMapping.${pluginName} or vimPlugins.${pluginName};
         config = if lib.pathExists cfgPath then lib.readFile cfgPath else "";
-      };
-
-    mkNixosConfiguration =
-      specialArgs: module:
-      inputs.nixpkgs.lib.nixosSystem {
-        inherit specialArgs;
-        modules = [
-          inputs.home-manager.nixosModules.home-manager
-          inputs.disko.nixosModules.disko
-          inputs.impermanence.nixosModules.impermanence
-          inputs.nixos-wsl.nixosModules.default
-          libModule
-          { imports = listModuleFiles ../modules/nixos; }
-          {
-            home-manager = {
-              sharedModules = [ libModule ] ++ listModuleFiles ../modules/home-manager;
-              extraSpecialArgs = { } // specialArgs;
-              useUserPackages = lib.mkDefault true;
-              useGlobalPkgs = lib.mkDefault true;
-            };
-          }
-          module
-        ];
-      };
-
-    mkHomeManagerConfiguration =
-      specialArgs: system: module:
-      inputs.home-manager.lib.homeManagerConfiguration {
-        pkgs = inputs.nixpkgs.legacyPackages.${system};
-        extraSpecialArgs = { } // specialArgs;
-        modules = [
-          libModule
-          { imports = listModuleFiles ../modules/home-manager; }
-          module
-        ];
       };
 
     libModule = {

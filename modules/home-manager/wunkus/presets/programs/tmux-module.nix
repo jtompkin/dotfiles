@@ -13,7 +13,7 @@ in
   options.wunkus.presets.programs.tmux.minimal = lib.mkEnableOption "minimal tmux configuration";
   config = mkIf cfg.enable {
     programs.tmux = {
-      enable = true;
+      enable = mkDefault true;
       keyMode = mkDefault "vi";
       shell = mkIf config.programs.zsh.enable (lib.getExe pkgs.zsh);
       extraConfig = # tmux

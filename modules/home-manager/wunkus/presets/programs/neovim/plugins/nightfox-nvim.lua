@@ -1,3 +1,4 @@
+-- nightfox-nvim.lua
 require("nightfox").setup({
 	specs = {
 		all = {

@@ -18,6 +18,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    goclacker = {
+      url = "github:jtompkin/goclacker";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     impermanence.url = "github:nix-community/impermanence";
   };
   outputs =
@@ -28,7 +32,7 @@
       ...
     }:
     let
-      extraModulesPath = ./modules;
+      # extraModulesPath = ./modules;
       lib = import ./lib inputs;
     in
     {
@@ -42,12 +46,7 @@
       # completion : Dummy for lsp       : x86_64-linux (fake)
       nixosConfigurations =
         # TODO: replace old configs with shiny new format
-        lib.pipe lib.linuxSystems [
-          (lib.mapGenAttrs (system: lib.genImportsFromDir ./hosts/${system}))
-          lib.flattenAttrset
-          (lib.mapAttrs (_host: module: lib.mkNixosConfiguration { } module))
-        ]
-        // {
+        lib.flattenAttrset (lib.genConfigsFromModules lib.const.nixosModules { }) // {
           "imperfect" = nixpkgs.lib.nixosSystem {
             specialArgs = { inherit inputs; };
             modules = [ hosts/imperfect/configuration.nix ];
@@ -60,14 +59,34 @@
             specialArgs = { inherit inputs; };
             modules = [ hosts/spinny/configuration.nix ];
           };
-          "completion" = lib.mkNixosConfiguration { } {
-            nixpkgs.hostPlatform = "x86_64-linux";
-          };
+          # "completion" = lib.mkNixosConfiguration {
+          #   system = "x86_64-linux";
+          #   specialArgs = { };
+          #   module = {
+          #     nixpkgs.hostPlatform = "x86_64-linux";
+          #   };
+          # };
         };
-      homeConfigurations."deck@steamdeck" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages."x86_64-linux";
-        extraSpecialArgs = { inherit inputs; };
-        modules = [ hosts/steamdeck/home.nix ];
+      homeConfigurations = lib.flattenAttrset (lib.genConfigsFromModules lib.const.homeModules { }) // {
+        "deck@steamdeck" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages."x86_64-linux";
+          extraSpecialArgs = { inherit inputs; };
+          modules = [ hosts/steamdeck/home.nix ];
+        };
+        # "completion" = lib.mkHomeManagerConfiguration {
+        #   system = "x86_64-linux";
+        #   module = {
+        #     home = {
+        #       username = "none";
+        #       homeDirectory = "/home/none";
+        #       stateVersion = "25.05";
+        #     };
+        #   };
+        #   specialArgs = { };
+        # };
+        # homeManagerModules.neovim.shared = import (
+        #   extraModulesPath + "/home-manager/programs/neovim/shared.nix"
+        # );
       };
       darwinConfigurations."ArtSci-0KPQC4CF" = nix-darwin.lib.darwinSystem {
         specialArgs = { inherit inputs; };
@@ -76,15 +95,5 @@
           home-manager.darwinModules.home-manager
         ];
       };
-      homeConfigurations."completion" = lib.mkHomeManagerConfiguration { } "x86_64-linux" {
-        home = {
-          username = "none";
-          homeDirectory = "/home/none";
-          stateVersion = "25.05";
-        };
-      };
-      homeManagerModules.neovim.shared = import (
-        extraModulesPath + "/home-manager/programs/neovim/shared.nix"
-      );
     };
 }
