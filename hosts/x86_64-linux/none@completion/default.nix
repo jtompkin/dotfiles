@@ -1,10 +1,7 @@
 {
-  wunkus = {
-    settings = {
-      host = "completion";
-      username = "none";
-      system = "x86_64-linux";
-    };
+  home = {
+    username = "none";
+    homeDirectory = "/home/none";
+    stateVersion = "25.05";
   };
-  home.stateVersion = "25.05";
 }

@@ -68,11 +68,16 @@
           # };
         };
       homeConfigurations = lib.flattenAttrset (lib.genConfigsFromModules lib.const.homeModules { }) // {
-        "deck@steamdeck" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages."x86_64-linux";
-          extraSpecialArgs = { inherit inputs; };
-          modules = [ hosts/steamdeck/home.nix ];
+        "deck@steamdeck" = lib.mkHomeManagerConfiguration {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
+          module = ./hosts/steamdeck/home.nix;
         };
+        # "deck@steamdeck" = home-manager.lib.homeManagerConfiguration {
+        #   pkgs = nixpkgs.legacyPackages."x86_64-linux";
+        #   extraSpecialArgs = { inherit inputs; };
+        #   modules = [ hosts/steamdeck/home.nix ];
+        # };
         # "completion" = lib.mkHomeManagerConfiguration {
         #   system = "x86_64-linux";
         #   module = {

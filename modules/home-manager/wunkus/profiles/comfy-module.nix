@@ -4,7 +4,7 @@
   ...
 }:
 let
-  cfg = config.wunkus.profiles.common;
+  cfg = config.wunkus.profiles.comfy;
   inherit (lib) mkIf mkDefault;
 in
 {
