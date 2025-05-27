@@ -6,10 +6,7 @@
   ...
 }:
 {
-  imports = [
-    inputs.self.homeManagerModules.neovim.shared
-  ];
-  nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+  wunkus.presets.programs.neovim.enable = true;
   home = {
     username = "deck";
     homeDirectory = "/home/deck";
@@ -173,7 +170,6 @@
       package = config.lib.nixGL.wrap pkgs.mpv;
     };
 
-    neovim.shared.enable = true;
     fd.enable = true;
     ripgrep.enable = true;
     home-manager.enable = true;
@@ -199,9 +195,6 @@
 
   xdg = {
     enable = true;
-    configFile = {
-      stylua.source = ../../dotfiles/.config/stylua;
-    };
     desktopEntries = {
       RStudio = {
         name = "RStudio";
