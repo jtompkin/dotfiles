@@ -14,7 +14,7 @@ in
   config = mkIf cfg.enable {
     boot = {
       loader = {
-        systemd-boot.enable = mkDefault true;
+        #systemd-boot.enable = mkDefault true;
         efi.canTouchEfiVariables = mkDefault true;
       };
     };
@@ -25,7 +25,7 @@ in
       };
     };
     services.openssh.enable = true;
-    networking.networkManager.enable = mkDefault true;
+    networking.networkmanager.enable = mkDefault true;
     i18n.defaultLocale = "en_US.UTF-8";
   };
 }

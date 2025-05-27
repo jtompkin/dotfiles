@@ -10,7 +10,7 @@
       description = "Hostname of this system";
     };
     system = lib.mkOption {
-      type = lib.types.enum config.lib.lib.allSystems;
+      type = lib.types.enum config.lib.lib.const.allSystems;
       description = "System to build this configuration on";
     };
   };
