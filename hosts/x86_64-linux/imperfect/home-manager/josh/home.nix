@@ -1,13 +1,12 @@
 {
-  inputs,
   lib,
   pkgs,
   ...
 }:
 {
-  imports = [
-    inputs.self.homeManagerModules.neovim.shared
-  ];
+  # imports = [
+  #   inputs.self.homeManagerModules.neovim.shared
+  # ];
   home = {
     stateVersion = "24.11";
     username = "josh";

@@ -20,7 +20,6 @@ let
       homeModules = forAllSystems (filterHostsFromSystem (lib.hasInfix "@"));
       overlays = [
         inputs.nixgl.overlay
-        inputs.goclacker.overlays.default
       ];
       pkgsBySystem = forAllSystems (
         system:

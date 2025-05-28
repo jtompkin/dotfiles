@@ -5,9 +5,9 @@
   ...
 }:
 {
-  imports = [
-    inputs.self.homeManagerModules.neovim.shared
-  ];
+  # imports = [
+  #   inputs.self.homeManagerModules.neovim.shared
+  # ];
   home = {
     username = "benoitja";
     homeDirectory = "/Users/benoitja";
@@ -111,7 +111,7 @@
       changeDirWidgetCommand = "";
     };
 
-    neovim.shared.enable = true;
+    # neovim.shared.enable = true;
 
     fd.enable = true;
     ripgrep.enable = true;

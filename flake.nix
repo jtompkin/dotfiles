@@ -19,7 +19,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     goclacker = {
-      url = "github:jtompkin/goclacker";
+      url = "github:jtompkin/goclacker/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     impermanence.url = "github:nix-community/impermanence";
