@@ -159,7 +159,7 @@ let
 
   };
   libModule = {
-    lib.lib = extra;
+    lib.dotfiles = extra;
   };
 in
 lib // extra

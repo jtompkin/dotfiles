@@ -11,7 +11,7 @@ let
     mkBefore
     mkDefault
     ;
-  inherit (config.lib.lib) listLuaFiles mkNeovimPluginCfgFromFile;
+  inherit (config.lib.dotfiles) listLuaFiles mkNeovimPluginCfgFromFile;
   cfg = config.wunkus.presets.programs.neovim;
 in
 {
