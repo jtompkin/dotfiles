@@ -13,6 +13,16 @@ in
   options.wunkus.profiles.gui.nixGL =
     lib.mkEnableOption "gui home-manager profile with nixGL support";
   config = mkIf cfg.enable {
+    warnings =
+      if cfg.nixGL && !cfg.enable then
+        [
+          ''
+            You have enable nixGL support but not the gui module. No configuration 
+            will be changed without enabling the gui module.
+          ''
+        ]
+      else
+        [ ];
     home.packages = with pkgs; [
       xsel
       xclip

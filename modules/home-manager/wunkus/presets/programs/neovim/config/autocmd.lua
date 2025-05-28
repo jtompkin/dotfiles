@@ -27,6 +27,15 @@ autocmd("FileType", {
 	end,
 })
 
+autocmd("FileType", {
+	group = lsp_group,
+	pattern = { "markdown" },
+	callback = function()
+		vim.opt_local.colorcolumn = "80"
+		vim.opt_local.textwidth = 80
+	end,
+})
+
 autocmd("LspAttach", {
 	group = lsp_group,
 	callback = function(e)

@@ -11,9 +11,11 @@ let
       linuxSystems = lib.filter (lib.hasSuffix "-linux") const.allSystems;
       darwinSystems = lib.filter (lib.hasSuffix "-darwin") const.allSystems;
       allSystemModules = forAllSystems (system: genImportsFromDir ../hosts/${system});
-      nixosModules = lib.genAttrs const.linuxSystems (filterHostsFromSystem (negate (lib.hasInfix "@")));
+      nixosModules = lib.genAttrs const.linuxSystems (
+        filterHostsFromSystem (negatePredicate (lib.hasInfix "@"))
+      );
       darwinModules = lib.genAttrs const.darwinSystems (
-        filterHostsFromSystem (negate (lib.hasInfix "@"))
+        filterHostsFromSystem (negatePredicate (lib.hasInfix "@"))
       );
       homeModules = forAllSystems (filterHostsFromSystem (lib.hasInfix "@"));
       overlays = [
@@ -29,12 +31,14 @@ let
       );
     };
 
-    negate = predicate: x: !(predicate x);
+    negatePredicate = predicate: x: !(predicate x);
     forAllSystems = f: lib.genAttrs const.allSystems f;
     filterHostsFromSystem =
       predicate: system: lib.filterAttrs (host: module: predicate host) const.allSystemModules.${system};
 
-    # { x86_64-linux = { franken = { ... } } } -> { franken = { ... } }
+    /**
+      { x86_64-linux = { franken = { ... } } } -> { franken = { ... } }
+    */
     flattenAttrset = attrs: lib.mergeAttrsList (lib.attrValues attrs);
 
     listFilesSuffix =
@@ -45,8 +49,10 @@ let
     listDefaultFiles =
       dir: lib.filter (file: baseNameOf file == "default.nix") (lib.filesystem.listFilesRecursive dir);
 
-    # Recurse into dir and return attrset of imported default.nix files as values and
-    # their containing directory as keys
+    /**
+      Recurse into dir and return attrset of imported default.nix files as values and
+      their containing directory as keys
+    */
     genImportsFromDir =
       dir:
       lib.genAttrs (map (file: baseNameOf (dirOf file)) (listDefaultFiles dir)) (
@@ -91,7 +97,6 @@ let
         module,
       }:
       inputs.home-manager.lib.homeManagerConfiguration {
-        #pkgs = inputs.nixpkgs.legacyPackages.${system};
         pkgs = const.pkgsBySystem.${system};
         extraSpecialArgs = { } // specialArgs;
         modules = [
@@ -138,8 +143,10 @@ let
         ) modules.${system}
       );
 
-    # Generate a Neovim plugin config suitable for home-manager containing configuration
-    # from a file
+    /**
+      Generate a Neovim plugin config suitable for home-manager containing configuration
+      from a file
+    */
     mkNeovimPluginCfgFromFile =
       vimPlugins: pluginMapping: cfgPath:
       let
@@ -151,9 +158,9 @@ let
         config = if lib.pathExists cfgPath then lib.readFile cfgPath else "";
       };
 
-    libModule = {
-      lib.lib = extra;
-    };
+  };
+  libModule = {
+    lib.lib = extra;
   };
 in
 lib // extra

@@ -39,7 +39,6 @@
       # franken    : WSL2                : x86_64-linux
       # imperfect  : Virtualbox vm       : x86_64-linux
       # zeefess    : Virtualbox vm w/zfs : x86_64-linux
-
       # spinny     : External HDD        : x86_64-linux
       # steamdeck  : Steam Deck          : x86_64-linux (home-manager)
       # ArtSci-*   : Lab Macs            : aarch64-darwin (nix-darwin)
