@@ -9,7 +9,7 @@ lspconfig.nixd.setup({
 		nixd = {
 			options = {
 				home_manager = {
-					expr = [[(builtins.getFlake "github:jtompkin/dotfiles").homeConfigurations."completion".options]],
+					expr = [[(builtins.getFlake "github:jtompkin/dotfiles").homeConfigurations."none@completion".options]],
 					--expr = [[(builtins.getFlake "/home/josh/dotfiles").homeConfigurations."completion".options]],
 				},
 				nixos = {
