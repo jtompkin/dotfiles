@@ -8,6 +8,8 @@
     profiles = {
       common.enable = true;
       comfy.enable = true;
+      gui.enable = true;
+      gui.nixGL = true;
     };
   };
 

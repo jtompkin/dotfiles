@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 let
@@ -10,6 +11,7 @@ in
 {
   options.wunkus.profiles.comfy.enable = lib.mkEnableOption "comfy home-manager profile";
   config = mkIf cfg.enable {
+    home.packages = [ pkgs.dust ];
     programs.goclacker.enable = mkDefault true;
     wunkus.presets = {
       programs = {

@@ -14,18 +14,18 @@ in
       zsh = {
         enable = mkDefault true;
         shellAliases = {
-          ls = "ls --color=tty --group-directories-first";
-          l = "ls -lAhpv";
-          la = "ls -lahpv";
-          ll = "ls -lhpv";
-          info = "info --vi-keys";
-          ssh-vm = "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
-          scp-vm = "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
-          rebuild = "nixos-rebuild --flake 'github:jtompkin/dotfiles' --use-remote-sudo switch";
-          rebuild-local = "nixos-rebuild --flake '${config.home.homeDirectory}/dotfiles' --use-remote-sudo switch";
-          hm = "home-manager --flake 'github:jtompkin/dotfiles'";
-          hm-local = "home-manager --flake '${config.home.homeDirectory}/dotfiles'";
-          pkgdoc = "nix edit -f '<nixpkgs>'";
+          ls = mkDefault "ls --color=tty --group-directories-first";
+          l = mkDefault "ls -lAhpv";
+          la = mkDefault "ls -lahpv";
+          ll = mkDefault "ls -lhpv";
+          info = mkDefault "info --vi-keys";
+          ssh-vm = mkDefault "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
+          scp-vm = mkDefault "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
+          rebuild = mkDefault "nixos-rebuild --flake 'github:jtompkin/dotfiles' --use-remote-sudo switch";
+          rebuild-local = mkDefault "nixos-rebuild --flake '${config.home.homeDirectory}/dotfiles' --use-remote-sudo switch";
+          hm = mkDefault "home-manager --flake 'github:jtompkin/dotfiles'";
+          hm-local = mkDefault "home-manager --flake '${config.home.homeDirectory}/dotfiles'";
+          pkgdoc = mkDefault "nix edit -f '<nixpkgs>'";
         };
       };
     };

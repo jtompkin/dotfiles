@@ -32,7 +32,6 @@
       ...
     }:
     let
-      # extraModulesPath = ./modules;
       lib = import ./lib inputs;
     in
     {
@@ -40,6 +39,7 @@
       # franken    : WSL2                : x86_64-linux
       # imperfect  : Virtualbox vm       : x86_64-linux
       # zeefess    : Virtualbox vm w/zfs : x86_64-linux
+
       # spinny     : External HDD        : x86_64-linux
       # steamdeck  : Steam Deck          : x86_64-linux (home-manager)
       # ArtSci-*   : Lab Macs            : aarch64-darwin (nix-darwin)
@@ -59,39 +59,8 @@
             specialArgs = { inherit inputs; };
             modules = [ hosts/spinny/configuration.nix ];
           };
-          # "completion" = lib.mkNixosConfiguration {
-          #   system = "x86_64-linux";
-          #   specialArgs = { };
-          #   module = {
-          #     nixpkgs.hostPlatform = "x86_64-linux";
-          #   };
-          # };
         };
       homeConfigurations = lib.flattenAttrset (lib.genConfigsFromModules lib.const.homeModules { }) // {
-        "deck@steamdeck" = lib.mkHomeManagerConfiguration {
-          system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
-          module = ./hosts/steamdeck/home.nix;
-        };
-        # "deck@steamdeck" = home-manager.lib.homeManagerConfiguration {
-        #   pkgs = nixpkgs.legacyPackages."x86_64-linux";
-        #   extraSpecialArgs = { inherit inputs; };
-        #   modules = [ hosts/steamdeck/home.nix ];
-        # };
-        # "completion" = lib.mkHomeManagerConfiguration {
-        #   system = "x86_64-linux";
-        #   module = {
-        #     home = {
-        #       username = "none";
-        #       homeDirectory = "/home/none";
-        #       stateVersion = "25.05";
-        #     };
-        #   };
-        #   specialArgs = { };
-        # };
-        # homeManagerModules.neovim.shared = import (
-        #   extraModulesPath + "/home-manager/programs/neovim/shared.nix"
-        # );
       };
       darwinConfigurations."ArtSci-0KPQC4CF" = nix-darwin.lib.darwinSystem {
         specialArgs = { inherit inputs; };

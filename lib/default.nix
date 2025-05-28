@@ -16,6 +16,17 @@ let
         filterHostsFromSystem (negate (lib.hasInfix "@"))
       );
       homeModules = forAllSystems (filterHostsFromSystem (lib.hasInfix "@"));
+      overlays = [
+        inputs.nixgl.overlay
+        inputs.goclacker.overlays.default
+      ];
+      pkgsBySystem = forAllSystems (
+        system:
+        import inputs.nixpkgs {
+          localSystem = { inherit system; };
+          inherit (const) overlays;
+        }
+      );
     };
 
     negate = predicate: x: !(predicate x);
@@ -44,9 +55,9 @@ let
 
     mkNixosConfiguration =
       {
-        system ? null,
-        specialArgs ? { },
         module,
+        specialArgs,
+        system,
       }:
       lib.nixosSystem {
         inherit specialArgs;
@@ -57,6 +68,7 @@ let
           inputs.nixos-wsl.nixosModules.default
           libModule
           { imports = listModuleFiles ../modules/nixos; }
+          { nixpkgs.pkgs = const.pkgsBySystem.${system}; }
           {
             home-manager = {
               sharedModules = [
@@ -79,13 +91,13 @@ let
         module,
       }:
       inputs.home-manager.lib.homeManagerConfiguration {
-        pkgs = inputs.nixpkgs.legacyPackages.${system};
+        #pkgs = inputs.nixpkgs.legacyPackages.${system};
+        pkgs = const.pkgsBySystem.${system};
         extraSpecialArgs = { } // specialArgs;
         modules = [
           libModule
           inputs.goclacker.homeModules.default
           { imports = listModuleFiles ../modules/home-manager; }
-          { nixpkgs.overlays = [ inputs.goclacker.overlays.default ]; }
           module
         ];
       };
@@ -97,6 +109,9 @@ let
       }:
       abort "Not implemented";
 
+    /**
+      modules: { <system> = { <host> = <module>; }; }
+    */
     genConfigsFromModules =
       modules: specialArgs:
       let

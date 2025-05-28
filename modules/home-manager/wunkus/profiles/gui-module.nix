@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 let
@@ -12,5 +13,33 @@ in
   options.wunkus.profiles.gui.nixGL =
     lib.mkEnableOption "gui home-manager profile with nixGL support";
   config = mkIf cfg.enable {
+    home.packages = with pkgs; [
+      xsel
+      xclip
+      nerd-fonts.meslo-lg
+    ];
+    programs = {
+      alacritty = {
+        enable = mkDefault true;
+        package = mkIf cfg.nixGL (config.lib.nixGL.wrap pkgs.alacritty);
+        theme = mkDefault "carbonfox";
+        settings = {
+          terminal.shell = mkIf config.programs.zsh.enable (lib.getExe pkgs.zsh);
+          font.normal = {
+            family = "MesloLGS Nerd Font";
+            style = "Regular";
+          };
+        };
+      };
+      mpv = {
+        enable = mkDefault true;
+        package = mkIf cfg.nixGL (config.lib.nixGL.wrap pkgs.alacritty);
+      };
+    };
+    fonts.fontconfig.enable = mkDefault true;
+    nixGL = {
+      installScripts = [ "mesa" ];
+      packages = pkgs.nixgl;
+    };
   };
 }
