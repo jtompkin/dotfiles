@@ -59,11 +59,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1748626753,
-        "narHash": "sha256-K04/HmhOX7blIqlkJYr97U0/j2wNaaCN2sufkJ23Ql4=",
+        "lastModified": 1748640511,
+        "narHash": "sha256-Vy2DLu7tT85rpkZFpIw58lx5Qm/MhCOQ8QCMQpuSY7o=",
         "owner": "jtompkin",
         "repo": "goclacker",
-        "rev": "d944b83f53fd21bc85c14c8a7d58808c8a740355",
+        "rev": "b9e3ca381d5ef251c14d2ba60b8decc906a33aab",
         "type": "github"
       },
       "original": {
