@@ -12,7 +12,7 @@ rec {
     };
     disks = {
       btrfsEncrypt.enable = true;
-      btrfsEcrypt.swapSize = "4G";
+      btrfsEncrypt.swapSize = "4G";
     };
   };
 

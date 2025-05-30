@@ -46,10 +46,10 @@
       nixosConfigurations =
         # TODO: replace old configs with shiny new format
         lib.flattenAttrset (lib.genConfigsFromModules lib.const.nixosModules { }) // {
-          "imperfect" = nixpkgs.lib.nixosSystem {
-            specialArgs = { inherit inputs; };
-            modules = [ hosts/imperfect/configuration.nix ];
-          };
+          #"imperfect" = nixpkgs.lib.nixosSystem {
+          #  specialArgs = { inherit inputs; };
+          #  modules = [ hosts/imperfect/configuration.nix ];
+          #};
           "zeefess" = nixpkgs.lib.nixosSystem {
             specialArgs = { inherit inputs; };
             modules = [ hosts/zeefess/configuration.nix ];
