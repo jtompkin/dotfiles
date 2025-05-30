@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.wunkus.profiles.minimal;
+  cfg = config.wunkus.profiles.vm;
   inherit (config.wunkus.settings) username;
   inherit (lib) mkIf mkDefault;
 in
@@ -14,7 +14,7 @@ in
   config = mkIf cfg.enable {
     boot = {
       loader = {
-        #systemd-boot.enable = mkDefault true;
+        systemd-boot.enable = mkDefault true;
         efi.canTouchEfiVariables = mkDefault true;
       };
     };

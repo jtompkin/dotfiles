@@ -1,4 +1,3 @@
-# This file requires "nixpkgs" to be in inputs
 inputs:
 let
   lib = inputs.nixpkgs.lib;

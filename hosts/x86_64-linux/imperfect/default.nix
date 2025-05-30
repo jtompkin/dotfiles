@@ -10,7 +10,12 @@ rec {
       minimal.enable = true;
       vm.enable = true;
     };
+    disks = {
+      btrfsEncrypt.enable = true;
+      btrfsEcrypt.swapSize = "4G";
+    };
   };
+
   home-manager.users.${wunkus.settings.username} = {
     wunkus = {
       settings = {

@@ -59,8 +59,7 @@
             modules = [ hosts/spinny/configuration.nix ];
           };
         };
-      homeConfigurations = lib.flattenAttrset (lib.genConfigsFromModules lib.const.homeModules { }) // {
-      };
+      homeConfigurations = lib.flattenAttrset (lib.genConfigsFromModules lib.const.homeModules { });
       darwinConfigurations."ArtSci-0KPQC4CF" = nix-darwin.lib.darwinSystem {
         specialArgs = { inherit inputs; };
         modules = [
