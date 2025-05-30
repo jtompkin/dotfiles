@@ -10,11 +10,11 @@ let
 in
 {
   options.wunkus.profiles.gui.enable = lib.mkEnableOption "gui home-manager profile";
-  options.wunkus.profiles.gui.nixGL =
+  options.wunkus.profiles.gui.nixgl.enable =
     lib.mkEnableOption "gui home-manager profile with nixGL support";
   config = mkIf cfg.enable {
     warnings =
-      if cfg.nixGL && !cfg.enable then
+      if cfg.nixgl.enable && !cfg.enable then
         [
           ''
             You have enable nixGL support but not the gui module. No configuration 
@@ -31,7 +31,7 @@ in
     programs = {
       alacritty = {
         enable = mkDefault true;
-        package = mkIf cfg.nixGL (config.lib.nixGL.wrap pkgs.alacritty);
+        package = mkIf cfg.nixgl.enable (config.lib.nixGL.wrap pkgs.alacritty);
         theme = mkDefault "carbonfox";
         settings = {
           terminal.shell = mkIf config.programs.zsh.enable (lib.getExe pkgs.zsh);
@@ -43,7 +43,7 @@ in
       };
       mpv = {
         enable = mkDefault true;
-        package = mkIf cfg.nixGL (config.lib.nixGL.wrap pkgs.alacritty);
+        package = mkIf cfg.nixgl.enable (config.lib.nixGL.wrap pkgs.alacritty);
       };
     };
     fonts.fontconfig.enable = mkDefault true;

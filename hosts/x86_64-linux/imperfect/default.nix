@@ -9,6 +9,7 @@ rec {
     profiles = {
       minimal.enable = true;
       vm.enable = true;
+      ephemeral.enable = true;
     };
     disks = {
       btrfsEncrypt.enable = true;

@@ -1,7 +1,6 @@
 {
   wunkus = {
     settings = {
-      host = "steamdeck";
       username = "deck";
       system = "x86_64-linux";
     };
@@ -9,7 +8,7 @@
       common.enable = true;
       comfy.enable = true;
       gui.enable = true;
-      gui.nixGL = true;
+      gui.nixgl.enable = true;
     };
   };
 

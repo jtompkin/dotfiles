@@ -1,7 +1,6 @@
 {
   wunkus = {
     settings = {
-      host = "franken";
       username = "josh";
       system = "x86_64-linux";
     };

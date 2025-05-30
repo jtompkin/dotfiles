@@ -5,10 +5,6 @@
       type = lib.types.str;
       description = "Username of the this user";
     };
-    host = lib.mkOption {
-      type = lib.types.str;
-      description = "Hostname of this system";
-    };
     system = lib.mkOption {
       type = lib.types.enum config.lib.dotfiles.const.allSystems;
       description = "System to build this configuration on";
