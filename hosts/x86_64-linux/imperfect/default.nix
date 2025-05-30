@@ -14,6 +14,7 @@ rec {
       btrfsEncrypt.enable = true;
       btrfsEncrypt.swapSize = "4G";
     };
+    hardware."virtualbox-x86_64-linux".enable = true;
   };
 
   home-manager.users.${wunkus.settings.username} = {
