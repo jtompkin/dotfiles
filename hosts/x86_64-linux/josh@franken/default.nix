@@ -8,6 +8,7 @@
       common.enable = true;
       comfy.enable = true;
     };
+    presets.programs.go.enable = true;
   };
 
   programs.git.signing.key = "8C07A97FC369A5F4FCFAC6F1989246B0B9904782";
