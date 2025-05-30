@@ -1,4 +1,4 @@
-rec {
+{
   networking.hostName = "imperfect";
 
   wunkus = {
@@ -16,19 +16,6 @@ rec {
       btrfsEncrypt.swapSize = "4G";
     };
     hardware."virtualbox-x86_64-linux".enable = true;
-  };
-
-  home-manager.users.${wunkus.settings.username} = {
-    wunkus = {
-      settings = {
-        inherit (wunkus.settings) username system;
-        host = networking.hostname;
-      };
-      profiles = {
-        common.enable = true;
-      };
-    };
-    home.stateVersion = "25.05";
   };
 
   time.timeZone = "America/New_York";
