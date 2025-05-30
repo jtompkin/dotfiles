@@ -21,9 +21,9 @@ in
           info = mkDefault "info --vi-keys";
           ssh-vm = mkDefault "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
           scp-vm = mkDefault "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
-          rebuild = mkDefault "nixos-rebuild --flake 'github:jtompkin/dotfiles' --use-remote-sudo switch";
+          rebuild = mkDefault "nixos-rebuild --flake 'github:jtompkin/dotfiles/main' --use-remote-sudo switch";
           rebuild-local = mkDefault "nixos-rebuild --flake '${config.home.homeDirectory}/dotfiles' --use-remote-sudo switch";
-          hm = mkDefault "home-manager --flake 'github:jtompkin/dotfiles'";
+          hm = mkDefault "home-manager --flake 'github:jtompkin/dotfiles/main'";
           hm-local = mkDefault "home-manager --flake '${config.home.homeDirectory}/dotfiles'";
           pkgdoc = mkDefault "nix edit -f '<nixpkgs>'";
         };
