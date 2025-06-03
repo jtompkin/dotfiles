@@ -18,7 +18,7 @@ in
         if pkgs.stdenv.isDarwin then "/Users/${settings.username}" else "/home/${settings.username}";
     };
     xdg.configFile."home-manager/home.nix".text = ''
-      abort "Do not use this configuration"
+      abort "Do not use this configuration. Use the flake at github:jtompkin/dotfiles"
     '';
     programs.home-manager.enable = mkDefault true;
     wunkus.presets = {

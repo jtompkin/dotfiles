@@ -26,13 +26,15 @@
   };
   outputs =
     inputs@{
+      self,
       nixpkgs,
       home-manager,
       nix-darwin,
       ...
     }:
     let
-      lib = import ./lib inputs;
+      libExtra = import ./lib { inherit inputs; };
+      lib = inputs.nixpkgs.lib // libExtra;
     in
     {
       # Host       : Description         : System
@@ -46,10 +48,6 @@
       nixosConfigurations =
         # TODO: replace old configs with shiny new format
         lib.flattenAttrset (lib.genConfigsFromModules lib.const.nixosModules { }) // {
-          #"imperfect" = nixpkgs.lib.nixosSystem {
-          #  specialArgs = { inherit inputs; };
-          #  modules = [ hosts/imperfect/configuration.nix ];
-          #};
           "zeefess" = nixpkgs.lib.nixosSystem {
             specialArgs = { inherit inputs; };
             modules = [ hosts/zeefess/configuration.nix ];
@@ -66,6 +64,14 @@
           hosts/artsci/configuration.nix
           home-manager.darwinModules.home-manager
         ];
+      };
+      nixosModules = {
+        lib = {
+          lib.dotfiles = libExtra;
+        };
+      };
+      homeModules = {
+        inherit (self.nixosModules) lib;
       };
     };
 }
