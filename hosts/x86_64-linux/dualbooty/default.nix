@@ -10,13 +10,14 @@
       minimal.enable = true;
       vm.enable = true;
       ephemeral.enable = true;
-      dualBooty.enable = true;
+      dualBooty = {
+        enable = true;
+        luksUUID = "3831a625-c20c-4663-8e76-8c624632e502";
+        espLabel = "SYSTEM";
+      };
     };
     hardware."virtualbox-x86_64-linux".enable = true;
   };
-
-  boot.initrd.luks.devices."nixcrypt".device =
-    "/dev/disk/by-uuid/3831a625-c20c-4663-8e76-8c624632e502";
 
   time.timeZone = "America/New_York";
 

@@ -8,54 +8,68 @@ let
   inherit (lib) mkIf mkDefault;
 in
 {
-  options.wunkus.profiles.dualBooty = {
-    enable = lib.mkEnableOption "dual boot with windows profile";
-    luksUUID = lib.mkOption {
-      type = lib.types.str;
-      description = "UUID of luks encrypted container";
-    };
-    espLabel = lib.mkOption {
-      type = lib.types.str;
-      default = "SYSTEM";
-      description = "EFI system partition label";
-    };
-  };
-  # Not using disko for this because I'm scared
+  options.wunkus.profiles.dualBooty.enable = lib.mkEnableOption "dual boot with windows profile";
   config = mkIf cfg.enable {
     time.hardwareClockInLocalTime = mkDefault true;
     boot = {
       loader = {
         systemd-boot = {
-          enable = true;
+          enable = mkDefault true;
           xbootldrMountPoint = "/boot";
         };
         efi = {
-          canTouchEfiVariables = true;
+          canTouchEfiVariables = mkDefault true;
           efiSysMountPoint = "/efi";
         };
       };
       initrd.luks.devices."nixcrypt" = {
-        device = "/dev/disk/by-uuid/${cfg.luksUUID}";
+        device = mkDefault (abort "Must set luks device path");
         allowDiscards = true;
       };
+      postResumeCommands =
+        lib.mkAfter # sh
+          ''
+            echo Starting root wipe...
+            MNTPOINT=$(mktemp -d)
+            mount /dev/nixvg/nix "$MNTPOINT"
+            if [[ -e "$MNTPOINT/@" ]]; then
+              mkdir -p "$MNTPOINT/old_roots"
+              timestamp=$(date --date="@$(stat -c %Y "$MNTPOINT/@")" "+%Y-%m-%-d_%H:%M:%S")
+              mv "$MNTPOINT/@" "$MNTPOINT/old_roots/$timestamp"
+            fi
+            delete_subvolume_recursively() {
+              IFS=$'\n'
+              for i in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
+                delete_subvolume_recursively "$MNTPOINT/$i"
+              done
+              btrfs subvolume delete "$1"
+            }
+            for i in $(find "$MNTPOINT/old_roots/" -maxdepth 1 -mtime +30); do
+              delete_subvolume_recursively "$i"
+            done
+            btrfs subvolume create "$MNTPOINT/@"
+            umount "$MNTPOINT"
+          '';
     };
     fileSystems = {
       "/" = {
-        device = "/dev/nixvg/root";
+        device = "/dev/disk/by-label/nixos";
         fsType = "btrfs";
         options = [
           "subvol=@"
           "compress=zstd"
         ];
       };
+
       "/efi" = {
-        device = "/dev/disk/by-label/${cfg.espLabel}";
+        device = "/dev/disk/by-label/SYSTEM";
         fsType = "vfat";
         options = [
           "fmask=0077"
           "dmask=0077"
         ];
       };
+
       "/boot" = {
         device = "/dev/disk/by-label/XBOOT";
         fsType = "vfat";
@@ -64,24 +78,27 @@ in
           "dmask=0077"
         ];
       };
+
       "/home" = {
-        device = "/dev/nixvg/root";
+        device = "/dev/disk/by-label/nixos";
         fsType = "btrfs";
         options = [
           "subvol=@home"
           "compress=zstd"
         ];
       };
+
       "/home/.snapshots" = {
-        device = "/dev/nixvg/root";
+        device = "/dev/disk/by-label/nixos";
         fsType = "btrfs";
         options = [
           "subvol=@home@.snapshots"
           "compress=zstd"
         ];
       };
+
       "/nix" = {
-        device = "/dev/nixvg/root";
+        device = "/dev/disk/by-label/nixos";
         fsType = "btrfs";
         options = [
           "subvol=@nix"
@@ -89,8 +106,9 @@ in
         ];
         neededForBoot = true;
       };
+
       "/persist" = {
-        device = "/dev/nixvg/root";
+        device = "/dev/disk/by-label/nixos";
         fsType = "btrfs";
         options = [
           "subvol=@persist"
@@ -98,16 +116,6 @@ in
         ];
         neededForBoot = true;
       };
-    };
-    swapDevices = [
-      {
-        device = "/dev/nixvg/swap";
-        discardPolicy = "both";
-      }
-    ];
-    zramSwap = {
-      enable = mkDefault true;
-      priority = mkDefault 100;
     };
   };
 }
