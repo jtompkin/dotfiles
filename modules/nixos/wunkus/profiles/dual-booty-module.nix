@@ -22,6 +22,10 @@ in
           efiSysMountPoint = "/efi";
         };
       };
+      initrd.luks.devices."nixcrypt" = {
+        device = mkDefault abort "Must set luks device path";
+        allowDiscards = true;
+      };
     };
     fileSystems = {
       "/" = {
