@@ -20,6 +20,7 @@ in
 {
   options.wunkus.profiles.dualBooty = {
     enable = lib.mkEnableOption "dual boot with windows profile";
+    useSwap = lib.mkEnableOption "swap partition";
     luksUUID = lib.mkOption {
       type = lib.types.str;
       description = "UUID of luks encrypted container";
@@ -74,7 +75,7 @@ in
         ];
       };
     };
-    swapDevices = [
+    swapDevices = mkIf cfg.useSwap [
       {
         device = "/dev/nixvg/swap";
         discardPolicy = "both";
