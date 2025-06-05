@@ -6,6 +6,16 @@
 let
   cfg = config.wunkus.profiles.dualBooty;
   inherit (lib) mkIf mkDefault;
+  getBtrfsSubvol = neededForBoot: name: {
+    inherit neededForBoot;
+    device = "/dev/nixvg/root";
+    fsType = "btrfs";
+    options = [
+      "subvol=${name}"
+      "compress=zstd"
+      "noatime"
+    ];
+  };
 in
 {
   options.wunkus.profiles.dualBooty = {
@@ -40,14 +50,13 @@ in
       };
     };
     fileSystems = {
-      "/" = {
-        device = "/dev/nixvg/root";
-        fsType = "btrfs";
-        options = [
-          "subvol=@"
-          "compress=zstd"
-        ];
+      "/" = getBtrfsSubvol false "@";
+      "/home" = getBtrfsSubvol false "@home";
+      "/home/.snapshots" = getBtrfsSubvol false "@home@.snapshots" // {
+        depends = [ "/home" ];
       };
+      "/nix" = getBtrfsSubvol true "@nix";
+      "/persist" = getBtrfsSubvol true "@persist";
       "/efi" = {
         device = "/dev/disk/by-label/${cfg.espLabel}";
         fsType = "vfat";
@@ -63,40 +72,6 @@ in
           "fmask=0077"
           "dmask=0077"
         ];
-      };
-      "/home" = {
-        device = "/dev/nixvg/root";
-        fsType = "btrfs";
-        options = [
-          "subvol=@home"
-          "compress=zstd"
-        ];
-      };
-      "/home/.snapshots" = {
-        device = "/dev/nixvg/root";
-        fsType = "btrfs";
-        options = [
-          "subvol=@home@.snapshots"
-          "compress=zstd"
-        ];
-      };
-      "/nix" = {
-        device = "/dev/nixvg/root";
-        fsType = "btrfs";
-        options = [
-          "subvol=@nix"
-          "compress=zstd"
-        ];
-        neededForBoot = true;
-      };
-      "/persist" = {
-        device = "/dev/nixvg/root";
-        fsType = "btrfs";
-        options = [
-          "subvol=@persist"
-          "compress=zstd"
-        ];
-        neededForBoot = true;
       };
     };
     swapDevices = [
