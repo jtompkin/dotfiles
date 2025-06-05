@@ -77,6 +77,7 @@ in
           "subvol=@nix"
           "compress=zstd"
         ];
+        neededForBoot = true;
       };
 
       "/persist" = {
@@ -86,6 +87,7 @@ in
           "subvol=@persist"
           "compress=zstd"
         ];
+        neededForBoot = true;
       };
     };
   };
