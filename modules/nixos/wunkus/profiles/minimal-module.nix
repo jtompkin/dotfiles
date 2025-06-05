@@ -15,16 +15,16 @@ in
     nixpkgs.hostPlatform = config.wunkus.settings.system;
     time.timeZone = mkDefault "America/New_York";
     environment = {
-      systemPackages = mkDefault [ pkgs.vim ];
+      systemPackages = [ pkgs.vim ];
     };
-    nix.settings.experimental-features = mkDefault [
+    nix.settings.experimental-features = [
       "nix-command"
       "flakes"
     ];
     users = {
       users.${username} = {
-        isNormalUser = true;
-        extraGroups = mkDefault [ "wheel" ];
+        isNormalUser = mkDefault true;
+        extraGroups = [ "wheel" ];
       };
     };
   };
