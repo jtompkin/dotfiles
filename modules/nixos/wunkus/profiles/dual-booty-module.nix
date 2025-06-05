@@ -10,7 +10,6 @@ in
 {
   options.wunkus.profiles.dualBooty.enable = lib.mkEnableOption "dual boot with windows profile";
   config = mkIf cfg.enable {
-    nixpkgs.config.allowUnfree = mkDefault true;
     time.hardwareClockInLocalTime = mkDefault true;
     boot = {
       loader = {

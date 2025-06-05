@@ -24,8 +24,9 @@ rec {
     pkgsBySystem = forAllSystems (
       system:
       import inputs.nixpkgs {
-        localSystem = { inherit system; };
         inherit (const) overlays;
+        localSystem = { inherit system; };
+        config.allowUnfree = true;
       }
     );
   };
