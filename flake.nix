@@ -2,6 +2,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixgl.url = "github:nix-community/nixGL";
+    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
     disko = {
       url = "github:nix-community/disko/latest";
       inputs.nixpkgs.follows = "nixpkgs";

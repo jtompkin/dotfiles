@@ -68,6 +68,7 @@ rec {
     lib.nixosSystem {
       inherit specialArgs;
       modules = [
+        inputs.determinate.nixosModules.default
         inputs.home-manager.nixosModules.home-manager
         inputs.disko.nixosModules.disko
         inputs.impermanence.nixosModules.impermanence
