@@ -34,7 +34,7 @@ in
             mount /dev/nixvg/nix "$MNTPOINT"
             if [[ -e "$MNTPOINT/@" ]]; then
               mkdir -p "$MNTPOINT/old_roots"
-              timestamp=$(date --date="@$(stat -c %Y "$MNTPOINT/@")" "+%Y-%m-%-d_%H:%M:%S")
+              timestamp=$(date --date="@$(stat -c %Y "$MNTPOINT/@")" "+%Y-%m-%d_%H:%M:%S")
               mv "$MNTPOINT/@" "$MNTPOINT/old_roots/$timestamp"
             fi
             delete_subvolume_recursively() {
