@@ -17,10 +17,6 @@ in
     environment = {
       systemPackages = [ pkgs.vim ];
     };
-    nix.settings.experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
     users = {
       users.${username} = {
         isNormalUser = mkDefault true;

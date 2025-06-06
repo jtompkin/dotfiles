@@ -19,7 +19,7 @@ local lsp_group = augroup("lsp", { clear = true })
 
 autocmd("FileType", {
 	group = lsp_group,
-	pattern = { "nix", "lua" },
+	pattern = { "nix", "lua", "toml" },
 	callback = function()
 		vim.opt_local.tabstop = 2
 		vim.opt_local.softtabstop = 2

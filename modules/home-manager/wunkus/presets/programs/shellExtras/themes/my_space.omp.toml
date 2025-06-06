@@ -29,13 +29,13 @@ version = 3
       style = 'unique'
 
   [[blocks.segments]]
-    template = '<#ffffff>on</> {{ .HEAD }}{{ if gt .StashCount 0 }}  {{ .StashCount }}{{ end }} '
+    template = '{{ .UpstreamIcon }}{{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }}  {{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }}  {{ .Staging.String }}{{ end }}{{ if gt .StashCount 0 }}  {{ .StashCount }}{{ end }} '
     type = 'git'
     style = 'plain'
 
     [blocks.segments.properties]
-      branch_icon = ''
-      fetch_stash_count = true
+      fetch_status = true
+      fetch_upstream_icon = true
 
   [[blocks.segments]]
     template = '[ {{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}{{ .Venv }} {{ end }}{{ .Full }}{{ end }}] '
