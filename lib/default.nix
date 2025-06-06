@@ -93,9 +93,9 @@ rec {
 
   mkHomeManagerConfiguration =
     {
-      system,
-      specialArgs,
       module,
+      specialArgs,
+      system,
     }:
     inputs.home-manager.lib.homeManagerConfiguration {
       pkgs = const.pkgsBySystem.${system};
@@ -109,9 +109,9 @@ rec {
     };
   mkDarwinConfiguration =
     {
-      system,
-      specialArgs,
       module,
+      specialArgs,
+      system,
     }:
     abort "Not implemented";
 
