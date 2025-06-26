@@ -42,6 +42,7 @@ in
         initContent = ''
           eval "$(batpipe)"
           alias -g -- --belp='--help 2>&1 | bat --language=help --style=plain'
+          command -v uv &>/dev/null && eval "$(uv generate-shell-completion zsh)"
         '';
         oh-my-zsh = {
           enable = mkDefault true;
