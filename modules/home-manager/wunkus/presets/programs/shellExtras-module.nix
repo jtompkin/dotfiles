@@ -42,7 +42,6 @@ in
         initContent = ''
           eval "$(batpipe)"
           alias -g -- --belp='--help 2>&1 | bat --language=help --style=plain'
-          command -v uv &>/dev/null && eval "$(uv generate-shell-completion zsh)"
         '';
         oh-my-zsh = {
           enable = mkDefault true;
@@ -58,6 +57,16 @@ in
             name = "vi-mode";
             src = pkgs.zsh-vi-mode;
             file = "share/zsh-vi-mode/zsh-vi-mode.plugin.zsh";
+          }
+          {
+            name = "zsh-completion-sync";
+            src = pkgs.fetchFromGitHub {
+              owner = "BronzeDeer";
+              repo = "zsh-completion-sync";
+              tag = "v0.3.1";
+              hash = "sha256-XhZ7l8e2H1+W1oUkDrr8pQVPVbb3+1/wuu7MgXsTs+8=";
+            };
+            file = "zsh-completion-sync.plugin.zsh";
           }
         ];
       };
