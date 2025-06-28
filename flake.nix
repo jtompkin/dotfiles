@@ -3,6 +3,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixgl.url = "github:nix-community/nixGL";
     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
+    impermanence.url = "github:nix-community/impermanence";
     disko = {
       url = "github:nix-community/disko/latest";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -23,42 +24,32 @@
       url = "github:jtompkin/goclacker/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    impermanence.url = "github:nix-community/impermanence";
   };
   outputs =
     inputs@{
       self,
-      nixpkgs,
       home-manager,
       nix-darwin,
       ...
     }:
     let
-      libExtra = import ./lib { inherit inputs; };
-      lib = inputs.nixpkgs.lib // libExtra;
+      lib = inputs.nixpkgs.lib // {
+        dotfiles = import ./lib { inherit inputs; };
+      };
     in
     {
       # Host       : Description         : System
       # franken    : WSL2                : x86_64-linux
       # imperfect  : Virtualbox vm       : x86_64-linux
-      # zeefess    : Virtualbox vm w/zfs : x86_64-linux
-      # spinny     : External HDD        : x86_64-linux
       # steamdeck  : Steam Deck          : x86_64-linux (home-manager)
       # ArtSci-*   : Lab Macs            : aarch64-darwin (nix-darwin)
       # completion : Dummy for lsp       : x86_64-linux (fake)
-      nixosConfigurations =
-        # TODO: replace old configs with shiny new format
-        lib.flattenAttrset (lib.genConfigsFromModules lib.const.nixosModules { }) // {
-          "zeefess" = nixpkgs.lib.nixosSystem {
-            specialArgs = { inherit inputs; };
-            modules = [ hosts/zeefess/configuration.nix ];
-          };
-          "spinny" = nixpkgs.lib.nixosSystem {
-            specialArgs = { inherit inputs; };
-            modules = [ hosts/spinny/configuration.nix ];
-          };
-        };
-      homeConfigurations = lib.flattenAttrset (lib.genConfigsFromModules lib.const.homeModules { });
+      nixosConfigurations = lib.dotfiles.flattenAttrset (
+        lib.dotfiles.genConfigsFromModules lib.dotfiles.const.nixosModules { }
+      );
+      homeConfigurations = lib.dotfiles.flattenAttrset (
+        lib.dotfiles.genConfigsFromModules lib.dotfiles.const.homeModules { }
+      );
       darwinConfigurations."ArtSci-0KPQC4CF" = nix-darwin.lib.darwinSystem {
         specialArgs = { inherit inputs; };
         modules = [
@@ -68,7 +59,7 @@
       };
       nixosModules = {
         lib = {
-          lib.dotfiles = libExtra;
+          lib.dotfiles = lib.dotfiles;
         };
       };
       homeModules = {
