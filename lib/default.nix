@@ -107,16 +107,18 @@ rec {
         module
       ];
     };
+
   mkDarwinConfiguration =
     {
-      module,
-      specialArgs,
-      system,
+      # module,
+      # specialArgs,
+      # system,
+      ...
     }:
     abort "Not implemented";
 
   /**
-    modules: { <system> = { <host> = <module>; }; }
+    modules: specialArgs: { <system> = { <host> = <config>; }; }
   */
   genConfigsFromModules =
     modules: specialArgs:
@@ -133,14 +135,7 @@ rec {
     lib.genAttrs (lib.attrNames modules) (
       system:
       lib.mapAttrs (
-        host: module:
-        getConfigMaker system host {
-          inherit
-            specialArgs
-            system
-            module
-            ;
-        }
+        host: module: getConfigMaker system host { inherit module specialArgs system; }
       ) modules.${system}
     );
 
