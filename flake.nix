@@ -20,8 +20,8 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    goclacker = {
-      url = "github:jtompkin/goclacker/main";
+    mornix = {
+      url = "/home/deck/Projects/mornix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

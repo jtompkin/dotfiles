@@ -69,8 +69,8 @@ rec {
       inherit specialArgs;
       modules = [
         inputs.determinate.nixosModules.default
-        inputs.home-manager.nixosModules.home-manager
         inputs.disko.nixosModules.disko
+        inputs.home-manager.nixosModules.home-manager
         inputs.impermanence.nixosModules.impermanence
         inputs.nixos-wsl.nixosModules.default
         inputs.self.nixosModules.lib
@@ -79,8 +79,8 @@ rec {
         {
           home-manager = {
             sharedModules = [
+              inputs.mornix.homeModules.goclacker
               inputs.self.homeModules.lib
-              inputs.goclacker.homeModules.default
             ] ++ listModuleFiles ../modules/home-manager;
             extraSpecialArgs = specialArgs;
             useUserPackages = lib.mkDefault true;
@@ -102,7 +102,7 @@ rec {
       extraSpecialArgs = specialArgs;
       modules = [
         inputs.self.homeModules.lib
-        inputs.goclacker.homeModules.default
+        inputs.mornix.homeModules.goclacker
         { imports = listModuleFiles ../modules/home-manager; }
         module
       ];
