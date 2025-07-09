@@ -21,7 +21,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     mornix = {
-      url = "/home/deck/Projects/mornix";
+      url = "github:jtompkin/mornix/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
