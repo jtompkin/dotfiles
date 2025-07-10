@@ -38,12 +38,14 @@
       };
     in
     {
-      # Host       : Description         : System
-      # franken    : WSL2                : x86_64-linux
-      # imperfect  : Virtualbox vm       : x86_64-linux
-      # steamdeck  : Steam Deck          : x86_64-linux (home-manager)
-      # ArtSci-*   : Lab Macs            : aarch64-darwin (nix-darwin)
-      # completion : Dummy for lsp       : x86_64-linux (fake)
+      /*
+        Host       : Description   : System
+        franken    : WSL2          : x86_64-linux
+        imperfect  : Virtualbox vm : x86_64-linux
+        steamdeck  : Steam Deck    : x86_64-linux (home-manager)
+        ArtSci-*   : Lab Macs      : aarch64-darwin (nix-darwin)
+        completion : Dummy for lsp : x86_64-linux (fake)
+      */
       nixosConfigurations = lib.dotfiles.flattenAttrset (
         lib.dotfiles.genConfigsFromModules lib.dotfiles.const.nixosModules { }
       );
@@ -53,7 +55,7 @@
       darwinConfigurations."ArtSci-0KPQC4CF" = nix-darwin.lib.darwinSystem {
         specialArgs = { inherit inputs; };
         modules = [
-          hosts/artsci/configuration.nix
+          ./hosts/artsci/configuration.nix
           home-manager.darwinModules.home-manager
         ];
       };

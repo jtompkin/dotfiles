@@ -79,7 +79,7 @@ rec {
         {
           home-manager = {
             sharedModules = [
-              inputs.mornix.homeModules.goclacker
+              inputs.mornix.homeModules.default
               inputs.self.homeModules.lib
             ] ++ listModuleFiles ../modules/home-manager;
             extraSpecialArgs = specialArgs;
@@ -102,7 +102,7 @@ rec {
       extraSpecialArgs = specialArgs;
       modules = [
         inputs.self.homeModules.lib
-        inputs.mornix.homeModules.goclacker
+        inputs.mornix.homeModules.default
         { imports = listModuleFiles ../modules/home-manager; }
         module
       ];
