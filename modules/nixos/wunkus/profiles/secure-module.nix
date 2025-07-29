@@ -19,6 +19,7 @@ in
   };
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.sbctl ];
+    wunkus.profiles.ephemeral.extraDirectories = [ config.boot.lanzaboote.pkiBundle ];
     boot = {
       loader.systemd-boot.enable = mkForce false;
       lanzaboote = {
@@ -27,5 +28,4 @@ in
       };
     };
   };
-  wunkus.profiles.ephemeral.extraDirectories = [ config.boot.lanzaboote.pkiBundle ];
 }
