@@ -72,11 +72,12 @@ rec {
         inputs.disko.nixosModules.disko
         inputs.home-manager.nixosModules.home-manager
         inputs.impermanence.nixosModules.impermanence
+        inputs.lanzaboote.nixosModules.lanzaboote
         inputs.nixos-wsl.nixosModules.default
         inputs.self.nixosModules.lib
-        { imports = listModuleFiles ../modules/nixos; }
-        { nixpkgs.pkgs = const.pkgsBySystem.${system}; }
         {
+          imports = listModuleFiles ../modules/nixos;
+          nixpkgs.pkgs = const.pkgsBySystem.${system};
           home-manager = {
             sharedModules = [
               inputs.mornix.homeModules.default

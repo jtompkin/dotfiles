@@ -1,9 +1,9 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixgl.url = "github:nix-community/nixGL";
     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
     impermanence.url = "github:nix-community/impermanence";
+    nixgl.url = "github:nix-community/nixGL";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     disko = {
       url = "github:nix-community/disko/latest";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -22,6 +22,10 @@
     };
     mornix = {
       url = "github:jtompkin/mornix/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v0.4.2";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
