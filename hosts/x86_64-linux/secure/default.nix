@@ -10,6 +10,7 @@
       minimal.enable = true;
       vm.enable = true;
       ephemeral.enable = true;
+      secure.enable = true;
     };
     disks = {
       btrfsEncrypt = {
