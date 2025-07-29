@@ -38,6 +38,8 @@ in
         shellAliases = {
           cat = mkDefault "bat --paging=never";
           fd = mkDefault "fd --one-file-system";
+          l = mkDefault "eza -la";
+          lx = mkDefault "eza -lX";
         };
         initContent = ''
           eval "$(batpipe)"
@@ -77,6 +79,16 @@ in
       fzf = {
         enable = mkDefault true;
         changeDirWidgetCommand = mkDefault "";
+      };
+      eza = {
+        enable = true;
+        enableZshIntegration = true;
+        extraOptions = [
+          "--group-directories-first"
+          "--header"
+          "--smart-group"
+          "--git"
+        ];
       };
       fd.enable = mkDefault true;
       ripgrep.enable = mkDefault true;
