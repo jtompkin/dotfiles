@@ -22,7 +22,6 @@ in
       pkgs.sbctl
       pkgs.tpm2-tss
     ];
-    wunkus.profiles.ephemeral.extraDirectories = [ config.boot.lanzaboote.pkiBundle ];
     boot = {
       loader.systemd-boot.enable = mkForce false;
       initrd.systemd.enable = mkDefault true;

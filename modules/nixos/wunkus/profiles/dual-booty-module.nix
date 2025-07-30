@@ -6,16 +6,6 @@
 let
   cfg = config.wunkus.profiles.dualBooty;
   inherit (lib) mkIf mkDefault;
-  getBtrfsSubvol = neededForBoot: name: {
-    inherit neededForBoot;
-    device = "/dev/nixvg/root";
-    fsType = "btrfs";
-    options = [
-      "subvol=${name}"
-      "compress=zstd"
-      "noatime"
-    ];
-  };
 in
 {
   options.wunkus.profiles.dualBooty = {
