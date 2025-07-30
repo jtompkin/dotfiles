@@ -18,10 +18,14 @@ in
     wunkus.profiles.secure.enable = mkEnableOption "secure system config";
   };
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.sbctl ];
+    environment.systemPackages = [
+      pkgs.sbctl
+      pkgs.tpm2-tss
+    ];
     wunkus.profiles.ephemeral.extraDirectories = [ config.boot.lanzaboote.pkiBundle ];
     boot = {
       loader.systemd-boot.enable = mkForce false;
+      initrd.systemd.enable = mkDefault true;
       lanzaboote = {
         enable = mkDefault true;
         pkiBundle = mkDefault "/var/lib/sbctl";
