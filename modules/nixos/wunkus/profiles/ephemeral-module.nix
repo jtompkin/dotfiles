@@ -55,8 +55,9 @@ in
             description = "Rollback BTRFS filesystem to blank snapshot";
             wantedBy = [ "initrd.target" ];
             before = [ "sysroot.mount" ];
+            after = [ "cryptsetup.target" ];
             unitConfig.DefaultDependencies = "no";
-            serviceConfig.type = "oneshot";
+            serviceConfig.Type = "oneshot";
             inherit script;
           };
           storePaths = [
