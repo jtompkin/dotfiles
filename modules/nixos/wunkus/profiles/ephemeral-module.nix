@@ -54,7 +54,11 @@ in
           description = "Rollback BTRFS filesystem to blank snapshot";
           wantedBy = [ "initrd.target" ];
           before = [ "sysroot.mount" ];
-          path = [ pkgs.btrfs-progs ];
+          path = [
+            pkgs.btrfs-progs
+            pkgs.coreutils
+            pkgs.util-linux
+          ];
           unitConfig.DefaultDependencies = "no";
           serviceConfig.type = "oneshot";
           inherit script;
