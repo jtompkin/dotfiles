@@ -50,18 +50,20 @@ in
       in
       {
         postResumeCommands = mkIf (!config.boot.initrd.systemd.enable) (lib.mkAfter script);
-        systemd.services.btrfs-rollback = mkIf config.boot.initrd.systemd.enable {
-          description = "Rollback BTRFS filesystem to blank snapshot";
-          wantedBy = [ "initrd.target" ];
-          before = [ "sysroot.mount" ];
-          path = [
+        systemd = mkIf config.boot.initrd.systemd.enable {
+          services.btrfs-rollback = {
+            description = "Rollback BTRFS filesystem to blank snapshot";
+            wantedBy = [ "initrd.target" ];
+            before = [ "sysroot.mount" ];
+            unitConfig.DefaultDependencies = "no";
+            serviceConfig.type = "oneshot";
+            inherit script;
+          };
+          systemd.storePaths = [
             pkgs.btrfs-progs
             pkgs.coreutils
             pkgs.util-linux
           ];
-          unitConfig.DefaultDependencies = "no";
-          serviceConfig.type = "oneshot";
-          inherit script;
         };
       };
 
