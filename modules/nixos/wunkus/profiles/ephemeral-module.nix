@@ -46,6 +46,7 @@ in
           done
           btrfs subvolume create "$MNTPOINT/@"
           umount "$MNTPOINT"
+          echo Finished root wipe...
         '';
       in
       {
