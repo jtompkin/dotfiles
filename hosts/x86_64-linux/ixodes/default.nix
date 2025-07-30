@@ -12,9 +12,6 @@
       ephemeral.enable = true;
       dualBooty.enable = true;
       secure.enable = true;
-
-      common.enable = true;
-      comfy.enable = true;
     };
     disks = {
       dualBooty.enable = true;
