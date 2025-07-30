@@ -18,7 +18,6 @@
     };
     hardware."kvm-x86_64-linux".enable = true;
   };
-  boot.initrd.systemd.enable = false;
 
   time.timeZone = "America/New_York";
 
