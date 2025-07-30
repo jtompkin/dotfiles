@@ -1,6 +1,12 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.wunkus.profiles.ephemeral;
+  inherit (lib) mkIf;
 in
 {
   options = {
@@ -16,10 +22,10 @@ in
       description = "Extra files to make persistant";
     };
   };
-  config = lib.mkIf cfg.enable {
-    boot.initrd.postResumeCommands =
-      lib.mkAfter # sh
-        ''
+  config = mkIf cfg.enable {
+    boot.initrd =
+      let
+        script = ''
           echo Starting root wipe...
           MNTPOINT=$(mktemp -d)
           mount ${config.fileSystems."/".device} "$MNTPOINT"
@@ -41,6 +47,19 @@ in
           btrfs subvolume create "$MNTPOINT/@"
           umount "$MNTPOINT"
         '';
+      in
+      {
+        postResumeCommands = mkIf (!config.boot.initrd.systemd.enable) (lib.mkAfter script);
+        systemd.services.btrfs-rollback = mkIf config.boot.initrd.systemd.enable {
+          description = "Rollback BTRFS filesystem to blank snapshot";
+          wantedBy = [ "initrd.target" ];
+          before = [ "sysroot.mount" ];
+          path = [ pkgs.btrfs-progs ];
+          unitConfig.DefaultDependencies = "no";
+          serviceConfig.type = "oneshot";
+          inherit script;
+        };
+      };
 
     environment.persistence = {
       "/persist" = {
@@ -50,10 +69,12 @@ in
           "/var/lib/nixos"
           "/var/lib/systemd/coredump"
           "/etc/NetworkManager/system-connections"
-        ] ++ cfg.extraDirectories;
+        ]
+        ++ cfg.extraDirectories;
         files = [
           "/etc/machine-id"
-        ] ++ cfg.extraFiles;
+        ]
+        ++ cfg.extraFiles;
       };
     };
   };
