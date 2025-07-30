@@ -59,7 +59,7 @@ in
             serviceConfig.type = "oneshot";
             inherit script;
           };
-          systemd.storePaths = [
+          storePaths = [
             pkgs.btrfs-progs
             pkgs.coreutils
             pkgs.util-linux
