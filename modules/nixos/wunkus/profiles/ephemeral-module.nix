@@ -5,8 +5,8 @@
   ...
 }:
 let
+  inherit (lib) mkIf mkMerge;
   cfg = config.wunkus.profiles.ephemeral;
-  inherit (lib) mkIf;
 in
 {
   options = {
@@ -70,18 +70,23 @@ in
 
     environment.persistence = {
       "/persist" = {
-        directories = [
-          "/var/log"
-          "/var/lib/bluetooth"
-          "/var/lib/nixos"
-          "/var/lib/systemd/coredump"
-          "/etc/NetworkManager/system-connections"
-        ]
-        ++ cfg.extraDirectories;
-        files = [
-          "/etc/machine-id"
-        ]
-        ++ cfg.extraFiles;
+        directories = mkMerge [
+          [
+            "/var/log"
+            "/var/lib/bluetooth"
+            "/var/lib/nixos"
+            "/var/lib/sbctl"
+            "/var/lib/systemd/coredump"
+            "/etc/NetworkManager/system-connections"
+          ]
+          cfg.extraDirectories
+        ];
+        files = mkMerge [
+          [
+            "/etc/machine-id"
+          ]
+          cfg.extraFiles
+        ];
       };
     };
   };
