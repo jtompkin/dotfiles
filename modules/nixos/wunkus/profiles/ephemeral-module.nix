@@ -28,7 +28,7 @@ in
         script = ''
           echo Starting root wipe...
           MNTPOINT=$(mktemp -d)
-          mount ${config.fileSystems."/".device} "$MNTPOINT"
+          mount -t btrfs ${config.fileSystems."/".device} "$MNTPOINT"
           if [[ -e "$MNTPOINT/@" ]]; then
             mkdir -p "$MNTPOINT/old_roots"
             timestamp=$(date --date="@$(stat -c %Y "$MNTPOINT/@")" "+%Y-%m-%-d_%H:%M:%S")
