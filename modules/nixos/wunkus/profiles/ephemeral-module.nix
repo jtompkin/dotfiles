@@ -56,7 +56,7 @@ in
             description = "Rollback BTRFS filesystem to blank snapshot";
             wantedBy = [ "initrd.target" ];
             before = [ "sysroot.mount" ];
-            after = [ "lvm-devices-import.service" ];
+            after = [ "tpm2.target" ];
             unitConfig.DefaultDependencies = "no";
             serviceConfig.Type = "oneshot";
             inherit script;
