@@ -55,7 +55,7 @@ in
           services.btrfs-rollback = {
             description = "Rollback BTRFS filesystem to blank snapshot";
             wantedBy = [ "initrd.target" ];
-            after = [ "basic.target" ];
+            after = [ "initrd-root-device.target" ];
             before = [ "sysroot.mount" ];
             unitConfig.DefaultDependencies = "no";
             serviceConfig.Type = "oneshot";
