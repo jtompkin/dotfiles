@@ -181,7 +181,6 @@ in
       };
     };
     programs = {
-      thunar.enable = mkDefault true;
       waybar = {
         enable = mkDefault true;
         systemd.enable = mkDefault true;
@@ -197,5 +196,6 @@ in
       bemenu.enable = mkDefault true;
       alacritty.enable = mkDefault true;
     };
+    home.packages = [ pkgs.xfce.thunar ];
   };
 }
