@@ -188,7 +188,7 @@ in
         systemd.target = mkDefault "hyprland-session.target";
       };
     };
-    programs.services = mkIf (!cfg.minimal) {
+    services = mkIf (!cfg.minimal) {
       network-manager-applet.enable = mkDefault true;
       mako.enable = mkDefault true;
       hyprpaper.enable = mkDefault true;
