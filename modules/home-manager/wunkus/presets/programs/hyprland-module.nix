@@ -36,15 +36,15 @@ in
   config = mkIf cfg.enable {
     wayland.windowManager.hyprland = {
       enable = mkDefault true;
-      systemd.enable = true;
+      #systemd.enable = true;
       package = mkDefault null;
       settings = {
       };
     };
     programs.waybar = mkIf (!cfg.minimal) {
       enable = true;
-      systemd.enable = true;
-      systemd.target = "hyprland-session.target";
+      # systemd.enable = true;
+      # systemd.target = "hyprland-session.target";
     };
     services = mkIf (!cfg.minimal) {
       network-manager-applet.enable = mkDefault true;
