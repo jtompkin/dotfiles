@@ -93,7 +93,7 @@ in
           kb_options = "caps:swapescape";
           numlock_by_default = true;
           follow_mouse = 1;
-          sensitivity = -0.85;
+          # sensitivity = -0.85;
           touchpad.natural_scroll = false;
         };
         gestures.workspace_swipe = false;
