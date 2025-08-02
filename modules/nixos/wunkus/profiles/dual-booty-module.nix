@@ -12,7 +12,17 @@ in
     enable = lib.mkEnableOption "dual boot with windows profile";
   };
   config = mkIf cfg.enable {
+
+    users.users.${config.wunkus.settings.username}.hashedPassword = mkDefault (
+      lib.fileContents ./data/password.sha512
+    );
+
     # time.hardwareClockInLocalTime = mkDefault true;
+    services.openssh.enable = mkDefault true;
+    networking.networkManager.enable = mkDefault true;
+
     boot.loader.efi.canTouchEfiVariables = mkDefault true;
+
+    i18n.defaultLocale = "en_US.UTF-8";
   };
 }

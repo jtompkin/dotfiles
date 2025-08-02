@@ -28,7 +28,7 @@ in
       lanzaboote = {
         enable = mkDefault true;
         pkiBundle = mkDefault "/var/lib/sbctl";
-        configurationLimit = 10;
+        configurationLimit = mkDefault 10;
       };
     };
   };
