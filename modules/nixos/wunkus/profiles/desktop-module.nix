@@ -20,5 +20,6 @@ in
       withUWSM = mkDefault true;
       xwayland.enable = mkDefault true;
     };
+    environment.systemPackages = [ pkgs.vivaldi ];
   };
 }
