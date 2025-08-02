@@ -11,6 +11,7 @@
       ephemeral.enable = true;
       dualBooty.enable = true;
       secure.enable = true;
+      nvidia.enable = true;
     };
     disks = {
       dualBooty.enable = true;
