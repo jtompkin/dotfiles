@@ -180,18 +180,22 @@ in
         ];
       };
     };
-    programs.waybar = mkIf (!cfg.minimal) {
-      enable = true;
-      systemd.enable = true;
-      systemd.target = "hyprland-session.target";
+    programs = {
+      thunar.enable = mkDefault true;
+      waybar = {
+        enable = mkDefault true;
+        systemd.enable = mkDefault true;
+        systemd.target = mkDefault "hyprland-session.target";
+      };
     };
-    services = mkIf (!cfg.minimal) {
+    programs.services = mkIf (!cfg.minimal) {
       network-manager-applet.enable = mkDefault true;
       mako.enable = mkDefault true;
       hyprpaper.enable = mkDefault true;
     };
-    wunkus.presets.programs = mkIf (!cfg.minimal) {
-      bemenu.enable = true;
+    wunkus.presets.programs = {
+      bemenu.enable = mkDefault true;
+      alacritty.enable = mkDefault true;
     };
   };
 }
