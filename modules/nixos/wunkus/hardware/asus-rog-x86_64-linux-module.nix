@@ -30,49 +30,6 @@ in
     boot.kernelModules = [ "kvm-intel" ];
     boot.extraModulePackages = [ ];
 
-    fileSystems."/" = {
-      device = "/dev/mapper/nixvg-nixos";
-      fsType = "btrfs";
-      options = [ "subvol=@" ];
-    };
-
-    fileSystems."/home" = {
-      device = "/dev/mapper/nixvg-nixos";
-      fsType = "btrfs";
-      options = [ "subvol=@home" ];
-    };
-
-    fileSystems."/home/.snapshots" = {
-      device = "/dev/mapper/nixvg-nixos";
-      fsType = "btrfs";
-      options = [ "subvol=@home@.snapshots" ];
-    };
-
-    fileSystems."/nix" = {
-      device = "/dev/mapper/nixvg-nixos";
-      fsType = "btrfs";
-      options = [ "subvol=@nix" ];
-    };
-
-    fileSystems."/persist" = {
-      device = "/dev/mapper/nixvg-nixos";
-      fsType = "btrfs";
-      options = [ "subvol=@persist" ];
-    };
-
-    fileSystems."/boot" = {
-      device = "/dev/disk/by-uuid/76FA-8443";
-      fsType = "vfat";
-      options = [
-        "fmask=0077"
-        "dmask=0077"
-      ];
-    };
-
-    swapDevices = [
-      { device = "/dev/mapper/nixvg-swap"; }
-    ];
-
     nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
     hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   };
