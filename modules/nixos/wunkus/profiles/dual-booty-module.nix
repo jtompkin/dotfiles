@@ -19,7 +19,7 @@ in
 
     # time.hardwareClockInLocalTime = mkDefault true;
     services.openssh.enable = mkDefault true;
-    networking.networkManager.enable = mkDefault true;
+    networking.networkmanager.enable = mkDefault true;
 
     boot.loader.efi.canTouchEfiVariables = mkDefault true;
 
