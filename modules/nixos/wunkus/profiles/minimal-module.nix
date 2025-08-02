@@ -20,7 +20,10 @@ in
     users = {
       users.${username} = {
         isNormalUser = mkDefault true;
-        extraGroups = [ "wheel" ];
+        extraGroups = [
+          "wheel"
+          "networkmanager"
+        ];
       };
     };
   };
