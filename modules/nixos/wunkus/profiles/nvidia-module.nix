@@ -31,7 +31,7 @@ in
     services.xserver.videoDrivers = [ "nvidia" ];
     hardware.nvidia = {
       open = mkDefault false;
-      hardware.nvidia.prime = {
+      prime = {
         intelBusId = mkDefault cfg.intelBusId;
         nvidiaBusId = mkDefault cfg.nvidiaBusId;
         offload.enable = mkDefault true;
