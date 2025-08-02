@@ -29,6 +29,7 @@ in
         enable = mkDefault true;
         pkiBundle = mkDefault "/var/lib/sbctl";
         configurationLimit = mkDefault 10;
+        settings.default = "@saved";
       };
     };
   };
