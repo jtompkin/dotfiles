@@ -182,7 +182,6 @@ in
     };
     programs = {
       waybar = {
-        enable = mkDefault true;
         systemd.enable = mkDefault true;
         systemd.target = mkDefault "hyprland-session.target";
       };
@@ -195,6 +194,7 @@ in
     wunkus.presets.programs = {
       bemenu.enable = mkDefault true;
       alacritty.enable = mkDefault true;
+      waybar.enable = mkDefault true;
     };
     home.packages = [ pkgs.xfce.thunar ];
   };
