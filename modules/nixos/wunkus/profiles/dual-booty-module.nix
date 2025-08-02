@@ -12,22 +12,7 @@ in
     enable = lib.mkEnableOption "dual boot with windows profile";
   };
   config = mkIf cfg.enable {
-    time.hardwareClockInLocalTime = mkDefault true;
-    boot = {
-      loader = {
-        systemd-boot = {
-          enable = mkDefault true;
-          xbootldrMountPoint = mkDefault "/boot";
-        };
-        efi = {
-          canTouchEfiVariables = mkDefault true;
-          efiSysMountPoint = mkDefault "/efi";
-        };
-      };
-      initrd.luks.devices."nixcrypt" = {
-        device = "/dev/disk/by-label/nixcrypt";
-        allowDiscards = true;
-      };
-    };
+    # time.hardwareClockInLocalTime = mkDefault true;
+    boot.loader.efi.canTouchEfiVariables = mkDefault true;
   };
 }

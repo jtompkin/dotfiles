@@ -8,15 +8,14 @@
     };
     profiles = {
       minimal.enable = true;
-      vm.enable = true;
       ephemeral.enable = true;
       dualBooty.enable = true;
-      secure.enable = true;
+      # secure.enable = true;
     };
     disks = {
       dualBooty.enable = true;
     };
-    hardware."kvm-x86_64-linux".enable = true;
+    hardware."asusRog-x86_64-linux".enable = true;
   };
 
   time.timeZone = "America/New_York";

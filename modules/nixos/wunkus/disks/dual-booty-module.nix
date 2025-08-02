@@ -18,7 +18,7 @@ in
   config = mkIf cfg.enable {
     fileSystems = {
       "/" = {
-        device = "/dev/nixvg/nix";
+        device = "/dev/nixvg/nixos";
         fsType = "btrfs";
         options = [
           "subvol=@"
@@ -28,7 +28,7 @@ in
       };
 
       "/home" = {
-        device = "/dev/nixvg/nix";
+        device = "/dev/nixvg/nixos";
         fsType = "btrfs";
         options = [
           "subvol=@home"
@@ -38,7 +38,7 @@ in
       };
 
       "/nix" = {
-        device = "/dev/nixvg/nix";
+        device = "/dev/nixvg/nixos";
         fsType = "btrfs";
         neededForBoot = true;
         options = [
@@ -49,7 +49,7 @@ in
       };
 
       "/persist" = {
-        device = "/dev/nixvg/nix";
+        device = "/dev/nixvg/nixos";
         fsType = "btrfs";
         neededForBoot = true;
         options = [
@@ -60,7 +60,7 @@ in
       };
 
       "/home/.snapshots" = {
-        device = "/dev/nixvg/nix";
+        device = "/dev/nixvg/nixos";
         fsType = "btrfs";
         depends = [ "/home" ];
         options = [
@@ -70,21 +70,8 @@ in
         ];
       };
 
-      "/efi" = {
-        device = "/dev/disk/by-label/ESP";
-        fsType = "vfat";
-        options = [
-          "fmask=0077"
-          "dmask=0077"
-          "noatime"
-          "nosuid"
-          "nodev"
-          "noexec"
-        ];
-      };
-
       "/boot" = {
-        device = "/dev/disk/by-label/XBOOT";
+        device = "/dev/disk/by-label/SYSTEM";
         fsType = "vfat";
         options = [
           "fmask=0077"
@@ -106,6 +93,10 @@ in
     zramSwap = {
       enable = mkDefault true;
       priority = mkDefault 100;
+    };
+    boot.initrd.luks.devices."nixcrypt" = {
+      device = "/dev/disk/by-label/nixcrypt";
+      allowDiscards = true;
     };
   };
 }
