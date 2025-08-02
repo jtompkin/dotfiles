@@ -34,7 +34,7 @@ in
       prime = {
         intelBusId = mkDefault cfg.intelBusId;
         nvidiaBusId = mkDefault cfg.nvidiaBusId;
-        offload.enable = mkDefault true;
+        offload.enable = true;
         offload.enableOffloadCmd = mkDefault true;
       };
     };
