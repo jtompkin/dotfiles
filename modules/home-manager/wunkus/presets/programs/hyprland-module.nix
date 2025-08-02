@@ -44,7 +44,7 @@ in
     programs.waybar = mkIf (!cfg.minimal) {
       enable = true;
       systemd.enable = true;
-      systemd.target = [ "hyprland-session.target" ];
+      systemd.target = "hyprland-session.target";
     };
     services = mkIf (!cfg.minimal) {
       network-manager-applet.enable = mkDefault true;
