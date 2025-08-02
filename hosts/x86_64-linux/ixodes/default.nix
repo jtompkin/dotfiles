@@ -12,12 +12,12 @@
       dualBooty.enable = true;
       secure.enable = true;
       nvidia.enable = true;
+      desktop.enable = true;
     };
     disks = {
       dualBooty.enable = true;
     };
     hardware."asusRog-x86_64-linux".enable = true;
-    presets.programs.hyprland.enable = true;
   };
 
   time.timeZone = "America/New_York";
