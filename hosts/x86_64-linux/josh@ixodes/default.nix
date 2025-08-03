@@ -12,8 +12,8 @@
       programs = {
         hyprland.enable = true;
       };
+      themes.dark.enable = true;
     };
-    themes.dark.enable = true;
   };
 
   programs.git.signing.key = "8C07A97FC369A5F4FCFAC6F1989246B0B9904782";

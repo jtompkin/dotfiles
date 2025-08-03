@@ -21,5 +21,15 @@ in
       xwayland.enable = mkDefault true;
     };
     environment.systemPackages = [ pkgs.vivaldi ];
+    environment.pathsToLink = [
+      "/share/xdg-desktop-portal"
+      "/share/applications"
+    ];
+    security.rtkit.enable = mkDefault true;
+    hardware.bluetooth.enable = mkDefault true;
+    services = {
+      blueman.enable = mkDefault true;
+      gvfs.enable = mkDefault true;
+    };
   };
 }

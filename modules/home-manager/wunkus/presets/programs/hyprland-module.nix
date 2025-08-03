@@ -40,6 +40,11 @@ in
       package = mkDefault null;
       settings = {
         "$mainMod" = "SUPER";
+        monitor = [
+          "eDP-1, preferred, 0x0, 1.2"
+          "desc:HP Inc. HP E24q G5 CNC3351FZT, preferred, auto, 1.6"
+          ", preferred, auto, 1"
+        ];
         general = {
           gaps_in = 3;
           gaps_out = 3;
@@ -189,6 +194,7 @@ in
     services = mkIf (!cfg.minimal) {
       network-manager-applet.enable = mkDefault true;
       mako.enable = mkDefault true;
+      blueman-applet.enable = mkDefault true;
       hyprpaper.enable = mkDefault true;
     };
     wunkus.presets.programs = {
@@ -197,5 +203,7 @@ in
       waybar.enable = mkDefault true;
     };
     home.packages = [ pkgs.xfce.thunar ];
+    xdg.portal.enable = true;
+    xdg.portal.config.hyprland.default = [ "hyprland" ];
   };
 }
