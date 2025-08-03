@@ -78,6 +78,7 @@ in
             "/var/lib/nixos"
             "/var/lib/sbctl"
             "/var/lib/systemd/coredump"
+            "/etc/ssh"
             "/etc/NetworkManager/system-connections"
           ]
           cfg.extraDirectories
@@ -90,5 +91,9 @@ in
         ];
       };
     };
+    age.identityPaths = [
+      "/persist/etc/ssh/ssh_host_ed25519_key"
+      "/persist/etc/ssh/ssh_host_rsa_key"
+    ];
   };
 }

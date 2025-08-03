@@ -68,6 +68,7 @@ rec {
     lib.nixosSystem {
       inherit specialArgs;
       modules = [
+        inputs.agenix.nixosModules.default
         inputs.determinate.nixosModules.default
         inputs.disko.nixosModules.disko
         inputs.home-manager.nixosModules.home-manager
@@ -77,12 +78,14 @@ rec {
         inputs.self.nixosModules.lib
         {
           imports = listModuleFiles ../modules/nixos;
+          age.secrets.password1.file = ../secrets/password1.age;
           nixpkgs.pkgs = const.pkgsBySystem.${system};
           home-manager = {
             sharedModules = [
               inputs.mornix.homeModules.default
               inputs.self.homeModules.lib
-            ] ++ listModuleFiles ../modules/home-manager;
+            ]
+            ++ listModuleFiles ../modules/home-manager;
             extraSpecialArgs = specialArgs;
             useUserPackages = lib.mkDefault true;
             useGlobalPkgs = lib.mkDefault true;
@@ -102,6 +105,7 @@ rec {
       pkgs = const.pkgsBySystem.${system};
       extraSpecialArgs = specialArgs;
       modules = [
+        inputs.agenix.homeManagerModules.default
         inputs.self.homeModules.lib
         inputs.mornix.homeModules.default
         { imports = listModuleFiles ../modules/home-manager; }

@@ -30,6 +30,7 @@ in
       "/home" = {
         device = "/dev/nixvg/nixos";
         fsType = "btrfs";
+        neededForBoot = true;
         options = [
           "subvol=@home"
           "compress=zstd:3"

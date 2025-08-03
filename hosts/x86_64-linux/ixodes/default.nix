@@ -13,6 +13,7 @@
       secure.enable = true;
       nvidia.enable = true;
       desktop.enable = true;
+      snappy.enable = true;
     };
     disks = {
       dualBooty.enable = true;

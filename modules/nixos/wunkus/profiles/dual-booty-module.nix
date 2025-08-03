@@ -13,11 +13,10 @@ in
   };
   config = mkIf cfg.enable {
 
-    users.users.${config.wunkus.settings.username}.hashedPassword = mkDefault (
-      lib.fileContents ./data/password.sha512
-    );
+    users.users.${config.wunkus.settings.username}.hashedPasswordFile =
+      config.age.secrets.password1.path;
+    users.mutableUsers = false;
 
-    # time.hardwareClockInLocalTime = mkDefault true;
     services.openssh.enable = mkDefault true;
     networking.networkmanager.enable = mkDefault true;
 
