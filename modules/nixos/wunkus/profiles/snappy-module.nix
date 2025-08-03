@@ -11,7 +11,7 @@ in
   config = mkIf cfg.enable {
     services.snapper.configs.home = {
       SUBVOLUME = "/home";
-      ALLOW_USERS = config.wunkus.settings.username;
+      ALLOW_USERS = [ config.wunkus.settings.username ];
       TIMELINE_CREATE = true;
       TIMELINE_CLEANUP = true;
     };
