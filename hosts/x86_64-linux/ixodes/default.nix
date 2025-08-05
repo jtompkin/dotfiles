@@ -14,6 +14,7 @@
       nvidia.enable = true;
       desktop.enable = true;
       snappy.enable = true;
+      laptop.enable = true;
     };
     disks = {
       dualBooty.enable = true;

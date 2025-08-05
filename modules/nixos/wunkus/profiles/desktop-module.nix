@@ -20,7 +20,10 @@ in
       withUWSM = mkDefault true;
       xwayland.enable = mkDefault true;
     };
-    environment.systemPackages = [ pkgs.vivaldi ];
+    environment.systemPackages = [
+      pkgs.vivaldi
+      pkgs.tor-browser
+    ];
     environment.pathsToLink = [
       "/share/xdg-desktop-portal"
       "/share/applications"
