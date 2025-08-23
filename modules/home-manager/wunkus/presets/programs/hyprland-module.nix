@@ -31,6 +31,15 @@ in
         type = types.str;
         default = "bemenu-run";
       };
+      defaultWallpaper = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "Path to png image file to use as default wallpaper";
+      };
+      wallpaperDir = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+      };
     };
   };
   config = mkIf cfg.enable {
@@ -180,7 +189,7 @@ in
         ];
         windowrulev2 = [
           "suppressevent maximize, class:.*"
-          "float, class:blueman-manager"
+          "float, title:Bluetooth Devices"
           "float, class:nm-connection-editor"
         ];
       };
@@ -196,13 +205,21 @@ in
       mako.enable = mkDefault true;
       blueman-applet.enable = mkDefault true;
       hyprpaper.enable = mkDefault true;
+      hyprpaper.settings = mkIf (cfg.defaultWallpaper != null) {
+        preload = [ cfg.defaultWallpaper ];
+        wallpaper = [ ", ${cfg.defaultWallpaper}" ];
+      };
     };
     wunkus.presets.programs = {
       bemenu.enable = mkDefault true;
       alacritty.enable = mkDefault true;
       waybar.enable = mkDefault true;
     };
-    home.packages = [ pkgs.xfce.thunar ];
+    home.packages = [
+      pkgs.xfce.thunar
+      pkgs.walker
+      pkgs.networkmanagerapplet
+    ];
     xdg.portal.enable = true;
     xdg.portal.config.hyprland.default = [ "hyprland" ];
   };

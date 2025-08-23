@@ -12,9 +12,13 @@
       dualBooty.enable = true;
       secure.enable = true;
       nvidia.enable = true;
-      desktop.enable = true;
+      desktop = {
+        enable = true;
+        displayManager.enable = true;
+      };
       snappy.enable = true;
       laptop.enable = true;
+      bluepill.enable = true;
     };
     disks = {
       dualBooty.enable = true;

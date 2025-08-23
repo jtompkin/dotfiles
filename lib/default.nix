@@ -108,7 +108,10 @@ rec {
         inputs.agenix.homeManagerModules.default
         inputs.self.homeModules.lib
         inputs.mornix.homeModules.default
-        { imports = listModuleFiles ../modules/home-manager; }
+        {
+          imports = listModuleFiles ../modules/home-manager;
+          age.secrets.spotify-password.file = ../secrets/spotify-password.age;
+        }
         module
       ];
     };

@@ -12,6 +12,9 @@ in
   options = {
     wunkus.profiles.desktop = {
       enable = mkEnableOption "desktop system configuration";
+      displayManager = {
+        enable = mkEnableOption "display manager system configuration";
+      };
     };
   };
   config = mkIf cfg.enable {
@@ -22,7 +25,7 @@ in
     };
     environment.systemPackages = [
       pkgs.vivaldi
-      pkgs.tor-browser
+      # pkgs.tor-browser
     ];
     environment.pathsToLink = [
       "/share/xdg-desktop-portal"
@@ -33,6 +36,11 @@ in
     services = {
       blueman.enable = mkDefault true;
       gvfs.enable = mkDefault true;
+      displayManager.sddm = mkIf cfg.displayManager.enable {
+        enable = mkDefault true;
+        wayland.enable = mkDefault true;
+        autoNumlock = mkDefault true;
+      };
     };
   };
 }

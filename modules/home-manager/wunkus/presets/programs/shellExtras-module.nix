@@ -90,9 +90,9 @@ in
           "--git"
         ];
       };
+      fastfetch.enable = mkDefault true;
       fd.enable = mkDefault true;
       ripgrep.enable = mkDefault true;
     };
-
   };
 }

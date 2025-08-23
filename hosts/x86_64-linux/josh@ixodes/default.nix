@@ -11,8 +11,12 @@
     presets = {
       programs = {
         hyprland.enable = true;
+        hyprland.wallpaperDir = "/home/josh/Pictures/wallpapers";
+        hyprland.defaultWallpaper = "/home/josh/Pictures/Wallpapers/dark_souls_1_01.jpg";
+        hyprland.menu = "walker";
       };
       themes.dark.enable = true;
+      services.spotify.enable = true;
     };
   };
 

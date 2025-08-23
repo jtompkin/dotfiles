@@ -9,4 +9,5 @@ in
     josh_ixodes
     ixodes
   ];
+  "spotify-password.age".publicKeys = [ josh_ixodes ];
 }

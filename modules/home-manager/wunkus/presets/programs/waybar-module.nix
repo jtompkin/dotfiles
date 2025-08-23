@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 let
@@ -50,6 +51,9 @@ in
             "custom/left-arrow-light"
             "custom/left-arrow-dark"
             "battery"
+            "custom/left-arrow-light"
+            "custom/left-arrow-dark"
+            "network"
             "custom/left-arrow-light"
             "custom/left-arrow-dark"
             "tray"
@@ -103,12 +107,12 @@ in
             "interval" = 5;
             "format" = "Mem {}%";
             "tooltip-format" = "{used:0.1f}G / {total:0.1f}G\n{swapUsed:0.1f}G / {swapTotal:0.1f}G";
-            "on-click" = "alacritty -e htop";
+            "on-click" = "alacritty -e ${lib.getExe pkgs.btop}";
           };
           "cpu" = {
             "interval" = 5;
             "format" = "CPU {usage:2}%";
-            "on-click" = "alacritty -e htop";
+            "on-click" = "alacritty -e ${lib.getExe pkgs.htop}";
           };
           "temperature" = {
             "critical-threshold" = 80;
