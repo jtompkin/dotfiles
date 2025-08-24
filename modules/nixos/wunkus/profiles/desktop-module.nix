@@ -25,6 +25,7 @@ in
     };
     environment.systemPackages = [
       pkgs.vivaldi
+      pkgs.sddm-astronaut
       # pkgs.tor-browser
     ];
     environment.pathsToLink = [
@@ -38,8 +39,11 @@ in
       gvfs.enable = mkDefault true;
       displayManager.sddm = mkIf cfg.displayManager.enable {
         enable = mkDefault true;
+        package = pkgs.kdePackages.sddm;
         wayland.enable = mkDefault true;
         autoNumlock = mkDefault true;
+        extraPackages = [ pkgs.kdePackages.qtmultimedia ];
+        theme = "sddm-astronaut-theme";
       };
     };
   };

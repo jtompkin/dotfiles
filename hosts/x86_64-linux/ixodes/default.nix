@@ -18,6 +18,7 @@
       };
       snappy.enable = true;
       laptop.enable = true;
+      laptop.asus = true;
       bluepill.enable = true;
     };
     disks = {
