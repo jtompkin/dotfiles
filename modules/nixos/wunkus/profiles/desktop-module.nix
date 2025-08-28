@@ -15,6 +15,7 @@ in
       displayManager = {
         enable = mkEnableOption "display manager system configuration";
       };
+      spotify = mkEnableOption "open ports required for Spotify";
     };
   };
   config = mkIf cfg.enable {
@@ -25,15 +26,18 @@ in
     };
     environment.systemPackages = [
       pkgs.vivaldi
-      pkgs.sddm-astronaut
-      # pkgs.tor-browser
-    ];
+    ]
+    ++ lib.optional cfg.displayManager.enable pkgs.sddm-astronaut;
     environment.pathsToLink = [
       "/share/xdg-desktop-portal"
       "/share/applications"
     ];
     security.rtkit.enable = mkDefault true;
     hardware.bluetooth.enable = mkDefault true;
+    networking.firewall = mkIf cfg.spotify {
+      allowedTCPPorts = [ 57621 ];
+      allowedUDPPorts = [ 5353 ];
+    };
     services = {
       blueman.enable = mkDefault true;
       gvfs.enable = mkDefault true;

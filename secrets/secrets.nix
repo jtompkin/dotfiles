@@ -9,5 +9,5 @@ in
     josh_ixodes
     ixodes
   ];
-  "spotify-password.age".publicKeys = [ josh_ixodes ];
+  "spotify-client-id-01.age".publicKeys = [ josh_ixodes ];
 }

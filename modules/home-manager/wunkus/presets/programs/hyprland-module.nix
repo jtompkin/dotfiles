@@ -112,15 +112,14 @@ in
         };
         gestures.workspace_swipe = false;
         bind = [
-          "$mainMod, RETURN, exec, ${cfg.terminal}"
+          "$mainMod, RETURN, exec, uwsm app -- ${cfg.terminal}"
           "$mainMod, Q, killactive"
           # "$mainMod, X, exec, $pymenu control"
           "$mainMod, X, exec, uwsm stop"
           "$mainMod SHIFT, M, exec, $pymenu monitor"
-          "$mainMod, E, exec, ${cfg.fileManager}"
+          "$mainMod, E, exec, uwsm app -- ${cfg.fileManager}"
           "$mainMod, SPACE, togglefloating"
-          "$mainMod, D, exec, $pymenu desktop --term ${cfg.terminal}"
-          "$mainMod SHIFT, D, exec, ${cfg.menu}"
+          "$mainMod, D, exec, ${cfg.menu}"
           "$mainMod, P, pseudo"
           "$mainMod, O, togglesplit"
           "$mainMod, F, fullscreen"

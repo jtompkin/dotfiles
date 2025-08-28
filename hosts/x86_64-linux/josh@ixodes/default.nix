@@ -2,6 +2,7 @@
   wunkus = {
     settings = {
       username = "josh";
+      userid = 1000;
       system = "x86_64-linux";
     };
     profiles = {
@@ -14,6 +15,7 @@
         hyprland.wallpaperDir = "/home/josh/Pictures/wallpapers";
         hyprland.defaultWallpaper = "/home/josh/Pictures/Wallpapers/dark_souls_1_01.jpg";
         hyprland.menu = "walker";
+        proton.enable = true;
       };
       themes.dark.enable = true;
       services.spotify.enable = true;

@@ -20,6 +20,9 @@ in
       asusd = mkIf cfg.asus {
         enable = mkDefault true;
         enableUserService = mkDefault true;
+        asusdConfig.source = mkDefault ./data/asusd.ron;
+        fanCurvesConfig.source = mkDefault ./data/fan_curves.ron;
+        auraConfigs."1866".source = mkDefault ./data/aura_1866.ron;
       };
     };
   };

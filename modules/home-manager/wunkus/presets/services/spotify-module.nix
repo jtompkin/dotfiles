@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 let
@@ -13,30 +12,17 @@ in
     wunkus.presets.services.spotify.enable = mkEnableOption "spotify service configuration";
   };
   config = mkIf cfg.enable {
-    home.packages = [ pkgs.spotify ];
-    xdg.configFile."spotify/prefs".text = ''
-      storage.size=3072
-    '';
-    # programs.spotify-player = {
-    #   enable = mkDefault true;
-    #   settings = {
-    #     client_id = "1a84876bd85141fda6ee47d0bd82eb32";
-    #   };
-    # };
-    # home.packages = [ pkgs.spotify-qt ];
-    # services.librespot.enable = mkDefault true;
-    # services.spotifyd = {
-    # enable = mkDefault true;
-    # settings = {
-    # global = {
-    # username = "jospamkin@gmail.com";
-    # password = "iQ$SqB4ECTs3Bsbd";
-    # device_name = "nix";
+    programs.spotify-player = {
+      enable = mkDefault true;
+      package = mkDefault config.programs.spotify-player-git.package;
+      settings = builtins.fromTOML (lib.readFile ./data/app.toml) // {
+        client_id_command = mkIf (config.wunkus.settings.userid != null) {
+          command = "cat";
+          args = [
+            "/run/user/${builtins.toString config.wunkus.settings.userid}/agenix/spotify-client-id-01"
+          ];
+        };
+      };
+    };
   };
-  # audio = {
-  #   backend = "pipe";
-  # };
-  # };
-  # };
-  # };
 }

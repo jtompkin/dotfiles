@@ -110,7 +110,9 @@ rec {
         inputs.mornix.homeModules.default
         {
           imports = listModuleFiles ../modules/home-manager;
-          age.secrets.spotify-password.file = ../secrets/spotify-password.age;
+          age.secrets = {
+            spotify-client-id-01.file = ../secrets/spotify-client-id-01.age;
+          };
         }
         module
       ];
