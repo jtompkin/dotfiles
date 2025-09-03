@@ -13,17 +13,15 @@ in
     services = {
       tlp.enable = mkDefault true;
       thermald.enable = mkDefault true;
-      logind = {
-        lidSwitch = mkDefault "suspend";
-        lidSwitchDocked = mkDefault "ignore";
+      logind.settings.Login = {
+        HandleLidSwitch = mkDefault "suspend";
+        HandleLidSwitchDocked = mkDefault "ignore";
       };
       asusd = mkIf cfg.asus {
         enable = mkDefault true;
         enableUserService = mkDefault true;
-        asusdConfig.source = mkDefault ./data/asusd.ron;
-        fanCurvesConfig.source = mkDefault ./data/fan_curves.ron;
-        auraConfigs."1866".source = mkDefault ./data/aura_1866.ron;
       };
     };
+    wunkus.profiles.ephemeral.extraDirectories = [ "/etc/asusd" ];
   };
 }

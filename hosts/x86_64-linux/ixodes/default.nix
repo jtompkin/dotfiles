@@ -14,8 +14,9 @@
       nvidia.enable = true;
       desktop = {
         enable = true;
-        spotify = true;
+        spotify.enable = true;
         displayManager.enable = true;
+        fileManager.enable = true;
       };
       snappy.enable = true;
       laptop.enable = true;

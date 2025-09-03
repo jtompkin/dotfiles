@@ -201,7 +201,7 @@ in
     };
     services = mkIf (!cfg.minimal) {
       network-manager-applet.enable = mkDefault true;
-      mako.enable = mkDefault true;
+      dunst.enable = mkDefault true;
       blueman-applet.enable = mkDefault true;
       hyprpaper.enable = mkDefault true;
       hyprpaper.settings = mkIf (cfg.defaultWallpaper != null) {
@@ -215,7 +215,6 @@ in
       waybar.enable = mkDefault true;
     };
     home.packages = [
-      pkgs.xfce.thunar
       pkgs.walker
       pkgs.networkmanagerapplet
     ];

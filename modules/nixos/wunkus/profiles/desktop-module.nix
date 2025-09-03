@@ -12,17 +12,25 @@ in
   options = {
     wunkus.profiles.desktop = {
       enable = mkEnableOption "desktop system configuration";
-      displayManager = {
-        enable = mkEnableOption "display manager system configuration";
-      };
-      spotify = mkEnableOption "open ports required for Spotify";
+      spotify.enable = mkEnableOption "open ports required for Spotify";
+      displayManager.enable = mkEnableOption "display manager system configuration";
+      fileManager.enable = mkEnableOption "Thunar file manager configuration";
     };
   };
   config = mkIf cfg.enable {
-    programs.hyprland = {
-      enable = mkDefault true;
-      withUWSM = mkDefault true;
-      xwayland.enable = mkDefault true;
+    programs = {
+      hyprland = {
+        enable = mkDefault true;
+        withUWSM = mkDefault true;
+        xwayland.enable = mkDefault true;
+      };
+      thunar = mkIf cfg.fileManager.enable {
+        enable = mkDefault true;
+        plugins = with pkgs.xfce; [
+          thunar-vcs-plugin
+          thunar-archive-plugin
+        ];
+      };
     };
     environment.systemPackages = [
       pkgs.vivaldi
@@ -34,7 +42,7 @@ in
     ];
     security.rtkit.enable = mkDefault true;
     hardware.bluetooth.enable = mkDefault true;
-    networking.firewall = mkIf cfg.spotify {
+    networking.firewall = mkIf cfg.spotify.enable {
       allowedTCPPorts = [ 57621 ];
       allowedUDPPorts = [ 5353 ];
     };
@@ -43,11 +51,11 @@ in
       gvfs.enable = mkDefault true;
       displayManager.sddm = mkIf cfg.displayManager.enable {
         enable = mkDefault true;
-        package = pkgs.kdePackages.sddm;
+        package = mkDefault pkgs.kdePackages.sddm;
         wayland.enable = mkDefault true;
         autoNumlock = mkDefault true;
         extraPackages = [ pkgs.kdePackages.qtmultimedia ];
-        theme = "sddm-astronaut-theme";
+        theme = mkDefault "sddm-astronaut-theme";
       };
     };
   };

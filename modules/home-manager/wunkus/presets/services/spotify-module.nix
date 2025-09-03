@@ -24,5 +24,7 @@ in
         };
       };
     };
+    wayland.windowManager.hyprland.settings.exec-once =
+      lib.optional config.wunkus.presets.programs.hyprland.enable "uwsm app -- ${lib.getExe config.programs.spotify-player.package} --daemon";
   };
 }

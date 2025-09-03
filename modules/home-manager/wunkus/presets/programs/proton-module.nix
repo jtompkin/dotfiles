@@ -20,12 +20,7 @@ in
   };
   config = mkIf cfg.enable {
     home.packages = [ pkgs.protonvpn-gui ];
-    wayland.windowManager.hyprland = mkIf config.wunkus.presets.programs.hyprland.enable {
-      settings = {
-        exec-once = [
-          "uwsm app -- ${lib.getExe pkgs.protonvpn-gui} --start-minimized"
-        ];
-      };
-    };
+    wayland.windowManager.hyprland.settings.exec-once =
+      lib.optional config.wunkus.presets.programs.hyprland.enable "uwsm app -- ${lib.getExe pkgs.protonvpn-gui} --start-minimized";
   };
 }

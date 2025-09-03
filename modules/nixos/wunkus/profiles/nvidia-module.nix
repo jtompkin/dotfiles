@@ -27,10 +27,19 @@ in
     };
   };
   config = mkIf cfg.enable {
+    boot.extraModprobeConfig = ''
+      # options nvidia NVreg_PreserveVideoMemoryAllocations=1
+      options nvidia NVreg_UsePageAttributeTable=1
+    '';
     hardware.graphics.enable = mkDefault true;
-    services.xserver.videoDrivers = [ "nvidia" ];
+    services.xserver.videoDrivers = [
+      "nvidia"
+      "modesetting"
+    ];
     hardware.nvidia = {
       open = mkDefault false;
+      powerManagement.enable = mkDefault true;
+      powerManagement.finegrained = mkDefault true;
       prime = {
         intelBusId = mkDefault cfg.intelBusId;
         nvidiaBusId = mkDefault cfg.nvidiaBusId;
