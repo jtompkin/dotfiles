@@ -16,5 +16,6 @@ in
       defaultUser = mkDefault username;
       interop.includePath = mkDefault false;
     };
+    services.openssh.enable = mkDefault true;
   };
 }
