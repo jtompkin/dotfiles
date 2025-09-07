@@ -33,7 +33,7 @@ in
       };
     };
     environment.systemPackages = [
-      pkgs.vivaldi
+      # pkgs.vivaldi
     ]
     ++ lib.optional cfg.displayManager.enable pkgs.sddm-astronaut;
     environment.pathsToLink = [
