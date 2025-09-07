@@ -20,8 +20,11 @@ in
     services.openssh.enable = mkDefault true;
     networking.networkmanager.enable = mkDefault true;
 
-    boot.loader.systemd-boot.enable = mkDefault true;
-    boot.loader.efi.canTouchEfiVariables = mkDefault true;
+    boot = {
+      loader.systemd-boot.enable = mkDefault true;
+      loader.efi.canTouchEfiVariables = mkDefault true;
+      supportedFilesystems = [ "ntfs" ];
+    };
 
     i18n.defaultLocale = "en_US.UTF-8";
   };
