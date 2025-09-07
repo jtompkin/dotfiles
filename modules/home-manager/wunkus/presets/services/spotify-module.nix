@@ -16,6 +16,7 @@ in
       enable = mkDefault true;
       package = mkDefault config.programs.spotify-player-git.package;
       settings = builtins.fromTOML (lib.readFile ./data/app.toml) // {
+        cover_img_scale = mkDefault 1.0;
         client_id_command = mkIf (config.wunkus.settings.userid != null) {
           command = "cat";
           args = [
@@ -24,7 +25,5 @@ in
         };
       };
     };
-    wayland.windowManager.hyprland.settings.exec-once =
-      lib.optional config.wunkus.presets.programs.hyprland.enable "uwsm app -- ${lib.getExe config.programs.spotify-player.package} --daemon";
   };
 }

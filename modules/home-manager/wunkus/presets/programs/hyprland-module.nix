@@ -12,6 +12,7 @@ let
     mkOption
     types
     ;
+  uwsmPkg = lib.getExe pkgs.uwsm;
   cfg = config.wunkus.presets.programs.hyprland;
 in
 {
@@ -112,12 +113,12 @@ in
         };
         gestures.workspace_swipe = false;
         bind = [
-          "$mainMod, RETURN, exec, uwsm app -- ${cfg.terminal}"
+          "$mainMod, RETURN, exec, ${uwsmPkg} app -- ${cfg.terminal}"
           "$mainMod, Q, killactive"
           # "$mainMod, X, exec, $pymenu control"
-          "$mainMod, X, exec, uwsm stop"
+          "$mainMod, X, exec, ${uwsmPkg} stop"
           "$mainMod SHIFT, M, exec, $pymenu monitor"
-          "$mainMod, E, exec, uwsm app -- ${cfg.fileManager}"
+          "$mainMod, E, exec, ${uwsmPkg} app -- ${cfg.fileManager}"
           "$mainMod, SPACE, togglefloating"
           "$mainMod, D, exec, ${cfg.menu}"
           "$mainMod, P, pseudo"

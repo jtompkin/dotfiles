@@ -46,26 +46,25 @@ in
           "nvim-treesitter" = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
         }) (listLuaFiles ./neovim/plugins)
       );
-      extraPackages =
+      extraPackages = lib.optionals (!cfg.minimal) (
         with pkgs;
-        mkIf (!cfg.minimal) [
+        [
           # LSPs
-          nixd # # Nix
-          lua-language-server # # Lua
-          pyright # # Python
-          gopls # # Go
+          nixd # Nix
+          lua-language-server # Lua
+          pyright # Python
+          gopls # Go
           # Formatters
-          nixfmt-rfc-style # # Nix
-          stylua # # Lua
-          black # # Python
-        ];
-      extraLuaConfig = mkMerge [
-        (mkBefore ''
-          vim.g.mapleader = " "
-          vim.g.maplocalleader = "\\"
-        '')
-        (lib.concatMapStrings lib.readFile (listLuaFiles ./neovim/config))
-      ];
+          nixfmt-rfc-style # Nix
+          stylua # Lua
+          black # Python
+        ]
+      );
+      extraLuaConfig = ''
+        vim.g.mapleader = " "
+        vim.g.maplocalleader = "\\"
+      ''
+      + (lib.concatMapStrings lib.readFile (listLuaFiles ./neovim/config));
     };
     xdg = {
       configFile.stylua.source = mkDefault ./neovim/stylua;

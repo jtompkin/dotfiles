@@ -6,11 +6,11 @@
 }:
 let
   inherit (lib) mkIf mkDefault mkEnableOption;
-  cfg = config.wunkus.presets.programs.alacritty;
+  cfg = config.wunkus.presets.programs.wezterm;
 in
 {
   options = {
-    wunkus.presets.programs.alacritty.enable = mkEnableOption "alacritty preset config";
+    wunkus.presets.programs.wezterm.enable = mkEnableOption "wezterm preset config";
   };
   config = mkIf cfg.enable {
     home.packages = [

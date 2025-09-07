@@ -6,6 +6,8 @@
 }:
 let
   inherit (lib) mkDefault mkEnableOption mkIf;
+  uwsmPkg = lib.getExe pkgs.uwsm;
+  spotify-playerExe = lib.getExe config.programs.spotify-player.package;
   cfg = config.wunkus.presets.programs.waybar;
 in
 {
@@ -15,7 +17,7 @@ in
   config = mkIf cfg.enable {
     programs.waybar = {
       enable = mkDefault true;
-      style = ./waybar/style.css;
+      style = mkDefault ./waybar/style.css;
       settings = {
         mainBar = {
           layer = "top";
@@ -41,19 +43,22 @@ in
             "wireplumber"
             "custom/left-arrow-light"
             "custom/left-arrow-dark"
+            "custom/spotify-player"
+            "custom/left-arrow-light"
+            "custom/left-arrow-dark"
             "memory"
-            "custom/left-arrow-light"
-            "custom/left-arrow-dark"
+            # "custom/left-arrow-light"
+            # "custom/left-arrow-dark"
             "cpu"
-            "custom/left-arrow-light"
-            "custom/left-arrow-dark"
+            # "custom/left-arrow-light"
+            # "custom/left-arrow-dark"
             "temperature"
             "custom/left-arrow-light"
             "custom/left-arrow-dark"
             "battery"
             "custom/left-arrow-light"
             "custom/left-arrow-dark"
-            "network"
+            # "network"
             "custom/left-arrow-light"
             "custom/left-arrow-dark"
             "tray"
@@ -103,22 +108,48 @@ in
             ];
             "on-click" = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
           };
+          "custom/spotify-player" = {
+            "exec" = "${
+              pkgs.fetchurl {
+                url = "https://raw.githubusercontent.com/Alexays/Waybar/refs/tags/0.14.0/resources/custom_modules/mediaplayer.py";
+                hash = "sha256-7Oq9cD4XKaHkrp2u0wDXNCGu2e44kZAUhmzu75WMR8E=";
+                executable = true;
+              }
+            } --player spotify-player";
+            "format" = "{icon} {text}";
+            "format-icons" = {
+              "spotify" = "";
+              "default" = "🎵";
+            };
+            "on-click" = "${uwsmPkg} app -- ${lib.getExe pkgs.kitty} ${lib.getExe (
+              pkgs.writeShellScriptBin "launch-spotify-daemon-and-player" ''
+                if pgrep spotify_player >/dev/null; then
+                  ${spotify-playerExe}
+                else
+                  ${spotify-playerExe} --daemon && ${spotify-playerExe}
+                fi
+              ''
+            )}";
+            "on-click-right" = "${spotify-playerExe} playback play-pause";
+            "on-scroll-up" = "${spotify-playerExe} playback next";
+            "on-scroll-down" = "${spotify-playerExe} playback previous";
+          };
           "memory" = {
             "interval" = 5;
             "format" = "Mem {}%";
             "tooltip-format" = "{used:0.1f}G / {total:0.1f}G\n{swapUsed:0.1f}G / {swapTotal:0.1f}G";
-            "on-click" = "alacritty -e ${lib.getExe pkgs.btop}";
+            "on-click" = "${uwsmPkg} app -- alacritty -e ${lib.getExe pkgs.btop}";
           };
           "cpu" = {
             "interval" = 5;
             "format" = "CPU {usage:2}%";
-            "on-click" = "alacritty -e ${lib.getExe pkgs.htop}";
+            "on-click" = "${uwsmPkg} app -- alacritty -e ${lib.getExe pkgs.htop}";
           };
           "temperature" = {
             "critical-threshold" = 80;
             "format-critical" = "{temperatureC}°C ";
             "format" = "{temperatureC}°C";
-            "on-click" = "rog-control-center";
+            "on-click" = "${uwsmPkg} app -- rog-control-center";
           };
           "battery" = {
             "states" = {
