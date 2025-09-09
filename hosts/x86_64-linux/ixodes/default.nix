@@ -22,6 +22,7 @@
       laptop.enable = true;
       laptop.asus = true;
       bluepill.enable = true;
+      forgejo.enable = true;
     };
     disks = {
       dualBooty.enable = true;
