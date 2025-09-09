@@ -15,7 +15,7 @@ in
     programs = {
       oh-my-posh = {
         enable = mkDefault true;
-        settings = builtins.fromTOML (builtins.readFile ./shellExtras/themes/my_space.omp.toml);
+        settings = lib.importTOML ./shellExtras/themes/my_space.omp.toml;
       };
       zoxide = {
         enable = mkDefault true;

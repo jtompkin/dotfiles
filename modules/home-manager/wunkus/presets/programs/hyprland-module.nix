@@ -29,8 +29,8 @@ let
         terminal = [ "alacritty" ];
         fileManager = [ "thunar" ];
         appLauncher = [
-          "anyrun"
           "walker"
+          "anyrun"
         ];
       };
     in
@@ -87,7 +87,7 @@ in
         default = {
           appType = "appLauncher";
           package = mkMerge [
-            (mkIf (cfg.appLauncher.name == "walker") (pkgs.walker))
+            (mkIf (cfg.appLauncher.name == "walker") (config.programs.walker.package))
             (mkIf (cfg.appLauncher.name == "anyrun") (config.programs.anyrun.package))
           ];
         };
@@ -284,6 +284,7 @@ in
     };
     wunkus.presets.programs = {
       anyrun = mkIf (cfg.appLauncher.name == "anyrun") { enable = mkDefault true; };
+      walker = mkIf (cfg.appLauncher.name == "walker") { enable = mkDefault true; };
       alacritty = mkIf (cfg.terminal.name == "alacritty") { enable = mkDefault true; };
       waybar.enable = mkDefault true;
     };

@@ -32,7 +32,7 @@ in
     ];
     programs.spotify-player = {
       enable = mkDefault true;
-      settings = builtins.fromTOML (lib.readFile ./data/app.toml) // {
+      settings = lib.importTOML ./data/app.toml // {
         cover_img_scale = mkDefault 1.0;
         enable_streaming = "DaemonOnly";
         notify_streaming_only = true;

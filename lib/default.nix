@@ -108,6 +108,7 @@ rec {
         inputs.agenix.homeManagerModules.default
         inputs.self.homeModules.lib
         inputs.mornix.homeModules.default
+        inputs.walker.homeManagerModules.default
         {
           imports = listModuleFiles ../modules/home-manager;
           age.secrets = {
