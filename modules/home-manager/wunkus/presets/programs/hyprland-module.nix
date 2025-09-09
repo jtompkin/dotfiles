@@ -10,27 +10,87 @@ let
     mkEnableOption
     mkIf
     mkOption
+    mkMerge
     types
     ;
-  uwsmPkg = lib.getExe pkgs.uwsm;
   cfg = config.wunkus.presets.programs.hyprland;
+  uwsmExe = lib.getExe pkgs.uwsm;
+  withUwsm =
+    {
+      app,
+      extra ? "",
+      offload ? false,
+    }:
+    "${uwsmExe} app -- ${lib.optionalString offload "nvidia-offload"} ${lib.getExe' app.package app.name} ${extra}";
+  defaultAppType =
+    { config, ... }:
+    let
+      appTypeAppsMap = {
+        terminal = [ "alacritty" ];
+        fileManager = [ "thunar" ];
+        appLauncher = [
+          "anyrun"
+          "walker"
+        ];
+      };
+    in
+    {
+      options = {
+        name = mkOption {
+          type = types.enum appTypeAppsMap.${config.appType};
+          default = lib.head appTypeAppsMap.${config.appType};
+        };
+        appType = mkOption {
+          type = types.enum (lib.attrNames appTypeAppsMap);
+          readOnly = true;
+        };
+        package = mkOption {
+          type = types.package;
+          readOnly = true;
+        };
+      };
+    };
 in
 {
   options = {
     wunkus.presets.programs.hyprland = {
       enable = mkEnableOption "Hyprland preset config";
       minimal = mkEnableOption "Hyprland minimal config";
+      nvidia = mkEnableOption "Nvidia specific settings";
       terminal = mkOption {
-        type = types.str;
-        default = "alacritty";
+        type = types.submodule defaultAppType;
+        default = {
+          appType = "terminal";
+          package = mkMerge [
+            (mkIf (cfg.terminal.name == "alacritty") config.programs.alacritty.package)
+          ];
+        };
       };
       fileManager = mkOption {
-        type = types.str;
-        default = "thunar";
+        type = types.submodule defaultAppType;
+        default = {
+          appType = "fileManager";
+          package = mkMerge [
+            (mkIf (cfg.fileManager.name == "thunar") (
+              pkgs.xfce.thunar.override {
+                thunarPlugins = with pkgs.xfce; [
+                  thunar-vcs-plugin
+                  thunar-archive-plugin
+                ];
+              }
+            ))
+          ];
+        };
       };
-      menu = mkOption {
-        type = types.str;
-        default = "bemenu-run";
+      appLauncher = mkOption {
+        type = types.submodule defaultAppType;
+        default = {
+          appType = "appLauncher";
+          package = mkMerge [
+            (mkIf (cfg.appLauncher.name == "walker") (pkgs.walker))
+            (mkIf (cfg.appLauncher.name == "anyrun") (config.programs.anyrun.package))
+          ];
+        };
       };
       defaultWallpaper = mkOption {
         type = types.nullOr types.str;
@@ -52,7 +112,7 @@ in
         "$mainMod" = "SUPER";
         monitor = [
           "eDP-1, preferred, 0x0, 1.2"
-          "desc:HP Inc. HP E24q G5 CNC3351FZT, preferred, auto, 1.6"
+          "desc:HP Inc. HP E24q G5 CNC3351FZT, 2560x1440@74.97, auto, 1.25"
           ", preferred, auto, 1"
         ];
         general = {
@@ -113,14 +173,21 @@ in
         };
         gestures.workspace_swipe = false;
         bind = [
-          "$mainMod, RETURN, exec, ${uwsmPkg} app -- ${cfg.terminal}"
+          "$mainMod, RETURN, exec, ${withUwsm { app = cfg.terminal; }}"
+          "$mainMod, E, exec, ${withUwsm { app = cfg.fileManager; }}"
+          "$mainMod, I, exec, ${
+            withUwsm {
+              app = {
+                package = config.programs.firefox.finalPackage;
+                name = "firefox";
+              };
+              offload = cfg.nvidia;
+            }
+          }"
+          "$mainMod, D, exec, ${lib.getExe cfg.appLauncher.package}"
+          "$mainMod, X, exec, ${uwsmExe} stop"
           "$mainMod, Q, killactive"
-          # "$mainMod, X, exec, $pymenu control"
-          "$mainMod, X, exec, ${uwsmPkg} stop"
-          "$mainMod SHIFT, M, exec, $pymenu monitor"
-          "$mainMod, E, exec, ${uwsmPkg} app -- ${cfg.fileManager}"
           "$mainMod, SPACE, togglefloating"
-          "$mainMod, D, exec, ${cfg.menu}"
           "$mainMod, P, pseudo"
           "$mainMod, O, togglesplit"
           "$mainMod, F, fullscreen"
@@ -194,32 +261,38 @@ in
         ];
       };
     };
+
     programs = {
       waybar = {
         systemd.enable = mkDefault true;
         systemd.target = mkDefault "hyprland-session.target";
       };
+      firefox.enable = mkDefault true;
     };
+
     services = mkIf (!cfg.minimal) {
       network-manager-applet.enable = mkDefault true;
       dunst.enable = mkDefault true;
       blueman-applet.enable = mkDefault true;
-      hyprpaper.enable = mkDefault true;
-      hyprpaper.settings = mkIf (cfg.defaultWallpaper != null) {
-        preload = [ cfg.defaultWallpaper ];
-        wallpaper = [ ", ${cfg.defaultWallpaper}" ];
+      hyprpaper = {
+        enable = mkDefault true;
+        settings = mkIf (cfg.defaultWallpaper != null) {
+          preload = [ cfg.defaultWallpaper ];
+          wallpaper = [ ", ${cfg.defaultWallpaper}" ];
+        };
       };
     };
     wunkus.presets.programs = {
-      bemenu.enable = mkDefault true;
-      alacritty.enable = mkDefault true;
+      anyrun = mkIf (cfg.appLauncher.name == "anyrun") { enable = mkDefault true; };
+      alacritty = mkIf (cfg.terminal.name == "alacritty") { enable = mkDefault true; };
       waybar.enable = mkDefault true;
     };
     home.packages = [
-      pkgs.walker
       pkgs.networkmanagerapplet
     ];
-    xdg.portal.enable = true;
-    xdg.portal.config.hyprland.default = [ "hyprland" ];
+    xdg.portal = {
+      enable = true;
+      config.hyprland.default = [ "hyprland" ];
+    };
   };
 }

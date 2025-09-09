@@ -11,10 +11,12 @@
     };
     presets = {
       programs = {
-        hyprland.enable = true;
-        hyprland.wallpaperDir = "/home/josh/Pictures/wallpapers";
-        hyprland.defaultWallpaper = "/home/josh/Pictures/Wallpapers/dark_souls_1_01.jpg";
-        hyprland.menu = "walker";
+        hyprland = {
+          enable = true;
+          nvidia = true;
+          wallpaperDir = "/home/josh/Pictures/wallpapers";
+          defaultWallpaper = "/home/josh/Pictures/Wallpapers/dark_souls_1_01.jpg";
+        };
         proton.enable = true;
       };
       themes.dark.enable = true;
@@ -23,7 +25,6 @@
   };
 
   programs = {
-    firefox.enable = true;
     git.signing.key = "8C07A97FC369A5F4FCFAC6F1989246B0B9904782";
   };
   services.gpg-agent.sshKeys = [ "B5BE9A6227DB43612DCA51604EF35ABB0FD50B27" ];

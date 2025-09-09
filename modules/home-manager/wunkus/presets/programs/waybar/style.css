@@ -23,6 +23,7 @@ window#waybar {
 #clock.2,
 #clock.3,
 #wireplumber,
+#custom-spotify-player,
 #network,
 #memory,
 #cpu,
@@ -68,6 +69,9 @@ window#waybar {
 #network {
 	color: #4EEAEC;
 }
+#custom-spotify-player {
+    color: #4EEAEC;
+}
 
 #clock,
 #wireplumber,
@@ -76,6 +80,7 @@ window#waybar {
 #cpu,
 #temperature,
 #battery,
+#custom-spotify-player,
 #disk {
 	padding: 0 10px;
 }
