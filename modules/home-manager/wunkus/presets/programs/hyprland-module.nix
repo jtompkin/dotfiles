@@ -202,6 +202,9 @@ in
           }"
           "$mainMod, D, exec, ${lib.getExe cfg.defaultApps.appLauncher.package}"
           "$mainMod, X, exec, ${uwsmExe} stop"
+          ", Print, exec, ${lib.getExe cfg.defaultApps.screenShotter.package} ${
+            lib.optionalString (cfg.defaultApps.screenShotter.name == "flameshot") "gui"
+          }"
           "$mainMod, Q, killactive"
           "$mainMod, SPACE, togglefloating"
           "$mainMod, P, pseudo"
@@ -278,7 +281,7 @@ in
     };
 
     programs = {
-      feh = mkIf (cfg.defaultApps.imageViewer == "feh") { enable = true; };
+      feh = mkIf (cfg.defaultApps.imageViewer.name == "feh") { enable = true; };
       waybar = {
         systemd.enable = mkDefault true;
         systemd.target = mkDefault "hyprland-session.target";
