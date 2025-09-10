@@ -32,14 +32,14 @@ in
         ];
       };
     };
-    environment.systemPackages = [
-      # pkgs.vivaldi
-    ]
-    ++ lib.optional cfg.displayManager.enable pkgs.sddm-astronaut;
-    environment.pathsToLink = [
-      "/share/xdg-desktop-portal"
-      "/share/applications"
-    ];
+    security.pam.services.hyprlock = { };
+    environment = {
+      systemPackages = lib.optional cfg.displayManager.enable pkgs.sddm-astronaut;
+      pathsToLink = [
+        "/share/xdg-desktop-portal"
+        "/share/applications"
+      ];
+    };
     security.rtkit.enable = mkDefault true;
     hardware.bluetooth.enable = mkDefault true;
     networking.firewall = mkIf cfg.spotify.enable {
