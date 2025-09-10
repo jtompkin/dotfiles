@@ -36,6 +36,7 @@ let
           "anyrun"
         ];
         screenShotter = [ "flameshot" ];
+        imageViewer = [ "feh" ];
       };
     in
     {
@@ -113,6 +114,11 @@ in
           flameshot = config.services.flameshot.package;
         }
         .${cfg.defaultApps.screenShotter.name};
+      imageViewer.package =
+        {
+          feh = config.programs.feh.package;
+        }
+        .${cfg.defaultApps.imageViewer.name};
     };
     wayland.windowManager.hyprland = {
       enable = mkDefault true;
@@ -272,6 +278,7 @@ in
     };
 
     programs = {
+      feh = mkIf (cfg.defaultApps.imageViewer == "feh") { enable = true; };
       waybar = {
         systemd.enable = mkDefault true;
         systemd.target = mkDefault "hyprland-session.target";
@@ -324,7 +331,6 @@ in
               text_align = "center";
               color = "rgba(200, 200, 200, 1.0)";
               font_size = 50;
-              # font_family = "Odalisque";
               rotate = 0;
               position = "0, 80";
               halign = "center";
@@ -350,8 +356,14 @@ in
       network-manager-applet.enable = mkDefault true;
       dunst.enable = mkDefault true;
       blueman-applet.enable = mkDefault true;
-      flameshot = mkIf (cfg.defaultApps.screenShotter == "flameshot") {
+      flameshot = mkIf (cfg.defaultApps.screenShotter.name == "flameshot") {
         enable = true;
+        settings = {
+          General = {
+            useGrimAdapter = true;
+            disabledGrimWarning = true;
+          };
+        };
       };
       hypridle = {
         enable = mkDefault true;
