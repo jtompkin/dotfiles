@@ -8,6 +8,10 @@
     profiles = {
       common.enable = true;
       comfy.enable = true;
+      gaimin = {
+        enable = true;
+        emulate.enable = true;
+      };
     };
     presets = {
       programs = {
