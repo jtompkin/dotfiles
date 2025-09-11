@@ -103,7 +103,6 @@ in
           };
           "custom/spotify-player" = {
             "exec" = "${lib.getExe config.programs.waybar-mediaplayer.package} 2>/dev/null";
-            "exec-if" = "pgrep spotify";
             "format" = "{icon}";
             "tooltip-format" = "{}";
             "escape" = true;

@@ -9,6 +9,7 @@ let
     mkDefault
     mkEnableOption
     mkIf
+    mkMerge
     mkOption
     types
     ;
@@ -35,7 +36,10 @@ let
           "walker"
           "anyrun"
         ];
-        screenShotter = [ "flameshot" ];
+        screenShotter = [
+          "hyprshot"
+          "flameshot"
+        ];
         imageViewer = [ "feh" ];
       };
     in
@@ -58,6 +62,7 @@ let
         };
       };
     };
+  defaultAppIs = type: name: cfg.defaultApps.${type}.name == name;
 in
 {
   options = {
@@ -111,6 +116,7 @@ in
         .${cfg.defaultApps.appLauncher.name};
       screenShotter.package =
         {
+          hyprshot = config.programs.hyprshot.package;
           flameshot = config.services.flameshot.package;
         }
         .${cfg.defaultApps.screenShotter.name};
@@ -184,75 +190,82 @@ in
           kb_options = "caps:swapescape";
           numlock_by_default = true;
           follow_mouse = 1;
-          # sensitivity = -0.85;
           touchpad.natural_scroll = false;
         };
         gestures.workspace_swipe = false;
-        bind = [
-          "$mainMod, RETURN, exec, ${withUwsm { app = cfg.defaultApps.terminal; }}"
-          "$mainMod, E, exec, ${withUwsm { app = cfg.defaultApps.fileManager; }}"
-          "$mainMod, I, exec, ${
-            withUwsm {
-              app = {
-                package = config.programs.firefox.finalPackage;
-                name = "firefox";
-              };
-              offload = cfg.nvidia;
-            }
-          }"
-          "$mainMod, D, exec, ${lib.getExe cfg.defaultApps.appLauncher.package}"
-          "$mainMod, X, exec, ${uwsmExe} stop"
-          ", Print, exec, ${lib.getExe cfg.defaultApps.screenShotter.package} ${
-            lib.optionalString (cfg.defaultApps.screenShotter.name == "flameshot") "gui"
-          }"
-          "$mainMod, Q, killactive"
-          "$mainMod, SPACE, togglefloating"
-          "$mainMod, P, pseudo"
-          "$mainMod, O, togglesplit"
-          "$mainMod, F, fullscreen"
-          "$mainMod SHIFT, P, exec, $pymenu power-profile --switch"
-          "$mainMod SHIFT CONTROL, P, exec, $pymenu power-profile"
+        bind = mkMerge [
+          [
+            "$mainMod, RETURN, exec, ${withUwsm { app = cfg.defaultApps.terminal; }}"
+            "$mainMod, E, exec, ${withUwsm { app = cfg.defaultApps.fileManager; }}"
+            "$mainMod, I, exec, ${
+              withUwsm {
+                app = {
+                  package = config.programs.firefox.finalPackage;
+                  name = "firefox";
+                };
+                offload = cfg.nvidia;
+              }
+            }"
+            "$mainMod, D, exec, ${lib.getExe cfg.defaultApps.appLauncher.package}"
+            "$mainMod, X, exec, ${uwsmExe} stop"
+            (
+              ", Print, exec, ${lib.optionalString (defaultAppIs "screenShotter" "hyprshot") "HYPRSHOT_DIR=${config.programs.hyprshot.saveLocation}"} ${lib.getExe cfg.defaultApps.screenShotter.package} "
+              + (lib.optionalString (defaultAppIs "screenShotter" "flameshot") "gui")
+              + (lib.optionalString (defaultAppIs "screenShotter" "hyprshot") "-m window")
+            )
 
-          "$mainMod, left, movefocus, l"
-          "$mainMod, right, movefocus, r"
-          "$mainMod, up, movefocus, u"
-          "$mainMod, down, movefocus, d"
-          "$mainMod, H, movefocus, l"
-          "$mainMod, L, movefocus, r"
-          "$mainMod, K, movefocus, u"
-          "$mainMod, J, movefocus, d"
+            "$mainMod, Q, killactive"
+            "$mainMod, SPACE, togglefloating"
+            "$mainMod, P, pseudo"
+            "$mainMod, O, togglesplit"
+            "$mainMod, F, fullscreen"
+            "$mainMod SHIFT, P, exec, $pymenu power-profile --switch"
+            "$mainMod SHIFT CONTROL, P, exec, $pymenu power-profile"
 
-          "$mainMod, 1, workspace, 1"
-          "$mainMod, 2, workspace, 2"
-          "$mainMod, 3, workspace, 3"
-          "$mainMod, 4, workspace, 4"
-          "$mainMod, 5, workspace, 5"
-          "$mainMod, 6, workspace, 6"
-          "$mainMod, 7, workspace, 7"
-          "$mainMod, 8, workspace, 8"
-          "$mainMod, 9, workspace, 9"
-          "$mainMod, 0, workspace, 10"
+            "$mainMod, left, movefocus, l"
+            "$mainMod, right, movefocus, r"
+            "$mainMod, up, movefocus, u"
+            "$mainMod, down, movefocus, d"
+            "$mainMod, H, movefocus, l"
+            "$mainMod, L, movefocus, r"
+            "$mainMod, K, movefocus, u"
+            "$mainMod, J, movefocus, d"
 
-          "$mainMod SHIFT, 1, movetoworkspace, 1"
-          "$mainMod SHIFT, 2, movetoworkspace, 2"
-          "$mainMod SHIFT, 3, movetoworkspace, 3"
-          "$mainMod SHIFT, 4, movetoworkspace, 4"
-          "$mainMod SHIFT, 5, movetoworkspace, 5"
-          "$mainMod SHIFT, 6, movetoworkspace, 6"
-          "$mainMod SHIFT, 7, movetoworkspace, 7"
-          "$mainMod SHIFT, 8, movetoworkspace, 8"
-          "$mainMod SHIFT, 9, movetoworkspace, 9"
-          "$mainMod SHIFT, 0, movetoworkspace, 10"
+            "$mainMod, 1, workspace, 1"
+            "$mainMod, 2, workspace, 2"
+            "$mainMod, 3, workspace, 3"
+            "$mainMod, 4, workspace, 4"
+            "$mainMod, 5, workspace, 5"
+            "$mainMod, 6, workspace, 6"
+            "$mainMod, 7, workspace, 7"
+            "$mainMod, 8, workspace, 8"
+            "$mainMod, 9, workspace, 9"
+            "$mainMod, 0, workspace, 10"
 
-          "$mainMod, M, togglespecialworkspace, magic"
-          "$mainMod, M, movetoworkspace, +0"
-          "$mainMod, M, togglespecialworkspace, magic"
-          "$mainMod, M, movetoworkspace, special:magic"
-          "$mainMod, M, togglespecialworkspace, magic"
+            "$mainMod SHIFT, 1, movetoworkspace, 1"
+            "$mainMod SHIFT, 2, movetoworkspace, 2"
+            "$mainMod SHIFT, 3, movetoworkspace, 3"
+            "$mainMod SHIFT, 4, movetoworkspace, 4"
+            "$mainMod SHIFT, 5, movetoworkspace, 5"
+            "$mainMod SHIFT, 6, movetoworkspace, 6"
+            "$mainMod SHIFT, 7, movetoworkspace, 7"
+            "$mainMod SHIFT, 8, movetoworkspace, 8"
+            "$mainMod SHIFT, 9, movetoworkspace, 9"
+            "$mainMod SHIFT, 0, movetoworkspace, 10"
 
-          "$mainMod, mouse_down, workspace, e+1"
-          "$mainMod, mouse_up, workspace, e-1"
-          "$mainMod, mouse:274, killactive"
+            "$mainMod, M, togglespecialworkspace, magic"
+            "$mainMod, M, movetoworkspace, +0"
+            "$mainMod, M, togglespecialworkspace, magic"
+            "$mainMod, M, movetoworkspace, special:magic"
+            "$mainMod, M, togglespecialworkspace, magic"
+
+            "$mainMod, mouse_down, workspace, e+1"
+            "$mainMod, mouse_up, workspace, e-1"
+            "$mainMod, mouse:274, killactive"
+          ]
+          (mkIf (defaultAppIs "screenShotter" "hyprshot") [
+            "Shift, Print, exec, ${lib.getExe cfg.defaultApps.screenShotter.package} -m region"
+          ])
         ];
         bindm = [
           "$mainMod, mouse:272, movewindow"
@@ -281,7 +294,11 @@ in
     };
 
     programs = {
-      feh = mkIf (cfg.defaultApps.imageViewer.name == "feh") { enable = true; };
+      feh = mkIf (defaultAppIs "imageViewer" "feh") { enable = true; };
+      hyprshot = mkIf (defaultAppIs "screenShotter" "hyprshot") {
+        enable = true;
+        saveLocation = "${config.xdg.userDirs.pictures}/Screenshots";
+      };
       waybar = {
         systemd.enable = mkDefault true;
         systemd.target = mkDefault "hyprland-session.target";
@@ -359,7 +376,7 @@ in
       network-manager-applet.enable = mkDefault true;
       dunst.enable = mkDefault true;
       blueman-applet.enable = mkDefault true;
-      flameshot = mkIf (cfg.defaultApps.screenShotter.name == "flameshot") {
+      flameshot = mkIf (defaultAppIs "screenShotter" "flameshot") {
         enable = true;
         settings = {
           General = {
@@ -391,17 +408,20 @@ in
       };
     };
     wunkus.presets.programs = {
-      anyrun = mkIf (cfg.defaultApps.appLauncher.name == "anyrun") { enable = true; };
-      walker = mkIf (cfg.defaultApps.appLauncher.name == "walker") { enable = true; };
-      alacritty = mkIf (cfg.defaultApps.terminal.name == "alacritty") { enable = true; };
+      anyrun = mkIf (defaultAppIs "appLauncher" "anyrun") { enable = true; };
+      walker = mkIf (defaultAppIs "appLauncher" "walker") { enable = true; };
+      alacritty = mkIf (defaultAppIs "terminal" "alacritty") { enable = true; };
       waybar.enable = mkDefault true;
     };
     home.packages = [
       pkgs.networkmanagerapplet
     ];
-    xdg.portal = {
-      enable = true;
-      config.hyprland.default = [ "hyprland" ];
+    xdg = {
+      portal = {
+        enable = true;
+        config.hyprland.default = [ "hyprland" ];
+      };
+      userDirs.enable = true;
     };
   };
 }

@@ -20,7 +20,7 @@ in
       in
       mkDefault (
         pkgs.writeShellScriptBin "spotify-launcher" ''
-          if pgrep spotify_player >/dev/null; then
+          if pgrep -f 'spotify_player --daemon' >/dev/null; then
             ${spotify-playerExe}
           else
             ${spotify-playerExe} --daemon && ${spotify-playerExe}

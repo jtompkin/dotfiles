@@ -12,7 +12,6 @@ in
 {
   options.wunkus.profiles.forgejo.enable = lib.mkEnableOption "forgejo config";
   config = mkIf cfg.enable {
-    wunkus.profiles.ephemeral.extraDirectories = [ "/var/lib/forgejo" ];
     services = {
       nginx = {
         enable = mkDefault true;

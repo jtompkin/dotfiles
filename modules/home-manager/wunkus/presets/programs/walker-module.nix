@@ -13,6 +13,7 @@ let
   cfg = config.wunkus.presets.programs.walker;
 in
 {
+  disabledModules = [ "services/walker.nix" ];
   options = {
     wunkus.presets.programs.walker = {
       enable = mkEnableOption "walker application launcher preset config";
