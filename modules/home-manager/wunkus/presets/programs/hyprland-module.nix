@@ -62,7 +62,8 @@ let
         };
       };
     };
-  defaultAppIs = type: name: cfg.defaultApps.${type}.name == name;
+  isDefaultApp = type: name: cfg.defaultApps.${type}.name == name;
+  getDefaltAppExe = type: lib.getExe cfg.defaultApps.${type}.package;
 in
 {
   options = {
@@ -79,14 +80,19 @@ in
         default = null;
         description = "Path to png image file to use as default wallpaper";
       };
+      wallpaperDir = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+      };
       lockBackground = mkOption {
         type = types.nullOr types.str;
         default = null;
         description = "Path to image to use as lock screen background";
       };
-      wallpaperDir = mkOption {
-        type = types.nullOr types.str;
-        default = null;
+      lockoutTime = mkOption {
+        type = lib.types.int;
+        default = 300;
+        description = "Number of seconds before screen is automatically locked. Set to 0 to disable automatic locking";
       };
     };
   };
@@ -193,6 +199,11 @@ in
           touchpad.natural_scroll = false;
         };
         gestures.workspace_swipe = false;
+        env = mkMerge [
+          (mkIf (isDefaultApp "screenShotter" "hyprshot") [
+            "HYPRSHOT_DIR, ${config.programs.hyprshot.saveLocation}"
+          ])
+        ];
         bind = mkMerge [
           [
             "$mainMod, RETURN, exec, ${withUwsm { app = cfg.defaultApps.terminal; }}"
@@ -206,21 +217,21 @@ in
                 offload = cfg.nvidia;
               }
             }"
-            "$mainMod, D, exec, ${lib.getExe cfg.defaultApps.appLauncher.package}"
+            "$mainMod, D, exec, ${getDefaltAppExe "appLauncher"}"
             "$mainMod, X, exec, ${uwsmExe} stop"
             (
-              ", Print, exec, ${lib.optionalString (defaultAppIs "screenShotter" "hyprshot") "HYPRSHOT_DIR=${config.programs.hyprshot.saveLocation}"} ${lib.getExe cfg.defaultApps.screenShotter.package} "
-              + (lib.optionalString (defaultAppIs "screenShotter" "flameshot") "gui")
-              + (lib.optionalString (defaultAppIs "screenShotter" "hyprshot") "-m window")
+              ", Print, exec, ${getDefaltAppExe "screenShotter"} "
+              + (lib.optionalString (isDefaultApp "screenShotter" "flameshot") "gui")
+              + (lib.optionalString (isDefaultApp "screenShotter" "hyprshot") "-m window")
             )
+            "$mainMod, Print, exec, ${lib.getExe pkgs.hyprpicker} -a"
 
+            "$mainMod CTRL, L, Exec, hyprlock"
             "$mainMod, Q, killactive"
             "$mainMod, SPACE, togglefloating"
             "$mainMod, P, pseudo"
             "$mainMod, O, togglesplit"
             "$mainMod, F, fullscreen"
-            "$mainMod SHIFT, P, exec, $pymenu power-profile --switch"
-            "$mainMod SHIFT CONTROL, P, exec, $pymenu power-profile"
 
             "$mainMod, left, movefocus, l"
             "$mainMod, right, movefocus, r"
@@ -263,28 +274,37 @@ in
             "$mainMod, mouse_up, workspace, e-1"
             "$mainMod, mouse:274, killactive"
           ]
-          (mkIf (defaultAppIs "screenShotter" "hyprshot") [
-            "Shift, Print, exec, ${lib.getExe cfg.defaultApps.screenShotter.package} -m region"
+          (mkIf (isDefaultApp "screenShotter" "hyprshot") [
+            "SHIFT, Print, exec, ${getDefaltAppExe "screenShotter"} -m region"
+            "$mainMod SHIFT, Print, exec, ${getDefaltAppExe "screenShotter"} --freeze"
           ])
         ];
         bindm = [
           "$mainMod, mouse:272, movewindow"
           "$mainMod, mouse:273, resizewindow"
         ];
-        bindel = [
-          ", XF86AudioRaiseVolume, exec, wpctl set-volume -l 1 @DEFAULT_SINK@ 2%+"
-          ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_SINK@ 2%-"
-          ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_SINK@ toggle"
-          ", XF86MonBrightnessDown, exec, brightnessctl set 5%-"
-          ", XF86MonBrightnessUp, exec, brightnessctl set 5%+"
-          ", xf86KbdBrightnessUp, exec, brightnessctl -d asus::kbd_backlight set +33%"
-          ", xf86KbdBrightnessDown, exec, brightnessctl -d asus::kbd_backlight set 33%-"
-        ];
-        bindl = [
-          ", XF86AudioPlay, exec, playerctl play-pause"
-          ", XF86AudioPrev, exec, playerctl previous"
-          ", XF86AudioNext, exec, playerctl next"
-        ];
+        bindel =
+          let
+            wpctlExe = lib.getExe' pkgs.wireplumber "wpctl";
+          in
+          [
+            ", XF86AudioRaiseVolume, exec, ${wpctlExe} set-volume -l 1 @DEFAULT_SINK@ 2%+"
+            ", XF86AudioLowerVolume, exec, ${wpctlExe} set-volume @DEFAULT_SINK@ 2%-"
+            ", XF86AudioMute, exec, ${wpctlExe} set-mute @DEFAULT_SINK@ toggle"
+            ", XF86MonBrightnessDown, exec, brightnessctl set 5%-"
+            ", XF86MonBrightnessUp, exec, brightnessctl set 5%+"
+            ", xf86KbdBrightnessUp, exec, brightnessctl -d asus::kbd_backlight set +33%"
+            ", xf86KbdBrightnessDown, exec, brightnessctl -d asus::kbd_backlight set 33%-"
+          ];
+        bindl =
+          let
+            playerctlExe = lib.getExe config.services.playerctld.package;
+          in
+          [
+            ", XF86AudioPlay, exec, ${playerctlExe} play-pause"
+            ", XF86AudioPrev, exec, ${playerctlExe} previous"
+            ", XF86AudioNext, exec, ${playerctlExe} next"
+          ];
         windowrulev2 = [
           "suppressevent maximize, class:.*"
           "float, title:Bluetooth Devices"
@@ -294,8 +314,8 @@ in
     };
 
     programs = {
-      feh = mkIf (defaultAppIs "imageViewer" "feh") { enable = true; };
-      hyprshot = mkIf (defaultAppIs "screenShotter" "hyprshot") {
+      feh = mkIf (isDefaultApp "imageViewer" "feh") { enable = true; };
+      hyprshot = mkIf (isDefaultApp "screenShotter" "hyprshot") {
         enable = true;
         saveLocation = "${config.xdg.userDirs.pictures}/Screenshots";
       };
@@ -376,7 +396,8 @@ in
       network-manager-applet.enable = mkDefault true;
       dunst.enable = mkDefault true;
       blueman-applet.enable = mkDefault true;
-      flameshot = mkIf (defaultAppIs "screenShotter" "flameshot") {
+      playerctld.enable = mkDefault true;
+      flameshot = mkIf (isDefaultApp "screenShotter" "flameshot") {
         enable = true;
         settings = {
           General = {
@@ -391,9 +412,9 @@ in
           general = {
             lock_cmd = "hyprlock";
           };
-          listener = [
+          listener = mkIf (cfg.lockoutTime > 0) [
             {
-              timeout = 300;
+              timeout = cfg.lockoutTime;
               on-timeout = "hyprlock";
             }
           ];
@@ -408,13 +429,16 @@ in
       };
     };
     wunkus.presets.programs = {
-      anyrun = mkIf (defaultAppIs "appLauncher" "anyrun") { enable = true; };
-      walker = mkIf (defaultAppIs "appLauncher" "walker") { enable = true; };
-      alacritty = mkIf (defaultAppIs "terminal" "alacritty") { enable = true; };
+      anyrun = mkIf (isDefaultApp "appLauncher" "anyrun") { enable = true; };
+      walker = mkIf (isDefaultApp "appLauncher" "walker") { enable = true; };
+      alacritty = mkIf (isDefaultApp "terminal" "alacritty") { enable = true; };
       waybar.enable = mkDefault true;
     };
-    home.packages = [
-      pkgs.networkmanagerapplet
+    home.packages = with pkgs; [
+      networkmanagerapplet
+      hyprpicker
+      wl-clipboard
+      wev
     ];
     xdg = {
       portal = {
