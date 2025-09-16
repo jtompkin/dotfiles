@@ -22,7 +22,7 @@ let
       extra ? "",
       offload ? false,
     }:
-    "${uwsmExe} app -- ${lib.optionalString offload "nvidia-offload"} ${lib.getExe' app.package exe} ${extra}";
+    "${uwsmExe} app -- ${lib.optionalString offload "nvidia-offload "}${lib.getExe' app.package exe} ${extra}";
   defaultAppType =
     { config, name, ... }:
     let
@@ -71,6 +71,7 @@ in
       enable = mkEnableOption "Hyprland preset config";
       minimal = mkEnableOption "Hyprland minimal config";
       nvidia = mkEnableOption "Nvidia specific settings";
+      asus = mkEnableOption "Asus specific settings";
       defaultApps = mkOption {
         type = types.attrsOf (types.submodule defaultAppType);
         default = { };
@@ -92,7 +93,12 @@ in
       lockoutTime = mkOption {
         type = lib.types.int;
         default = 300;
-        description = "Number of seconds before screen is automatically locked. Set to 0 to disable automatic locking";
+        description = "Number of idle seconds before screen is locked. Set to 0 to disable automatic locking";
+      };
+      suspendTime = mkOption {
+        type = lib.types.int;
+        default = 900;
+        description = "Number of idle seconds before the system is suspended. Set to 0 to disable automatic suspension";
       };
     };
   };
@@ -276,7 +282,7 @@ in
           ]
           (mkIf (isDefaultApp "screenShotter" "hyprshot") [
             "SHIFT, Print, exec, ${getDefaltAppExe "screenShotter"} -m region"
-            "$mainMod SHIFT, Print, exec, ${getDefaltAppExe "screenShotter"} --freeze"
+            "$mainMod CTRL, Print, exec, ${getDefaltAppExe "screenShotter"} --freeze"
           ])
         ];
         bindm = [
@@ -309,6 +315,10 @@ in
           "suppressevent maximize, class:.*"
           "float, title:Bluetooth Devices"
           "float, class:nm-connection-editor"
+          "float, class:wev"
+          "float, class:SystemInfo"
+          "size 70% 70%, class:SystemInfo"
+          "size 15% 70%, title:Proton VPN"
         ];
       };
     };
@@ -320,8 +330,10 @@ in
         saveLocation = "${config.xdg.userDirs.pictures}/Screenshots";
       };
       waybar = {
-        systemd.enable = mkDefault true;
-        systemd.target = mkDefault "hyprland-session.target";
+        systemd = {
+          enable = mkDefault true;
+          target = mkDefault "hyprland-session.target";
+        };
       };
       firefox.enable = mkDefault true;
       hyprlock = {
@@ -406,18 +418,40 @@ in
           };
         };
       };
+      hyprsunset = {
+        enable = mkDefault true;
+        settings = {
+          max-gamma = 150;
+          profile = [
+            {
+              time = "7:30";
+              identity = true;
+            }
+            {
+              time = "21:00";
+              temperature = 5500;
+              gamma = 0.8;
+            }
+          ];
+        };
+      };
       hypridle = {
         enable = mkDefault true;
         settings = {
           general = {
-            lock_cmd = "hyprlock";
+            lock_cmd = "pidof hyprlock || hyprlock";
+            before_sleep_cmd = "loginctl lock-session";
+            after_sleep_cmd = "hyprctl dispatch dpms on";
           };
-          listener = mkIf (cfg.lockoutTime > 0) [
-            {
+          listener =
+            lib.optional (cfg.lockoutTime > 0) {
               timeout = cfg.lockoutTime;
-              on-timeout = "hyprlock";
+              on-timeout = "loginctl lock-session";
             }
-          ];
+            ++ lib.optional (cfg.suspendTime > 0) {
+              timeout = cfg.suspendTime;
+              on-timeout = "systemctl suspend";
+            };
         };
       };
       hyprpaper = {

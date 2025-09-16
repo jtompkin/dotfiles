@@ -19,6 +19,7 @@ in
       extraConfig = # tmux
         ''
           set -g status-position top
+          set -g status-bg "#4E9BEC"
           bind-key C-t set status
           set-option -a terminal-features 'xterm-256color:RGB'
         '';

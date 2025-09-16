@@ -9,9 +9,9 @@ in
     wunkus.profiles.laptop.asus = mkEnableOption "Asus laptop specific config";
   };
   config = mkIf cfg.enable {
-    powerManagement.enable = mkDefault true;
+    # powerManagement.enable = mkDefault true;
     services = {
-      tlp.enable = mkDefault true;
+      # tlp.enable = mkDefault true;
       thermald.enable = mkDefault true;
       logind.settings.Login = {
         HandleLidSwitch = mkDefault "suspend";

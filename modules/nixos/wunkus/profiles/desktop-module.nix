@@ -7,6 +7,22 @@
 let
   inherit (lib) mkDefault mkEnableOption mkIf;
   cfg = config.wunkus.profiles.desktop;
+  sddm-astronaut-custom =
+    let
+      imgStorePath = "${./data/desktop/MVIC_sunset_scan_of_Pluto.jpg}";
+      backgroundsDir = "$out/share/sddm/themes/sddm-astronaut-theme/Backgrounds";
+    in
+    (pkgs.sddm-astronaut.override {
+      themeConfig = {
+        Background = "Backgrounds/${baseNameOf imgStorePath}";
+      };
+    }).overrideAttrs
+      (prevAttrs: {
+        installPhase = prevAttrs.installPhase + ''
+          chmod u+w ${backgroundsDir}
+          cp ${imgStorePath} ${backgroundsDir}
+        '';
+      });
 in
 {
   options = {
@@ -34,7 +50,7 @@ in
     };
     security.pam.services.hyprlock = { };
     environment = {
-      systemPackages = lib.optional cfg.displayManager.enable pkgs.sddm-astronaut;
+      systemPackages = mkIf cfg.displayManager.enable [ sddm-astronaut-custom ];
       pathsToLink = [
         "/share/xdg-desktop-portal"
         "/share/applications"
@@ -42,9 +58,15 @@ in
     };
     security.rtkit.enable = mkDefault true;
     hardware.bluetooth.enable = mkDefault true;
-    networking.firewall = mkIf cfg.spotify.enable {
-      allowedTCPPorts = [ 57621 ];
-      allowedUDPPorts = [ 5353 ];
+    networking = mkIf cfg.spotify.enable {
+      firewall = {
+        allowedTCPPorts = [ 57621 ];
+        allowedUDPPorts = [ 5353 ];
+      };
+      # Workaround for: https://github.com/Spotifyd/spotifyd/issues/1358
+      hosts = {
+        "0.0.0.0" = [ "apresolve.spotify.com" ];
+      };
     };
     services = {
       blueman.enable = mkDefault true;

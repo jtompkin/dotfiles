@@ -10,4 +10,5 @@ in
     ixodes
   ];
   "spotify-client-id-01.age".publicKeys = [ josh_ixodes ];
+  "spotify-secret-01.age".publicKeys = [ josh_ixodes ];
 }

@@ -32,8 +32,9 @@ in
       pkgs.nvitop
     ];
     boot.extraModprobeConfig = ''
-      # options nvidia NVreg_PreserveVideoMemoryAllocations=1
+      options nvidia NVreg_PreserveVideoMemoryAllocations=1
       options nvidia NVreg_UsePageAttributeTable=1
+      options nvidia NVreg_TemporaryFilePath=/var/tmp
     '';
     hardware.graphics.enable = mkDefault true;
     services.xserver.videoDrivers = [
@@ -42,8 +43,11 @@ in
     ];
     hardware.nvidia = {
       open = mkDefault false;
-      powerManagement.enable = mkDefault true;
-      powerManagement.finegrained = mkDefault true;
+      modesetting.enable = mkDefault true;
+      powerManagement = {
+        finegrained = mkDefault true;
+        enable = mkDefault true;
+      };
       prime = {
         intelBusId = mkDefault cfg.intelBusId;
         nvidiaBusId = mkDefault cfg.nvidiaBusId;

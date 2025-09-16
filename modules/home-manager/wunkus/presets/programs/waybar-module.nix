@@ -5,9 +5,17 @@
   ...
 }:
 let
-  inherit (lib) mkDefault mkEnableOption mkIf;
+  inherit (lib)
+    mkDefault
+    mkEnableOption
+    mkIf
+    optionalString
+    ;
   uwsmExe = lib.getExe pkgs.uwsm;
-  spotify-playerExe = lib.getExe config.programs.spotify-player.package;
+  launchWithTerminal =
+    extaArgs: package:
+    "${uwsmExe} app -- ${lib.getExe pkgs.alacritty} ${extaArgs} -e ${lib.getExe package}";
+  playerctlExe = lib.getExe config.services.playerctld.package;
   cfg = config.wunkus.presets.programs.waybar;
 in
 {
@@ -46,9 +54,9 @@ in
             "custom/spotify-player"
             "custom/left-arrow-light"
             "custom/left-arrow-dark"
-            # "memory"
+            "memory"
             # "cpu"
-            "temperature"
+            # "temperature"
             "custom/left-arrow-light"
             "custom/left-arrow-dark"
             "battery"
@@ -101,6 +109,9 @@ in
             ];
             "on-click" = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
           };
+          "mpris" = {
+
+          };
           "custom/spotify-player" = {
             "exec" = "${lib.getExe config.programs.waybar-mediaplayer.package} 2>/dev/null";
             "format" = "{icon}";
@@ -110,26 +121,28 @@ in
             "return-type" = "json";
             "format-icons" = {
               "spotify" = "";
+              "spotifyd" = "";
               "spotify_player" = "";
               "default" = "🎵";
             };
-            "on-click" =
-              "${uwsmExe} app -- ${lib.getExe pkgs.kitty} ${lib.getExe config.wunkus.presets.services.spotify.launcher}";
-            "on-click-right" = "${spotify-playerExe} playback play-pause";
+            "on-click" = "${uwsmExe} app -- ${lib.getExe config.wunkus.presets.services.spotify.launcher}";
+            "on-click-right" = "${playerctlExe} play-pause";
             "on-click-middle" = "${lib.getExe pkgs.killall} spotify_player";
-            "on-scroll-up" = "${spotify-playerExe} playback next";
-            "on-scroll-down" = "${spotify-playerExe} playback previous";
+            "on-scroll-up" = "${playerctlExe} next";
+            "on-scroll-down" = "${playerctlExe} previous";
           };
           "memory" = {
             "interval" = 5;
             "format" = "{}%";
             "tooltip-format" = "{used:0.1f}G / {total:0.1f}G\n{swapUsed:0.1f}G / {swapTotal:0.1f}G";
-            "on-click" = "${uwsmExe} app -- alacritty -e ${lib.getExe pkgs.btop}";
+            "on-click" = launchWithTerminal "--class SystemInfo" pkgs.htop;
+            "on-click-right" = launchWithTerminal "--class SystemInfo" pkgs.btop;
           };
           "cpu" = {
             "interval" = 5;
             "format" = "{usage:2}%";
             "on-click" = "${uwsmExe} app -- alacritty -e ${lib.getExe pkgs.htop}";
+            "on-click-right" = "${uwsmExe} app -- alacritty -e ${lib.getExe pkgs.btop}";
           };
           "temperature" = {
             "critical-threshold" = 80;
