@@ -19,14 +19,17 @@
         fileManager.enable = true;
       };
       snappy.enable = true;
-      laptop.enable = true;
-      laptop.asus = true;
+      laptop = {
+        enable = true;
+        asus = true;
+      };
       bluepill.enable = true;
-      # forgejo.enable = true;
+      windy = {
+        enable = true;
+        client = "qbittorrent";
+      };
     };
-    disks = {
-      dualBooty.enable = true;
-    };
+    disks.dualBooty.enable = true;
     hardware."asusRog-x86_64-linux".enable = true;
   };
 

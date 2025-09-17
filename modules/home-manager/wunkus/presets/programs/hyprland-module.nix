@@ -206,7 +206,6 @@ in
           follow_mouse = 1;
           touchpad.natural_scroll = false;
         };
-        gestures.workspace_swipe = false;
         env = mkMerge [
           (mkIf (isDefaultApp "screenShotter" "hyprshot") [
             "HYPRSHOT_DIR, ${config.programs.hyprshot.saveLocation}"
