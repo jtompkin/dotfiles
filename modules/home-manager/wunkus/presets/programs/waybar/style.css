@@ -23,6 +23,7 @@ window#waybar {
 #clock.2,
 #clock.3,
 #wireplumber,
+#mpris,
 #custom-spotify-player,
 #network,
 #memory,
@@ -51,24 +52,13 @@ window#waybar {
 	padding: 0 3px;
 }
 
-#wireplumber {
-	color: #4EEAEC;
-}
-#memory {
-	color: #4EEAEC;
-}
-#cpu {
-	color: #4EEAEC;
-}
-#temperature {
-    color: #4EEAEC;
-}
-#battery {
-	color: #4EEAEC;
-}
-#network {
-	color: #4EEAEC;
-}
+#wireplumber,
+#memory,
+#cpu,
+#temperature,
+#battery,
+#network,
+#mpris,
 #custom-spotify-player {
     color: #4EEAEC;
 }
@@ -80,6 +70,7 @@ window#waybar {
 #cpu,
 #temperature,
 #battery,
+#mpris,
 #custom-spotify-player,
 #disk {
 	padding: 0 10px;

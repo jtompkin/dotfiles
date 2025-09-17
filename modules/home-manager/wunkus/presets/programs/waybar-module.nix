@@ -51,7 +51,8 @@ in
             "wireplumber"
             "custom/left-arrow-light"
             "custom/left-arrow-dark"
-            "custom/spotify-player"
+            "mpris"
+            # "custom/spotify-player"
             "custom/left-arrow-light"
             "custom/left-arrow-dark"
             "memory"
@@ -110,7 +111,21 @@ in
             on-click = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
           };
           "mpris" = {
-
+            format = "{player_icon}";
+            tooltip-format = "{status_icon} {player}: {dynamic}";
+            enable-tooltip-len-limits = true;
+            player-icons = {
+              spotifyd = "";
+              spotify = "";
+              spotify_player = "";
+              firefox = "";
+              default = "";
+            };
+            status-icons = {
+              playing = "";
+              paused = "";
+              stopped = "";
+            };
           };
           "custom/spotify-player" = {
             exec = "${lib.getExe config.programs.waybar-mediaplayer.package} 2>/dev/null";

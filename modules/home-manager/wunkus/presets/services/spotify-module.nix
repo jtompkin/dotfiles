@@ -21,7 +21,7 @@ in
     wunkus.presets.services.spotify = {
       launcher = mkDefault (
         pkgs.writeShellScriptBin "spotify-launcher" ''
-          ${lib.getExe pkgs.kitty} ${spotify-playerExe}
+          ${lib.getExe config.programs.kitty.package} ${spotify-playerExe}
         ''
       );
       # Stolen from: https://docs.spotifyd.rs/advanced/hooks.html
