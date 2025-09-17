@@ -6,10 +6,10 @@
 }:
 let
   inherit (lib)
-    mkIf
-    mkMerge
     mkBefore
     mkDefault
+    mkIf
+    mkMerge
     ;
   inherit (config.lib.dotfiles) listLuaFiles mkNeovimPluginCfgFromFile;
   cfg = config.wunkus.presets.programs.neovim;
@@ -46,7 +46,7 @@ in
           "nvim-treesitter" = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
         }) (listLuaFiles ./neovim/plugins)
       );
-      extraPackages = lib.optionals (!cfg.minimal) (
+      extraPackages = mkIf (!cfg.minimal) (
         with pkgs;
         [
           # LSPs
@@ -60,11 +60,13 @@ in
           black # Python
         ]
       );
-      extraLuaConfig = ''
-        vim.g.mapleader = " "
-        vim.g.maplocalleader = "\\"
-      ''
-      + (lib.concatMapStrings lib.readFile (listLuaFiles ./neovim/config));
+      extraLuaConfig = mkMerge [
+        (mkBefore ''
+          vim.g.mapleader = " "
+          vim.g.maplocalleader = "\\"
+        '')
+        (lib.concatMapStrings lib.readFile (listLuaFiles ./neovim/config))
+      ];
     };
     xdg = {
       configFile.stylua.source = mkDefault ./neovim/stylua;
