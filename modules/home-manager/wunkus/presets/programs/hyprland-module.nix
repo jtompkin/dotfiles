@@ -30,6 +30,7 @@ let
         terminal = [
           "alacritty"
           "foot"
+          "kitty"
         ];
         fileManager = [ "thunar" ];
         appLauncher = [
@@ -108,6 +109,7 @@ in
         {
           alacritty = config.programs.alacritty.package;
           foot = config.programs.foot.package;
+          kitty = config.programs.kitty.package;
         }
         .${cfg.defaultApps.terminal.name};
       fileManager.package =
@@ -466,6 +468,7 @@ in
       anyrun = mkIf (isDefaultApp "appLauncher" "anyrun") { enable = true; };
       walker = mkIf (isDefaultApp "appLauncher" "walker") { enable = true; };
       alacritty = mkIf (isDefaultApp "terminal" "alacritty") { enable = true; };
+      kitty = mkIf (isDefaultApp "terminal" "kitty") { enable = true; };
       waybar.enable = mkDefault true;
     };
     home.packages = with pkgs; [

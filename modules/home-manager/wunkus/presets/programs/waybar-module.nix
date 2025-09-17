@@ -9,7 +9,6 @@ let
     mkDefault
     mkEnableOption
     mkIf
-    optionalString
     ;
   uwsmExe = lib.getExe pkgs.uwsm;
   launchWithTerminal =
@@ -23,6 +22,7 @@ in
     wunkus.presets.programs.waybar.enable = mkEnableOption "waybar preset config";
   };
   config = mkIf cfg.enable {
+    home.packages = [ pkgs.nerd-fonts.meslo-lg ];
     programs.waybar = {
       enable = mkDefault true;
       style = mkDefault ./waybar/style.css;

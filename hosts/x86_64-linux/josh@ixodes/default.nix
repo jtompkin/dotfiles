@@ -22,6 +22,7 @@
           wallpaperDir = "/home/josh/Pictures/Wallpapers";
           defaultWallpaper = "/home/josh/Pictures/Wallpapers/dark_souls_1_01.jpg";
           lockBackground = "/home/josh/Pictures/Wallpapers/MVIC_sunset_scan_of_Pluto.jpg";
+          defaultApps.terminal.name = "kitty";
         };
         proton.enable = true;
       };

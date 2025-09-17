@@ -6,10 +6,24 @@
 }:
 let
   cfg = config.wunkus.presets.themes.dark;
-  inherit (lib) mkIf mkDefault;
+  inherit (lib)
+    mkDefault
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    ;
 in
 {
-  options.wunkus.presets.themes.dark.enable = lib.mkEnableOption "dark theme";
+  options = {
+    wunkus.presets.themes.dark = {
+      enable = mkEnableOption "dark theme";
+      font = mkOption {
+        type = types.nullOr lib.hm.types.fontType;
+        default = null;
+      };
+    };
+  };
   config = mkIf cfg.enable {
     home.pointerCursor = {
       gtk.enable = mkDefault true;

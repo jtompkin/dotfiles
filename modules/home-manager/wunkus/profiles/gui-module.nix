@@ -9,9 +9,10 @@ let
   inherit (lib) mkIf mkDefault;
 in
 {
-  options.wunkus.profiles.gui.enable = lib.mkEnableOption "gui home-manager profile";
-  options.wunkus.profiles.gui.nixgl.enable =
-    lib.mkEnableOption "gui home-manager profile with nixGL support";
+  options.wunkus.profiles.gui = {
+    enable = lib.mkEnableOption "gui home-manager profile";
+    nixgl.enable = lib.mkEnableOption "gui home-manager profile with nixGL support";
+  };
   config = mkIf cfg.enable {
     warnings =
       if cfg.nixgl.enable && !cfg.enable then
@@ -26,21 +27,9 @@ in
     home.packages = with pkgs; [
       xsel
       xclip
-      nerd-fonts.meslo-lg
     ];
+    wunkus.presets.programs.alacritty.enable = mkDefault true;
     programs = {
-      alacritty = {
-        enable = mkDefault true;
-        package = mkIf cfg.nixgl.enable (config.lib.nixGL.wrap pkgs.alacritty);
-        theme = mkDefault "carbonfox";
-        settings = {
-          terminal.shell = mkIf config.programs.zsh.enable (lib.getExe pkgs.zsh);
-          font.normal = {
-            family = "MesloLGS Nerd Font";
-            style = "Regular";
-          };
-        };
-      };
       mpv = {
         enable = mkDefault true;
         package = mkIf cfg.nixgl.enable (config.lib.nixGL.wrap pkgs.alacritty);
