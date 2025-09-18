@@ -63,8 +63,9 @@ in
         name = "Spotify (terminal)";
         genericName = "Music Player";
         type = "Application";
-        terminal = false;
-        exec = "${lib.getExe cfg.launcher}";
+        terminal = true;
+        exec = "${spotify-playerExe}";
+        icon = ./data/spotify/spotify.png;
         categories = [
           "AudioVideo"
           "Audio"

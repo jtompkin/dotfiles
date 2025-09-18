@@ -26,7 +26,7 @@ let
   defaultAppType =
     { config, name, ... }:
     let
-      appTypeAppsMap = {
+      appTypeToApps = {
         terminal = [
           "alacritty"
           "foot"
@@ -42,17 +42,18 @@ let
           "flameshot"
         ];
         imageViewer = [ "feh" ];
+        videoPlayer = [ "mpv" ];
       };
     in
     {
       options = {
         name = mkOption {
-          type = types.enum appTypeAppsMap.${config.appType};
-          default = lib.head appTypeAppsMap.${config.appType};
+          type = types.enum appTypeToApps.${config.appType};
+          default = lib.head appTypeToApps.${config.appType};
           description = "Name of the program to be used as the default application for this application type";
         };
         appType = mkOption {
-          type = types.enum (lib.attrNames appTypeAppsMap);
+          type = types.enum (lib.attrNames appTypeToApps);
           default = name;
           readOnly = true;
           description = "Class of the program, based on the name";
@@ -139,6 +140,11 @@ in
           feh = config.programs.feh.package;
         }
         .${cfg.defaultApps.imageViewer.name};
+      videoPlayer.package =
+        {
+          mpv = config.programs.mpv.package;
+        }
+        .${cfg.defaultApps.videoPlayer.name};
     };
     wayland.windowManager.hyprland = {
       enable = mkDefault true;
@@ -468,6 +474,7 @@ in
       walker = mkIf (isDefaultApp "appLauncher" "walker") { enable = true; };
       alacritty = mkIf (isDefaultApp "terminal" "alacritty") { enable = true; };
       kitty = mkIf (isDefaultApp "terminal" "kitty") { enable = true; };
+      notCone = mkIf (isDefaultApp "videoPlayer" "mpv") { enable = true; };
       waybar.enable = mkDefault true;
     };
     home.packages = with pkgs; [
