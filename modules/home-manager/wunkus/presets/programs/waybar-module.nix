@@ -12,8 +12,8 @@ let
     ;
   uwsmExe = lib.getExe pkgs.uwsm;
   launchWithTerminal =
-    extaArgs: package:
-    "${uwsmExe} app -- ${lib.getExe pkgs.alacritty} ${extaArgs} -e ${lib.getExe package}";
+    extaArgs: package: exe:
+    "${uwsmExe} app -- ${lib.getExe config.programs.kitty.package} ${extaArgs} -e ${lib.getExe' package exe}";
   playerctlExe = lib.getExe config.services.playerctld.package;
   cfg = config.wunkus.presets.programs.waybar;
 in
@@ -25,7 +25,7 @@ in
     home.packages = [ pkgs.nerd-fonts.meslo-lg ];
     programs.waybar = {
       enable = mkDefault true;
-      style = mkDefault ./waybar/style.css;
+      style = mkDefault ./data/waybar/style.css;
       settings = {
         mainBar = {
           layer = "top";
@@ -150,8 +150,9 @@ in
             interval = 5;
             format = "{}%";
             tooltip-format = "{used:0.1f}G / {total:0.1f}G\n{swapUsed:0.1f}G / {swapTotal:0.1f}G";
-            on-click = launchWithTerminal "--class SystemInfo" pkgs.htop;
-            on-click-right = launchWithTerminal "--class SystemInfo" pkgs.btop;
+            on-click = launchWithTerminal "--class SystemInfo" pkgs.htop "htop";
+            on-click-right = launchWithTerminal "--class SystemInfo" pkgs.btop "btop";
+            on-click-middle = launchWithTerminal "--class SystemInfo" pkgs.nvitop "nvitop";
           };
           "cpu" = {
             interval = 5;

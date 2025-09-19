@@ -44,7 +44,7 @@ in
         ++ map (mkNeovimPluginCfgFromFile pkgs.vimPlugins {
           # Add plugin mappings here, otherwise basename of file is plugin name
           "nvim-treesitter" = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
-        }) (listLuaFiles ./neovim/plugins)
+        }) (listLuaFiles ./data/neovim/plugins)
       );
       extraPackages = mkIf (!cfg.minimal) (
         with pkgs;
@@ -65,11 +65,11 @@ in
           vim.g.mapleader = " "
           vim.g.maplocalleader = "\\"
         '')
-        (lib.concatMapStrings lib.readFile (listLuaFiles ./neovim/config))
+        (lib.concatMapStrings lib.readFile (listLuaFiles ./data/neovim/config))
       ];
     };
     xdg = {
-      configFile.stylua.source = mkDefault ./neovim/stylua;
+      configFile.stylua.source = mkDefault ./data/neovim/stylua;
     };
   };
 }

@@ -10,11 +10,13 @@ lspconfig.nixd.setup({
 			options = {
 				nixos = {
 					-- expr = [[(builtins.getFlake "github:jtompkin/dotfiles").nixosConfigurations."completion".options]],
-					expr = '(builtins.getFlake ("git+file://" + toString ./.)).nixosConfigurations.completion.options',
+					-- expr = '(builtins.getFlake ("git+file://" + toString ./.)).nixosConfigurations.completion.options',
+					expr = '(builtins.getFlake ("/home/josh/dotfiles")).nixosConfigurations.completion.options',
 				},
 				home_manager = {
 					-- expr = [[(builtins.getFlake "github:jtompkin/dotfiles").homeConfigurations."none@completion".options]],
-					expr = '(builtins.getFlake ("git+file://" + toString ./.)).homeConfigurations."none@completion".options',
+					-- expr = '(builtins.getFlake ("git+file://" + toString ./.)).homeConfigurations."none@completion".options',
+					expr = '(builtins.getFlake ("/home/josh/dotfiles")).homeConfigurations."none@completion".options',
 				},
 			},
 		},

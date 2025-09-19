@@ -18,6 +18,7 @@
         displayManager.enable = true;
         fileManager.enable = true;
       };
+      vapor.enable = true;
       snappy.enable = true;
       laptop = {
         enable = true;

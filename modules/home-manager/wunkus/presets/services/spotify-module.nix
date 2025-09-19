@@ -87,11 +87,54 @@ in
     };
     programs.spotify-player = {
       enable = mkDefault true;
-      settings = lib.importTOML ./data/app.toml // {
+      # settings = lib.importTOML ./data/app.toml // {
+      settings = {
+        theme = mkDefault "dracula";
+        client_port = mkDefault 8080;
+        login_redirect_uri = mkDefault "http://127.0.0.1:8989/login";
+        playback_format = mkDefault ''
+          {status} {track} • {artists} {liked}
+          {album}
+          {metadata}'';
+        playback_metadata_fields = [
+          "repeat"
+          "shuffle"
+          "volume"
+          "device"
+        ];
+        notify_timeout_in_secs = mkDefault 0;
+        tracks_playback_limit = mkDefault 50;
+        app_refresh_duration_in_ms = mkDefault 32;
+        playback_refresh_duration_in_ms = mkDefault 0;
+        page_size_in_rows = mkDefault 20;
+        play_icon = mkDefault "▶";
+        pause_icon = mkDefault "▌▌";
+        liked_icon = mkDefault "♥";
+        border_type = mkDefault "Plain";
+        progress_bar_type = mkDefault "Rectangle";
+        cover_img_length = mkDefault 9;
+        cover_img_width = mkDefault 5;
+        enable_media_control = mkDefault true;
+        enable_cover_image_cache = mkDefault true;
+        notify_streaming_only = mkDefault false;
+        seek_duration_secs = mkDefault 5;
+        sort_artist_albums_by_type = mkDefault false;
         cover_img_scale = mkDefault 1.0;
-        enable_streaming = "Never";
-        enable_notify = false;
-        default_device = config.services.spotifyd.settings.global.device_name;
+        enable_streaming = mkDefault "Never";
+        enable_notify = mkDefault false;
+        default_device = mkDefault config.services.spotifyd.settings.global.device_name;
+        notify_format = {
+          summary = mkDefault "{track} • {artists}";
+          body = mkDefault "{album}";
+        };
+        layout = {
+          playback_window_position = mkDefault "Top";
+          playback_window_height = mkDefault 6;
+          library = {
+            playlist_percent = mkDefault 40;
+            album_percent = mkDefault 40;
+          };
+        };
         # TODO: remove userid dependency once agenix gets their shit together
         client_id_command = mkIf (config.wunkus.settings.userid != null) {
           command = "cat";

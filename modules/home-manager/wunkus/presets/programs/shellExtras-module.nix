@@ -15,7 +15,68 @@ in
     programs = {
       oh-my-posh = {
         enable = mkDefault true;
-        settings = lib.importTOML ./shellExtras/themes/my_space.omp.toml;
+        settings = {
+          version = 3;
+          blocks = [
+            {
+              type = "prompt";
+              alignment = "left";
+              segments = [
+                {
+                  template = "{{ if .WSL }}WSL at {{ end }}{{.Icon}}";
+                  foreground = "#26C6DA";
+                  type = "os";
+                  style = "plain";
+                  properties = {
+                    macos = "mac";
+                  };
+                }
+                {
+                  template = " {{ .UserName }}: ";
+                  foreground = "#26C6DA";
+                  type = "session";
+                  style = "plain";
+                }
+                {
+                  template = "{{ .Path }} ";
+                  foreground = "lightGreen";
+                  type = "path";
+                  style = "plain";
+                  properties = {
+                    style = "unique";
+                  };
+                }
+                {
+                  template = "{{ .UpstreamIcon }} {{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }}  {{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }}  {{ .Staging.String }}{{ end }}{{ if gt .StashCount 0 }}  {{ .StashCount }}{{ end }} ";
+                  type = "git";
+                  style = "plain";
+                  properties = {
+                    fetch_status = true;
+                    fetch_upstream_icon = true;
+                  };
+                }
+                {
+                  template = "[ {{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}{{ .Venv }} {{ end }}{{ .Full }}{{ end }}] ";
+                  foreground = "#906cff";
+                  type = "python";
+                  style = "powerline";
+                }
+                {
+                  template = "[ {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }}] ";
+                  foreground = "#7FD5EA";
+                  type = "go";
+                  style = "powerline";
+                }
+                {
+                  template = "❯ ";
+                  foreground = "#FFD54F";
+                  type = "text";
+                  style = "plain";
+                }
+              ];
+            }
+          ];
+        };
       };
       zoxide = {
         enable = mkDefault true;
@@ -41,10 +102,13 @@ in
           l = mkDefault "eza -la";
           lx = mkDefault "eza -lX";
         };
+        shellGlobalAliases = {
+          "--belp" = "--help 2>&1 | bat --language=help --style=plain";
+        };
         initContent = ''
           eval "$(batpipe)"
-          alias -g -- --belp='--help 2>&1 | bat --language=help --style=plain'
         '';
+        # alias -g -- --belp='--help 2>&1 | bat --language=help --style=plain'
         oh-my-zsh = {
           enable = mkDefault true;
           theme = mkDefault "gallifrey";
