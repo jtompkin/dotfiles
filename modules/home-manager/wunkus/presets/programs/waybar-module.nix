@@ -48,6 +48,7 @@ in
           ];
           modules-right = [
             "custom/left-arrow-dark"
+            "cava"
             "wireplumber"
             "custom/left-arrow-light"
             "custom/left-arrow-dark"
@@ -100,9 +101,26 @@ in
             format = "{:%m-%d}";
             tooltip = false;
           };
+          "cava" = {
+            hide_on_silence = true;
+            sleep_timer = 5;
+            method = "pipewire";
+            bars = 8;
+            bar_delimiter = 0;
+            format-icons = [
+              "▁"
+              "▂"
+              "▃"
+              "▄"
+              "▅"
+              "▆"
+              "▇"
+              "█"
+            ];
+          };
           "wireplumber" = {
-            format = "{icon}  {volume:2}%";
-            format-muted = "  {volume:2}%";
+            format = "{icon} {volume:2}%";
+            format-muted = " {volume:2}%";
             format-icons = [
               ""
               ""

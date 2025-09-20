@@ -22,6 +22,7 @@ window#waybar {
 #clock.1,
 #clock.2,
 #clock.3,
+#cava,
 #wireplumber,
 #mpris,
 #custom-spotify-player,
@@ -52,6 +53,7 @@ window#waybar {
 	padding: 0 3px;
 }
 
+#cava,
 #wireplumber,
 #memory,
 #cpu,
@@ -64,6 +66,7 @@ window#waybar {
 }
 
 #clock,
+#cava,
 #wireplumber,
 #memory,
 #network,
