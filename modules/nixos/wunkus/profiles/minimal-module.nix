@@ -15,7 +15,10 @@ in
     nixpkgs.hostPlatform = config.wunkus.settings.system;
     time.timeZone = mkDefault "America/New_York";
     environment = {
-      systemPackages = [ pkgs.vim ];
+      systemPackages = with pkgs; [
+        vim
+        file
+      ];
     };
     users = {
       users.${username} = {

@@ -31,14 +31,27 @@ in
       spotify.enable = mkEnableOption "open ports required for Spotify";
       displayManager.enable = mkEnableOption "display manager system configuration";
       fileManager.enable = mkEnableOption "Thunar file manager configuration";
+      compositors = lib.mkOption {
+        type = lib.types.listOf (
+          lib.types.enum [
+            "hyprland"
+            "niri"
+          ]
+        );
+        default = [ "hyprland" ];
+        description = "Name of the Wayland compositors to build configurations for";
+      };
     };
   };
   config = mkIf cfg.enable {
     programs = {
-      hyprland = {
+      hyprland = mkIf (lib.elem "hyprland" cfg.compositors) {
         enable = mkDefault true;
         withUWSM = mkDefault true;
         xwayland.enable = mkDefault true;
+      };
+      niri = mkIf (lib.elem "niri" cfg.compositors) {
+        enable = mkDefault true;
       };
       thunar = mkIf cfg.fileManager.enable {
         enable = mkDefault true;

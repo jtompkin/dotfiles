@@ -17,6 +17,10 @@
         spotify.enable = true;
         displayManager.enable = true;
         fileManager.enable = true;
+        compositors = [
+          "hyprland"
+          "niri"
+        ];
       };
       vapor.enable = true;
       snappy.enable = true;

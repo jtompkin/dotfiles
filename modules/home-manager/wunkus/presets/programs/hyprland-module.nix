@@ -326,6 +326,8 @@ in
           "float, class:SystemInfo"
           "size 70% 70%, class:SystemInfo"
           "size 15% 70%, title:Proton VPN"
+          "float, title:Picture-In-Picture"
+          "size 1020 570, title:Picture-In-Picture"
         ];
       };
     };
@@ -478,6 +480,7 @@ in
       waybar.enable = mkDefault true;
     };
     home.packages = with pkgs; [
+      tor-browser
       networkmanagerapplet
       hyprpicker
       wl-clipboard
