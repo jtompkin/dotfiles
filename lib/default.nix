@@ -81,11 +81,6 @@ rec {
           age.secrets.password1.file = ../secrets/password1.age;
           nixpkgs.pkgs = const.pkgsBySystem.${system};
           home-manager = {
-            sharedModules = [
-              inputs.mornix.homeModules.default
-              inputs.self.homeModules.lib
-            ]
-            ++ listModuleFiles ../modules/home-manager;
             extraSpecialArgs = specialArgs;
             useUserPackages = lib.mkDefault true;
             useGlobalPkgs = lib.mkDefault true;
@@ -106,8 +101,8 @@ rec {
       extraSpecialArgs = specialArgs;
       modules = [
         inputs.agenix.homeManagerModules.default
-        inputs.self.homeModules.lib
         inputs.mornix.homeModules.default
+        inputs.self.homeModules.lib
         inputs.walker.homeManagerModules.default
         {
           imports = listModuleFiles ../modules/home-manager;
