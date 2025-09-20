@@ -69,6 +69,7 @@ in
         categories = [
           "AudioVideo"
           "Audio"
+          "Music"
         ];
         settings = {
           Keywords = "music;spotify";

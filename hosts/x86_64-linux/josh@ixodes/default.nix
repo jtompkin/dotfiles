@@ -25,6 +25,7 @@
           defaultApps.terminal.name = "kitty";
         };
         proton.enable = true;
+        discord.enable = true;
       };
       themes.dark.enable = true;
       services.spotify.enable = true;
