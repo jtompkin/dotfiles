@@ -41,5 +41,8 @@ in
     wunkus.profiles.ephemeral.extraDirectories =
       optional (cfg.client == "qbittorrent") config.services.qbittorrent.profileDir
       ++ optional (cfg.client == "deluge") config.services.deluge.dataDir;
+    users.users.${config.wunkus.settings.username}.extraGroups = optional (
+      cfg.client == "qbittorrent"
+    ) "qbittorrent";
   };
 }

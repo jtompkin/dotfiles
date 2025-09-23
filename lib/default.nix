@@ -74,7 +74,9 @@ rec {
         inputs.home-manager.nixosModules.home-manager
         inputs.impermanence.nixosModules.impermanence
         inputs.lanzaboote.nixosModules.lanzaboote
+        inputs.niri-flake.nixosModules.niri
         inputs.nixos-wsl.nixosModules.default
+        inputs.noctalia-shell.nixosModules.default
         inputs.self.nixosModules.lib
         {
           imports = listModuleFiles ../modules/nixos;
@@ -102,6 +104,8 @@ rec {
       modules = [
         inputs.agenix.homeManagerModules.default
         inputs.mornix.homeModules.default
+        inputs.niri-flake.homeModules.niri
+        inputs.noctalia-shell.homeModules.default
         inputs.self.homeModules.lib
         inputs.walker.homeManagerModules.default
         {
@@ -160,4 +164,49 @@ rec {
       plugin = pluginMapping.${pluginName} or vimPlugins.${pluginName};
       config = if lib.pathExists cfgPath then lib.readFile cfgPath else "";
     };
+
+  types = {
+    defaultApp =
+      { config, name, ... }:
+      let
+        appTypeToApps = {
+          terminal = [
+            "alacritty"
+            "foot"
+            "kitty"
+          ];
+          fileManager = [ "thunar" ];
+          appLauncher = [
+            "walker"
+            "anyrun"
+            "fuzzel"
+          ];
+          screenShotter = [
+            "hyprshot"
+            "flameshot"
+          ];
+          imageViewer = [ "feh" ];
+          videoPlayer = [ "mpv" ];
+        };
+      in
+      {
+        options = {
+          name = lib.mkOption {
+            type = lib.types.enum appTypeToApps.${config.appType};
+            default = lib.head appTypeToApps.${config.appType};
+            description = "Name of the program to be used as the default application for this application type";
+          };
+          appType = lib.mkOption {
+            type = lib.types.enum (lib.attrNames appTypeToApps);
+            default = name;
+            readOnly = true;
+            description = "Class of the program, based on the name";
+          };
+          package = lib.mkOption {
+            type = lib.types.package;
+            description = "Package to use for app";
+          };
+        };
+      };
+  };
 }

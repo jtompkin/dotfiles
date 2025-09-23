@@ -42,6 +42,7 @@
 
   console.useXkbConfig = true;
   services.xserver.xkb.options = "caps:swapescape";
+  services.noctalia-shell.enable = false;
 
   system.stateVersion = "25.11";
 }

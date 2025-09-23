@@ -84,6 +84,7 @@ in
     services = {
       blueman.enable = mkDefault true;
       gvfs.enable = mkDefault true;
+      noctalia-shell = mkIf (lib.elem "niri" cfg.compositors) { enable = mkDefault true; };
       displayManager.sddm = mkIf cfg.displayManager.enable {
         enable = mkDefault true;
         package = mkDefault pkgs.kdePackages.sddm;

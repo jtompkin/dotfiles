@@ -32,6 +32,11 @@
       url = "github:jtompkin/mornix/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Niri Wayland compositor
+    niri-flake = {
+      url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # WSL2 support
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL/main";
@@ -40,6 +45,11 @@
     # MacOS support
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    # Pretty Wayland shell
+    noctalia-shell = {
+      url = "github:noctalia-dev/noctalia-shell/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # Application runner for Wayland - TODO: remove once updated in nixpkgs

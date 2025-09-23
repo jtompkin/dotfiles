@@ -62,7 +62,7 @@ in
                   style = "powerline";
                 }
                 {
-                  template = "[ {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }}] ";
+                  template = "[ {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }}] ";
                   foreground = "#7FD5EA";
                   type = "go";
                   style = "powerline";
@@ -108,7 +108,6 @@ in
         initContent = ''
           eval "$(batpipe)"
         '';
-        # alias -g -- --belp='--help 2>&1 | bat --language=help --style=plain'
         oh-my-zsh = {
           enable = mkDefault true;
           theme = mkDefault "gallifrey";
@@ -124,15 +123,15 @@ in
             src = pkgs.zsh-vi-mode;
             file = "share/zsh-vi-mode/zsh-vi-mode.plugin.zsh";
           }
-          {
+          rec {
             name = "zsh-completion-sync";
             src = pkgs.fetchFromGitHub {
               owner = "BronzeDeer";
-              repo = "zsh-completion-sync";
-              tag = "v0.3.1";
-              hash = "sha256-XhZ7l8e2H1+W1oUkDrr8pQVPVbb3+1/wuu7MgXsTs+8=";
+              repo = name;
+              tag = "v0.3.3";
+              hash = "sha256-GTW4nLVW1/09aXNnZJuKs12CoalzWGKB79VsQ2a2Av4=";
             };
-            file = "zsh-completion-sync.plugin.zsh";
+            file = "${name}.plugin.zsh";
           }
         ];
       };

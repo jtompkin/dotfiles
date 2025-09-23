@@ -23,47 +23,6 @@ let
       offload ? false,
     }:
     "${uwsmExe} app -- ${lib.optionalString offload "nvidia-offload "}${lib.getExe' app.package exe} ${extra}";
-  defaultAppType =
-    { config, name, ... }:
-    let
-      appTypeToApps = {
-        terminal = [
-          "alacritty"
-          "foot"
-          "kitty"
-        ];
-        fileManager = [ "thunar" ];
-        appLauncher = [
-          "walker"
-          "anyrun"
-        ];
-        screenShotter = [
-          "hyprshot"
-          "flameshot"
-        ];
-        imageViewer = [ "feh" ];
-        videoPlayer = [ "mpv" ];
-      };
-    in
-    {
-      options = {
-        name = mkOption {
-          type = types.enum appTypeToApps.${config.appType};
-          default = lib.head appTypeToApps.${config.appType};
-          description = "Name of the program to be used as the default application for this application type";
-        };
-        appType = mkOption {
-          type = types.enum (lib.attrNames appTypeToApps);
-          default = name;
-          readOnly = true;
-          description = "Class of the program, based on the name";
-        };
-        package = mkOption {
-          type = types.package;
-          description = "Package to run in Hyprland";
-        };
-      };
-    };
   isDefaultApp = type: name: cfg.defaultApps.${type}.name == name;
   getDefaltAppExe = type: lib.getExe cfg.defaultApps.${type}.package;
 in
@@ -75,7 +34,7 @@ in
       nvidia = mkEnableOption "Nvidia specific settings";
       asus = mkEnableOption "Asus specific settings";
       defaultApps = mkOption {
-        type = types.attrsOf (types.submodule defaultAppType);
+        type = types.attrsOf (types.submodule config.lib.dotfiles.types.defaultApp);
         default = { };
       };
       defaultWallpaper = mkOption {
@@ -127,6 +86,7 @@ in
         {
           walker = config.programs.walker.package;
           anyrun = config.programs.anyrun.package;
+          fuzzel = config.programs.fuzzel.package;
         }
         .${cfg.defaultApps.appLauncher.name};
       screenShotter.package =
@@ -291,6 +251,9 @@ in
             "SHIFT, Print, exec, ${getDefaltAppExe "screenShotter"} -m region"
             "$mainMod CTRL, Print, exec, ${getDefaltAppExe "screenShotter"} --freeze"
           ])
+          (mkIf (isDefaultApp "appLauncher" "fuzzel") [
+            ''$mainMod SHIFT, D, exec, choice=$(${lib.getExe pkgs.zsh} -c 'print -rC1 -- ''${(ko)commands}' | fuzzel --dmenu --prompt 'run command: ') && [ -n "$choice" ] && ${getDefaltAppExe "terminal"} -e $choice''
+          ])
         ];
         bindm = [
           "$mainMod, mouse:272, movewindow"
@@ -334,6 +297,32 @@ in
 
     programs = {
       feh = mkIf (isDefaultApp "imageViewer" "feh") { enable = true; };
+      fuzzel = mkIf (isDefaultApp "appLauncher" "fuzzel") {
+        enable = true;
+        settings = {
+          main = {
+            terminal = "${getDefaltAppExe "terminal"}";
+            font = "Iosevka Nerd Font Propo:size=12";
+            prompt = ''"-> "'';
+            width = 38;
+            launch-prefix = "uwsm app --";
+            show-actions = true;
+          };
+          colors = {
+            background = "292B2EFF";
+            text = "FDF6E3FF";
+            input = "FDF6E3FF";
+            prompt = "FDF6E3FF";
+            selection = "181818FF";
+            selection-text = "4EEAECFF";
+          };
+          key-bindings = {
+            delete-line-forward = "Shift+Control+k";
+            prev = "Up Control+k";
+            next = "Down Control+j";
+          };
+        };
+      };
       hyprshot = mkIf (isDefaultApp "screenShotter" "hyprshot") {
         enable = true;
         saveLocation = "${config.xdg.userDirs.pictures}/Screenshots";
