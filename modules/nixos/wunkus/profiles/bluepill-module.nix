@@ -25,6 +25,6 @@ in
       virt-manager.enable = mkDefault true;
     };
     users.users.${config.wunkus.settings.username}.extraGroups = [ "libvirtd" ];
-    wunkus.profiles.ephemeral.extraDirectories = [ "/var/lib/libvirt/images" ];
+    wunkus.profiles.ephemeral.extraDirectories = [ "/var/lib/libvirt" ];
   };
 }
