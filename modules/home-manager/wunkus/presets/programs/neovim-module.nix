@@ -15,10 +15,14 @@ let
   cfg = config.wunkus.presets.programs.neovim;
 in
 {
-  options = {
-    wunkus.presets.programs.neovim.enable = lib.mkEnableOption "Neovim preset configuration";
-    wunkus.presets.programs.neovim.minimal =
-      lib.mkEnableOption "building neovim with all plugins (false) or just basic configuration (true)";
+  options.wunkus.presets.programs.neovim = {
+    enable = lib.mkEnableOption "Neovim preset configuration";
+    minimal = lib.mkEnableOption "building neovim with all plugins (false) or just basic configuration (true)";
+    nixConfigDir = lib.mkOption {
+      type = lib.types.str;
+      default = "/home/josh/dotfiles";
+      description = "Path to flake directory with NixOS and Home Manager configurations for nixd completion options";
+    };
   };
   config = mkIf cfg.enable {
     programs.neovim = {
@@ -27,8 +31,7 @@ in
       viAlias = mkDefault true;
       vimAlias = mkDefault true;
       plugins = mkIf (!cfg.minimal) (
-        with pkgs.vimPlugins;
-        [
+        (with pkgs.vimPlugins; [
           # neogit dependencies
           diffview-nvim
           # nvim-cmp dependencies
@@ -40,7 +43,7 @@ in
           cmp-cmdline
           # fzf-lua dependencies
           nvim-web-devicons
-        ]
+        ])
         ++ map (mkNeovimPluginCfgFromFile pkgs.vimPlugins {
           # Add plugin mappings here, otherwise basename of file is plugin name
           "nvim-treesitter" = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
@@ -50,10 +53,10 @@ in
         with pkgs;
         [
           # LSPs
-          nixd # Nix
-          lua-language-server # Lua
-          pyright # Python
-          gopls # Go
+          # nixd # Nix
+          # lua-language-server # Lua
+          # pyright # Python
+          # gopls # Go
           # Formatters
           nixfmt-rfc-style # Nix
           stylua # Lua
@@ -65,6 +68,10 @@ in
           vim.g.mapleader = " "
           vim.g.maplocalleader = "\\"
         '')
+        (import ./neovim/lsp-setup.nix {
+          inherit pkgs lib;
+          inherit (cfg) nixConfigDir;
+        })
         (lib.concatMapStrings lib.readFile (listLuaFiles ./data/neovim/config))
       ];
     };
