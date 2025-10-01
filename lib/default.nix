@@ -29,6 +29,7 @@ rec {
         config.allowUnfree = true;
       }
     );
+    formatter = forAllSystems (system: const.pkgsBySystem.${system}.nixfmt-tree);
   };
 
   negatePredicate = predicate: x: !(predicate x);
@@ -149,21 +150,6 @@ rec {
         host: module: getConfigMaker system host { inherit module specialArgs system; }
       ) modules.${system}
     );
-
-  /**
-    Generate a Neovim plugin config suitable for home-manager containing configuration
-    from a file
-  */
-  mkNeovimPluginCfgFromFile =
-    vimPlugins: pluginMapping: cfgPath:
-    let
-      pluginName = lib.removeSuffix ".lua" (baseNameOf cfgPath);
-    in
-    {
-      type = "lua";
-      plugin = pluginMapping.${pluginName} or vimPlugins.${pluginName};
-      config = if lib.pathExists cfgPath then lib.readFile cfgPath else "";
-    };
 
   types = {
     defaultApp =

@@ -114,5 +114,6 @@
           default = pkgs.mkShell { packages = [ agenix.packages.${system}.default ]; };
         }
       );
+      inherit (lib.dotfiles.const) formatter;
     };
 }
