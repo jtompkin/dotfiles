@@ -23,7 +23,6 @@ in
           "$git_branch"
           "$git_commit"
           "$git_state"
-          "$git_metrics"
           "$git_status"
           "$golang"
           "$nix_shell"
@@ -46,19 +45,15 @@ in
           powershell_indicator = " ";
         };
         nix_shell = {
+          format = "[$symbol$state( \($name\))]($style) ";
           symbol = " ";
           heuristic = true;
           impure_msg = "";
         };
-        directory = {
-          style = "green";
-        };
-        golang = {
-          symbol = " ";
-        };
-        character = {
-          success_symbol = "[❯](#FFD54F)";
-        };
+        directory.style = "green";
+        git_branch.format = "[$symbol$branch(:$remote_branch)]($style) ";
+        golang.symbol = " ";
+        character.success_symbol = "[❯](#FFD54F)";
       };
     };
   };
