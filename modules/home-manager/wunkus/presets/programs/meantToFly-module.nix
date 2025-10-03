@@ -7,9 +7,8 @@ let
   cfg = config.wunkus.presets.programs.meantToFly;
 in
 {
-  options.wunkus.presets.programs.meantToFly = {
-    enable = lib.mkEnableOption "starship preset configuration";
-  };
+  options.wunkus.presets.programs.meantToFly.enable =
+    lib.mkEnableOption "starship preset configuration";
   config = lib.mkIf cfg.enable {
     programs.starship = {
       enable = lib.mkDefault true;

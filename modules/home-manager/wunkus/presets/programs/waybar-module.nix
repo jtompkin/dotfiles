@@ -7,8 +7,6 @@
 let
   inherit (lib)
     mkDefault
-    mkEnableOption
-    mkIf
     ;
   uwsmExe = lib.getExe pkgs.uwsm;
   launchWithTerminal =
@@ -18,10 +16,8 @@ let
   cfg = config.wunkus.presets.programs.waybar;
 in
 {
-  options = {
-    wunkus.presets.programs.waybar.enable = mkEnableOption "waybar preset config";
-  };
-  config = mkIf cfg.enable {
+  options.wunkus.presets.programs.waybar.enable = lib.mkEnableOption "waybar preset config";
+  config = lib.mkIf cfg.enable {
     home.packages = [ pkgs.nerd-fonts.meslo-lg ];
     programs.waybar = {
       enable = mkDefault true;

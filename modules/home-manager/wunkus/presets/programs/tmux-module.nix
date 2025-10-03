@@ -6,16 +6,18 @@
 }:
 let
   cfg = config.wunkus.presets.programs.tmux;
-  inherit (lib) mkIf mkDefault;
+  inherit (lib) mkDefault;
 in
 {
-  options.wunkus.presets.programs.tmux.enable = lib.mkEnableOption "tmux preset configuration";
-  options.wunkus.presets.programs.tmux.minimal = lib.mkEnableOption "minimal tmux configuration";
-  config = mkIf cfg.enable {
+  options.wunkus.presets.programs.tmux = {
+    enable = lib.mkEnableOption "tmux preset configuration";
+    minimal = lib.mkEnableOption "minimal tmux configuration";
+  };
+  config = lib.mkIf cfg.enable {
     programs.tmux = {
       enable = mkDefault true;
       keyMode = mkDefault "vi";
-      shell = mkIf config.programs.zsh.enable (lib.getExe pkgs.zsh);
+      shell = lib.mkIf config.programs.zsh.enable (lib.getExe pkgs.zsh);
       extraConfig = # tmux
         ''
           set -g status-position top
@@ -23,12 +25,10 @@ in
           bind-key C-t set status
           set-option -a terminal-features 'xterm-256color:RGB'
         '';
-      plugins =
-        with pkgs.tmuxPlugins;
-        mkIf (!cfg.minimal) [
-          sensible
-          pain-control
-        ];
+      plugins = lib.mkIf (!cfg.minimal) [
+        pkgs.tmuxPlugins.sensible
+        pkgs.tmuxPlugins.pain-control
+      ];
     };
   };
 }

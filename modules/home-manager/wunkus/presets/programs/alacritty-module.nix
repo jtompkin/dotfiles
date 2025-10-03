@@ -5,14 +5,12 @@
   ...
 }:
 let
-  inherit (lib) mkIf mkDefault mkEnableOption;
+  inherit (lib) mkDefault;
   cfg = config.wunkus.presets.programs.alacritty;
 in
 {
-  options = {
-    wunkus.presets.programs.alacritty.enable = mkEnableOption "alacritty preset config";
-  };
-  config = mkIf cfg.enable {
+  options.wunkus.presets.programs.alacritty.enable = lib.mkEnableOption "alacritty preset config";
+  config = lib.mkIf cfg.enable {
     home.packages = [
       pkgs.nerd-fonts.meslo-lg
       pkgs.nerd-fonts.iosevka
@@ -21,16 +19,14 @@ in
       alacritty = {
         enable = mkDefault true;
         theme = mkDefault "carbonfox";
-        package = mkIf config.wunkus.profiles.gui.nixgl.enable (config.lib.nixGL.wrap pkgs.alacritty);
+        package = lib.mkIf config.wunkus.profiles.gui.nixgl.enable (config.lib.nixGL.wrap pkgs.alacritty);
         settings = {
-          terminal.shell = mkIf config.programs.zsh.enable (lib.getExe pkgs.zsh);
+          terminal.shell = lib.mkIf config.programs.zsh.enable (lib.getExe pkgs.zsh);
           font = {
             size = 20;
             normal = {
               family = "Iosevka Nerd Font Mono";
               style = "Regular";
-              # family = "MesloLGS Nerd Font";
-              # style = "Regular";
             };
           };
         };

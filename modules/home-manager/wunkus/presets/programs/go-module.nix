@@ -6,15 +6,12 @@
 }:
 let
   cfg = config.wunkus.presets.programs.go;
-  inherit (lib) mkIf mkDefault;
 in
 {
-  options = {
-    wunkus.presets.programs.go.enable = lib.mkEnableOption "Go preset configuration";
-  };
-  config = mkIf cfg.enable {
+  options.wunkus.presets.programs.go.enable = lib.mkEnableOption "Go preset configuration";
+  config = lib.mkIf cfg.enable {
     programs.go = {
-      enable = mkDefault true;
+      enable = lib.mkDefault true;
       telemetry.mode = "off";
     };
     home.packages = [

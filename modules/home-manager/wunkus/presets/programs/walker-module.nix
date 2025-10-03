@@ -5,21 +5,14 @@
   ...
 }:
 let
-  inherit (lib)
-    mkDefault
-    mkEnableOption
-    mkIf
-    ;
+  inherit (lib) mkDefault;
   cfg = config.wunkus.presets.programs.walker;
 in
 {
   disabledModules = [ "services/walker.nix" ];
-  options = {
-    wunkus.presets.programs.walker = {
-      enable = mkEnableOption "walker application launcher preset config";
-    };
-  };
-  config = mkIf cfg.enable {
+  options.wunkus.presets.programs.walker.enable =
+    lib.mkEnableOption "walker application launcher preset config";
+  config = lib.mkIf cfg.enable {
     xdg.configFile."elephant/websearch.toml".source =
       (pkgs.formats.toml { }).generate "websearch.toml"
         {

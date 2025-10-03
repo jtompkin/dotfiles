@@ -5,11 +5,11 @@
 }:
 let
   cfg = config.wunkus.presets.programs.zsh;
-  inherit (lib) mkIf mkDefault mkOverride;
+  inherit (lib) mkDefault mkOverride;
 in
 {
   options.wunkus.presets.programs.zsh.enable = lib.mkEnableOption "Zsh preset configuration";
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     programs = {
       zsh = {
         enable = mkDefault true;

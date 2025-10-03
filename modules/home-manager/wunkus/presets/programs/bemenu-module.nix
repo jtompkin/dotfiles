@@ -1,13 +1,11 @@
 { config, lib, ... }:
 let
-  inherit (lib) mkDefault mkEnableOption mkIf;
+  inherit (lib) mkDefault;
   cfg = config.wunkus.presets.programs.bemenu;
 in
 {
-  options = {
-    wunkus.presets.programs.bemenu.enable = mkEnableOption "bemenu preset config";
-  };
-  config = mkIf cfg.enable {
+  options.wunkus.presets.programs.bemenu.enable = lib.mkEnableOption "bemenu preset config";
+  config = lib.mkIf cfg.enable {
     programs.bemenu = {
       enable = mkDefault true;
       settings = {

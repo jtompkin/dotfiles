@@ -5,26 +5,20 @@
   ...
 }:
 let
+  inherit (lib) mkDefault;
   cfg = config.wunkus.presets.themes.dark;
-  inherit (lib)
-    mkDefault
-    mkEnableOption
-    mkIf
-    mkOption
-    types
-    ;
 in
 {
   options = {
     wunkus.presets.themes.dark = {
-      enable = mkEnableOption "dark theme";
-      font = mkOption {
-        type = types.nullOr lib.hm.types.fontType;
+      enable = lib.mkEnableOption "dark theme";
+      font = lib.mkOption {
+        type = lib.types.nullOr lib.hm.types.fontType;
         default = null;
       };
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     home.pointerCursor = {
       gtk.enable = mkDefault true;
       name = mkDefault "Bibata-Modern-Classic";

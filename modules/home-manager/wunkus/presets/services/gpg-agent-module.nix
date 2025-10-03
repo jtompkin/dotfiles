@@ -6,12 +6,12 @@
 }:
 let
   cfg = config.wunkus.presets.services.gpg-agent;
-  inherit (lib) mkIf mkDefault;
+  inherit (lib) mkDefault;
 in
 {
   options.wunkus.presets.services.gpg-agent.enable =
     lib.mkEnableOption "gpg-agent service preset configuration";
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     programs.gpg.enable = mkDefault true;
     services.gpg-agent = {
       enable = mkDefault true;

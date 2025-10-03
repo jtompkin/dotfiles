@@ -1,20 +1,14 @@
 { config, lib, ... }:
 let
-  inherit (lib)
-    mkDefault
-    mkEnableOption
-    mkIf
-    mkOption
-    types
-    ;
+  inherit (lib) mkDefault;
   cfg = config.wunkus.presets.programs.anyrun;
 in
 {
   options = {
     wunkus.presets.programs.anyrun = {
-      enable = mkEnableOption "anyrun preset config";
-      plugins = mkOption {
-        type = types.listOf types.str;
+      enable = lib.mkEnableOption "anyrun preset config";
+      plugins = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [
           "libapplications.so"
           "libsymbols.so"
@@ -27,7 +21,7 @@ in
       };
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     programs.anyrun = {
       enable = mkDefault true;
       config = {
@@ -40,14 +34,14 @@ in
         showResultsImmediately = mkDefault true;
       };
       extraConfigFiles = {
-        "symbols.ron" = mkIf (lib.elem "libsymbols.so" cfg.plugins) {
+        "symbols.ron" = lib.mkIf (lib.elem "libsymbols.so" cfg.plugins) {
           text = ''
             Config(
               prefix: ":sym ",
             )
           '';
         };
-        "websearch.ron" = mkIf (lib.elem "libwebsearch.so" cfg.plugins) {
+        "websearch.ron" = lib.mkIf (lib.elem "libwebsearch.so" cfg.plugins) {
           text = ''
             Config(
               engines: [DuckDuckGo],

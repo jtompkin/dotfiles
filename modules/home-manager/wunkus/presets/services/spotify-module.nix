@@ -5,19 +5,19 @@
   ...
 }:
 let
-  inherit (lib) mkDefault mkEnableOption mkIf;
+  inherit (lib) mkDefault;
   cfg = config.wunkus.presets.services.spotify;
   spotify-playerExe = lib.getExe config.programs.spotify-player.package;
 in
 {
   options = {
     wunkus.presets.services.spotify = {
-      enable = mkEnableOption "spotify configuration";
+      enable = lib.mkEnableOption "spotify configuration";
       launcher = lib.mkPackageOption pkgs "spotify-launcher" { };
       notifier = lib.mkPackageOption pkgs "spotify-notification" { };
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     wunkus.presets.services.spotify = {
       launcher = mkDefault (
         pkgs.writeShellScriptBin "spotify-launcher" ''
@@ -137,7 +137,7 @@ in
           };
         };
         # TODO: remove userid dependency once agenix gets their shit together
-        client_id_command = mkIf (config.wunkus.settings.userid != null) {
+        client_id_command = lib.mkIf (config.wunkus.settings.userid != null) {
           command = "cat";
           args = [
             "/run/user/${builtins.toString config.wunkus.settings.userid}/agenix/spotify-client-id-01"

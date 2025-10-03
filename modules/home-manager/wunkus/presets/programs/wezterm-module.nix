@@ -5,14 +5,12 @@
   ...
 }:
 let
-  inherit (lib) mkIf mkDefault mkEnableOption;
+  inherit (lib) mkDefault;
   cfg = config.wunkus.presets.programs.wezterm;
 in
 {
-  options = {
-    wunkus.presets.programs.wezterm.enable = mkEnableOption "wezterm preset config";
-  };
-  config = mkIf cfg.enable {
+  options.wunkus.presets.programs.wezterm.enable = lib.mkEnableOption "wezterm preset config";
+  config = lib.mkIf cfg.enable {
     home.packages = [
       pkgs.nerd-fonts.meslo-lg
     ];
@@ -21,7 +19,7 @@ in
         enable = mkDefault true;
         theme = mkDefault "carbonfox";
         settings = {
-          terminal.shell = mkIf config.programs.zsh.enable (lib.getExe pkgs.zsh);
+          terminal.shell = lib.mkIf config.programs.zsh.enable (lib.getExe pkgs.zsh);
           font.normal = {
             family = "MesloLGS Nerd Font";
             style = "Regular";

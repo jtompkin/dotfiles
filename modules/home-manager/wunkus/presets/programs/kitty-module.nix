@@ -5,16 +5,12 @@
   ...
 }:
 let
-  inherit (lib) mkIf mkDefault mkEnableOption;
+  inherit (lib) mkDefault;
   cfg = config.wunkus.presets.programs.kitty;
 in
 {
-  options = {
-    wunkus.presets.programs.kitty = {
-      enable = mkEnableOption "kitty terminal preset config";
-    };
-  };
-  config = mkIf cfg.enable {
+  options.wunkus.presets.programs.kitty.enable = lib.mkEnableOption "kitty terminal preset config";
+  config = lib.mkIf cfg.enable {
     wunkus.presets.themes.dark.font = config.programs.kitty.font;
     fonts.fontconfig.enable = mkDefault true;
     programs = {

@@ -5,13 +5,7 @@
   ...
 }:
 let
-  inherit (lib)
-    mkBefore
-    mkDefault
-    mkIf
-    mkMerge
-    ;
-  inherit (config.lib.dotfiles) listLuaFiles;
+  inherit (lib) mkDefault;
   cfg = config.wunkus.presets.programs.neovim;
 in
 {
@@ -25,7 +19,7 @@ in
       description = "Path to flake directory with NixOS and Home Manager configurations for nixd completion options";
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     wunkus.presets.programs.neovim.plugins = {
       enable = mkDefault true;
       pluginMapping = {
@@ -55,12 +49,12 @@ in
       defaultEditor = mkDefault true;
       viAlias = mkDefault true;
       vimAlias = mkDefault true;
-      extraLuaConfig = mkMerge [
-        (mkBefore ''
+      extraLuaConfig = lib.mkMerge [
+        (lib.mkBefore ''
           vim.g.mapleader = " "
           vim.g.maplocalleader = "\\"
         '')
-        (lib.concatMapStrings lib.readFile (listLuaFiles ./data/neovim/config))
+        (lib.concatMapStrings lib.readFile (config.lib.dotfiles.listLuaFiles ./data/neovim/config))
       ];
     };
     xdg = {

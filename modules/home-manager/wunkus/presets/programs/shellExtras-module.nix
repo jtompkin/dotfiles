@@ -6,13 +6,12 @@
 }:
 let
   cfg = config.wunkus.presets.programs.shellExtras;
-  inherit (lib) mkIf mkDefault;
+  inherit (lib) mkDefault;
 in
 {
-  options.wunkus.presets.programs.shellExtras = {
-    enable = lib.mkEnableOption "oh-my-posh, direnv, zoxide, bat, fzf, fd, ripgrep configuration";
-  };
-  config = mkIf cfg.enable {
+  options.wunkus.presets.programs.shellExtras.enable =
+    lib.mkEnableOption "oh-my-posh, direnv, zoxide, bat, fzf, fd, ripgrep configuration";
+  config = lib.mkIf cfg.enable {
     programs = {
       oh-my-posh = {
         enable = mkDefault true;
@@ -96,7 +95,7 @@ in
           batpipe
         ];
       };
-      zsh = mkIf config.programs.zsh.enable {
+      zsh = lib.mkIf config.programs.zsh.enable {
         shellAliases = {
           cat = mkDefault "bat --paging=never";
           fd = mkDefault "fd --one-file-system";
