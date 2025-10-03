@@ -1,8 +1,6 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    # Alternate Nix implementation
-    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
     # Ephemeral filesystem management
     impermanence.url = "github:nix-community/impermanence";
     # GUI apps on non-NixOS support

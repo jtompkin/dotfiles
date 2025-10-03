@@ -70,7 +70,6 @@ rec {
       inherit specialArgs;
       modules = [
         inputs.agenix.nixosModules.default
-        inputs.determinate.nixosModules.default
         inputs.disko.nixosModules.disko
         inputs.home-manager.nixosModules.home-manager
         inputs.impermanence.nixosModules.impermanence
@@ -83,6 +82,10 @@ rec {
           imports = listModuleFiles ../modules/nixos;
           age.secrets.password1.file = ../secrets/password1.age;
           nixpkgs.pkgs = const.pkgsBySystem.${system};
+          nix.settings.experimental-features = [
+            "nix-command"
+            "flakes"
+          ];
           home-manager = {
             extraSpecialArgs = specialArgs;
             useUserPackages = lib.mkDefault true;
@@ -111,6 +114,11 @@ rec {
         inputs.walker.homeManagerModules.default
         {
           imports = listModuleFiles ../modules/home-manager;
+          nix.package = const.pkgsBySystem.${system}.nix;
+          nix.settings.experimental-features = [
+            "nix-command"
+            "flakes"
+          ];
           age.secrets = {
             spotify-client-id-01.file = ../secrets/spotify-client-id-01.age;
             spotify-secret-01.file = ../secrets/spotify-secret-01.age;
