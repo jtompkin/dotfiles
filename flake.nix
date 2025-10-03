@@ -109,7 +109,10 @@
           pkgs = lib.dotfiles.const.pkgsBySystem.${system};
         in
         {
-          default = pkgs.mkShell { packages = [ agenix.packages.${system}.default ]; };
+          default = pkgs.mkShell {
+            name = "dotfiles";
+            packages = [ agenix.packages.${system}.default ];
+          };
         }
       );
       inherit (lib.dotfiles.const) formatter;
