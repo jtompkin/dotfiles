@@ -9,8 +9,9 @@ let
   inherit (lib) mkIf mkDefault;
 in
 {
-  options.wunkus.presets.programs.shellExtras.enable =
-    lib.mkEnableOption "oh-my-posh, direnv, zoxide, bat, fzf, fd, ripgrep configuration";
+  options.wunkus.presets.programs.shellExtras = {
+    enable = lib.mkEnableOption "oh-my-posh, direnv, zoxide, bat, fzf, fd, ripgrep configuration";
+  };
   config = mkIf cfg.enable {
     programs = {
       oh-my-posh = {
@@ -145,7 +146,6 @@ in
       };
       eza = {
         enable = true;
-        enableZshIntegration = true;
         extraOptions = [
           "--group-directories-first"
           "--header"

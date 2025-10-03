@@ -16,6 +16,7 @@ in
       username = settings.username;
       homeDirectory =
         if pkgs.stdenv.isDarwin then "/Users/${settings.username}" else "/home/${settings.username}";
+      shell.enableZshIntegration = mkDefault true;
     };
     xdg.configFile."home-manager/home.nix".text = ''
       abort "Do not use this configuration. Use the flake at github:jtompkin/dotfiles"
