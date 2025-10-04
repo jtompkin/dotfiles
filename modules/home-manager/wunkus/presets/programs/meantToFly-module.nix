@@ -44,14 +44,17 @@ in
           powershell_indicator = " ";
         };
         nix_shell = {
-          format = "[$symbol$state( \($name\))]($style) ";
+          format = "[$symbol$state(\\($name\\))]($style) ";
           symbol = " ";
-          heuristic = true;
+          heuristic = false;
           impure_msg = "";
         };
         directory.style = "green";
         git_branch.format = "[$symbol$branch(:$remote_branch)]($style) ";
-        golang.symbol = " ";
+        golang = {
+          format = "[$symbol($version )]($style)";
+          symbol = " ";
+        };
         character.success_symbol = "[❯](#FFD54F)";
       };
     };
