@@ -25,6 +25,7 @@
           defaultApps.terminal.name = "kitty";
           defaultApps.appLauncher.name = "fuzzel";
         };
+        meantToFly.enable = true;
         niri = {
           enable = true;
           wallpaperDir = "/home/josh/Picture/Wallpapers";
@@ -40,6 +41,7 @@
   programs = {
     git.signing.key = "8C07A97FC369A5F4FCFAC6F1989246B0B9904782";
     noctalia-shell.enable = false;
+    oh-my-posh.enable = false;
   };
   services.gpg-agent.sshKeys = [ "B5BE9A6227DB43612DCA51604EF35ABB0FD50B27" ];
 
