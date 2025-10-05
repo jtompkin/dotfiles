@@ -13,12 +13,13 @@ in
     programs = {
       zsh = {
         enable = mkDefault true;
+        dotDir = "${config.xdg.configHome}/zsh";
         shellAliases = {
-          l = mkOverride 1001 "ls -lAhpv";
-          ls = mkOverride 1001 "ls --color=tty --group-directories-first";
-          la = mkOverride 1001 "ls -lahpv";
-          ll = mkOverride 1001 "ls -lhpv";
-          info = mkDefault "info --vi-keys";
+          # l = mkOverride 1001 "ls -lAhpv";
+          # ls = mkOverride 1001 "ls --color=tty --group-directories-first";
+          # la = mkOverride 1001 "ls -lahpv";
+          # ll = mkOverride 1001 "ls -lhpv";
+          # info = mkDefault "info --vi-keys";
           ssh-vm = mkDefault "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
           scp-vm = mkDefault "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
           rebuild = mkDefault "nixos-rebuild --flake 'github:jtompkin/dotfiles/main' --use-remote-sudo switch";

@@ -49,7 +49,10 @@ in
           heuristic = false;
           impure_msg = "";
         };
-        directory.style = "green";
+        directory = {
+          style = "green";
+          read_only = "󰌾";
+        };
         git_branch.format = "[$symbol$branch(:$remote_branch)]($style) ";
         golang = {
           format = "[$symbol($version )]($style)";

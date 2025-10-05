@@ -25,6 +25,7 @@
           defaultApps.terminal.name = "kitty";
           defaultApps.appLauncher.name = "fuzzel";
         };
+        zim.enable = true;
         meantToFly.enable = true;
         niri = {
           enable = true;
@@ -39,6 +40,7 @@
   };
 
   programs = {
+    zsh.oh-my-zsh.enable = false;
     git.signing.key = "8C07A97FC369A5F4FCFAC6F1989246B0B9904782";
     noctalia-shell.enable = false;
     oh-my-posh.enable = false;

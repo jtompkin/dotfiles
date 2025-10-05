@@ -97,17 +97,17 @@ in
       };
       zsh = lib.mkIf config.programs.zsh.enable {
         shellAliases = {
-          cat = mkDefault "bat --paging=never";
-          fd = mkDefault "fd --one-file-system";
-          l = mkDefault "eza -la";
-          lx = mkDefault "eza -lX";
+          # cat = mkDefault "bat --paging=never";
+          # fd = mkDefault "fd --one-file-system";
+          # l = mkDefault "eza -la";
+          # lx = mkDefault "eza -lX";
         };
         shellGlobalAliases = {
-          "--belp" = "--help 2>&1 | bat --language=help --style=plain";
+          # "--belp" = "--help 2>&1 | bat --language=help --style=plain";
         };
-        initContent = ''
-          eval "$(batpipe)"
-        '';
+        # initContent = ''
+        #   eval "$(batpipe)"
+        # '';
         oh-my-zsh = {
           enable = mkDefault true;
           theme = mkDefault "gallifrey";
@@ -117,23 +117,23 @@ in
             "direnv"
           ];
         };
-        plugins = [
-          {
-            name = "vi-mode";
-            src = pkgs.zsh-vi-mode;
-            file = "share/zsh-vi-mode/zsh-vi-mode.plugin.zsh";
-          }
-          rec {
-            name = "zsh-completion-sync";
-            src = pkgs.fetchFromGitHub {
-              owner = "BronzeDeer";
-              repo = name;
-              tag = "v0.3.3";
-              hash = "sha256-GTW4nLVW1/09aXNnZJuKs12CoalzWGKB79VsQ2a2Av4=";
-            };
-            file = "${name}.plugin.zsh";
-          }
-        ];
+        # plugins = [
+        #   {
+        #     name = "vi-mode";
+        #     src = pkgs.zsh-vi-mode;
+        #     file = "share/zsh-vi-mode/zsh-vi-mode.plugin.zsh";
+        #   }
+        #   rec {
+        #     name = "zsh-completion-sync";
+        #     src = pkgs.fetchFromGitHub {
+        #       owner = "BronzeDeer";
+        #       repo = name;
+        #       tag = "v0.3.3";
+        #       hash = "sha256-GTW4nLVW1/09aXNnZJuKs12CoalzWGKB79VsQ2a2Av4=";
+        #     };
+        #     file = "${name}.plugin.zsh";
+        #   }
+        # ];
       };
       direnv = {
         enable = mkDefault true;
