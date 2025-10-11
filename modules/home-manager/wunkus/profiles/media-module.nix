@@ -13,6 +13,7 @@ in
     home.packages = [
       pkgs.gimp3
       pkgs.inkscape
+      pkgs.kdePackages.okular
     ];
   };
 }

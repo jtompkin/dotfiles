@@ -21,7 +21,7 @@
           nvidia = true;
           asus = true;
           wallpaperDir = "/home/josh/Pictures/Wallpapers";
-          defaultWallpaper = "/home/josh/Pictures/Wallpapers/primes_10000.png";
+          defaultWallpaper = "/home/josh/Pictures/Wallpapers/primes_twilight_10000.jpg";
           lockBackground = "/home/josh/Pictures/Wallpapers/MVIC_sunset_scan_of_Pluto.jpg";
           defaultApps.terminal.name = "kitty";
           defaultApps.appLauncher.name = "fuzzel";
