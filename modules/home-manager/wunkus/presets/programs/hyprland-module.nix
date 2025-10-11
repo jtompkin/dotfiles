@@ -503,7 +503,6 @@ in
     };
     home.packages = with pkgs; [
       tor-browser
-      kdePackages.okular
       networkmanagerapplet
       hyprpicker
       wl-clipboard
