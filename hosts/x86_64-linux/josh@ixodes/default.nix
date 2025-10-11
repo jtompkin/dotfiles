@@ -12,6 +12,7 @@
         enable = true;
         emulate.enable = true;
       };
+      media.enable = true;
     };
     presets = {
       programs = {
@@ -20,7 +21,7 @@
           nvidia = true;
           asus = true;
           wallpaperDir = "/home/josh/Pictures/Wallpapers";
-          defaultWallpaper = "/home/josh/Pictures/Wallpapers/dark_souls_1_01.jpg";
+          defaultWallpaper = "/home/josh/Pictures/Wallpapers/primes_10000.png";
           lockBackground = "/home/josh/Pictures/Wallpapers/MVIC_sunset_scan_of_Pluto.jpg";
           defaultApps.terminal.name = "kitty";
           defaultApps.appLauncher.name = "fuzzel";
