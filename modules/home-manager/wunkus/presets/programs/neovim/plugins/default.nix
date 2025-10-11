@@ -477,7 +477,7 @@ in
   };
   config = lib.mkIf cfg.enable {
     programs.neovim.plugins = lib.concatMap (
-      module: if module.enable then [ module.config ] ++ module.dependencies else [ ]
+      module: lib.optionals module.enable ([ module.config ] ++ module.dependencies)
     ) (lib.attrValues cfg.plugins);
   };
 }

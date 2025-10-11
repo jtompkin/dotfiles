@@ -51,6 +51,7 @@ in
     programs = {
       zsh = {
         enable = mkDefault true;
+        oh-my-zsh.enable = false;
         completionInit = "";
         initContent =
           lib.mkAfter # sh

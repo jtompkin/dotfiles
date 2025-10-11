@@ -51,7 +51,7 @@ in
         };
         directory = {
           style = "green";
-          read_only = "󰌾";
+          read_only = " 󰌾";
         };
         git_branch.format = "[$symbol$branch(:$remote_branch)]($style) ";
         golang = {

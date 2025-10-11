@@ -386,6 +386,22 @@ in
               halign = "center";
               valign = "center";
             }
+            {
+              monitor = "";
+              text = "Shutdown";
+              font_size = 40;
+              valign = "bottom";
+              position = "-10%, 0";
+              onclick = "systemctl poweroff";
+            }
+            {
+              monitor = "";
+              text = "Reboot";
+              font_size = 40;
+              valign = "bottom";
+              position = "10%, 0";
+              onclick = "systemctl reboot";
+            }
           ];
           shape = [
             {
