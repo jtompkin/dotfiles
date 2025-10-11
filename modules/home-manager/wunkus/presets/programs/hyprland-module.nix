@@ -388,25 +388,42 @@ in
             }
             {
               monitor = "";
-              text = "Shutdown";
-              font_size = 40;
+              text = "<span> 󰤄 </span>";
+              font_size = 50;
               valign = "bottom";
-              position = "-10%, 0";
-              onclick = "systemctl poweroff";
+              position = "-150, 60";
+              onclick = "systemctl suspend";
             }
             {
               monitor = "";
-              text = "Reboot";
-              font_size = 40;
+              text = "<span> 󰤁 </span>";
+              font_size = 50;
               valign = "bottom";
-              position = "10%, 0";
+              position = "0, 60";
               onclick = "systemctl reboot";
+            }
+            {
+              monitor = "";
+              text = "<span> 󰐥 </span>";
+              font_size = 50;
+              valign = "bottom";
+              position = "150, 60";
+              onclick = "systemctl poweroff";
             }
           ];
           shape = [
             {
               monitor = "";
-              size = "200, 100";
+              size = "400, 80";
+              color = "rgba(50, 50, 50, 0.75)";
+              rounding = 7;
+              position = "0, 60";
+              halign = "center";
+              valign = "bottom";
+            }
+            {
+              monitor = "";
+              size = "220, 100";
               color = "rgba(50, 50, 50, 0.75)";
               rounding = 7;
               position = "0, 80";
