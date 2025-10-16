@@ -45,11 +45,6 @@
       url = "github:nix-darwin/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Pretty Wayland shell
-    noctalia-shell = {
-      url = "github:noctalia-dev/noctalia-shell/main";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     # Application runner for Wayland - TODO: remove once updated in nixpkgs
     walker = {
       url = "github:abenz1267/walker/master";

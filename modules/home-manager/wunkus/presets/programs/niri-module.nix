@@ -73,19 +73,6 @@ in
         .${cfg.defaultApps.videoPlayer.name};
     };
     programs = {
-      noctalia-shell = {
-        enable = mkDefault true;
-        settings = lib.strings.fromJSON (lib.readFile ./data/niri/settings-default.json) // {
-          ui = {
-            fontDefault = mkDefault "Meslo LGS Nerd Font Propo";
-            fontFixed = mkDefault "Iosevka Nerd Font";
-          };
-          wallpaper = {
-            directory = mkIf (cfg.wallpaperDir != null) cfg.wallpaperDir;
-          };
-          nightLight.enabled = mkDefault true;
-        };
-      };
       niri = {
         enable = mkDefault true;
         settings = {

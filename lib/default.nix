@@ -76,7 +76,6 @@ rec {
         inputs.lanzaboote.nixosModules.lanzaboote
         inputs.niri-flake.nixosModules.niri
         inputs.nixos-wsl.nixosModules.default
-        inputs.noctalia-shell.nixosModules.default
         inputs.self.nixosModules.lib
         {
           imports = listModuleFiles ../modules/nixos;
@@ -109,7 +108,6 @@ rec {
         inputs.agenix.homeManagerModules.default
         inputs.mornix.homeModules.default
         inputs.niri-flake.homeModules.niri
-        inputs.noctalia-shell.homeModules.default
         inputs.self.homeModules.lib
         inputs.walker.homeManagerModules.default
         {

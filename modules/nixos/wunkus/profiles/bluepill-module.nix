@@ -17,7 +17,6 @@ in
         enable = mkDefault true;
         qemu = {
           swtpm.enable = mkDefault true;
-          ovmf.enable = mkDefault true;
         };
       };
     };

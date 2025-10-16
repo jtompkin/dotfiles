@@ -202,6 +202,7 @@ in
             "$mainMod CTRL, L, Exec, hyprlock"
             "$mainMod, Q, killactive"
             "$mainMod, SPACE, togglefloating"
+            "$mainMod CTRL, SPACE, pin"
             "$mainMod, P, pseudo"
             "$mainMod, O, togglesplit"
             "$mainMod, F, fullscreen"
