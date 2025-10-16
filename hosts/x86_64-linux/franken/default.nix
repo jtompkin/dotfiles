@@ -11,6 +11,7 @@
       wsl.enable = true;
     };
   };
+  programs.dconf.enable = true;
 
   environment = {
     pathsToLink = [ "/share/zsh" ];
