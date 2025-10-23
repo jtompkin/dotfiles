@@ -38,9 +38,9 @@ in
         package = mkDefault pkgs.kdePackages.breeze-gtk;
       };
     };
-    qt = {
-      enable = mkDefault true;
-      platformTheme.name = mkDefault "gtk";
-    };
+    # qt = {
+    #   enable = mkDefault true;
+    #   platformTheme.name = mkDefault "gtk";
+    # };
   };
 }
