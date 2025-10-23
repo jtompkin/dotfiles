@@ -125,7 +125,7 @@ in
       };
       eza = {
         enable = true;
-        extraOptions = [
+        extraOptions = lib.mkIf (!config.wunkus.presets.programs.zim.enable) [
           "--group-directories-first"
           "--header"
           "--smart-group"
