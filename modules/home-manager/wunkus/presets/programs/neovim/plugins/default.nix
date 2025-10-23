@@ -398,6 +398,14 @@ let
           })
         '';
     };
+    render-markdown-nvim = {
+      config = # lua
+        ''
+          local render_markdown = require("render-markdown")
+          render_markdown.setup({})
+          vim.keymap.set("n", "<leader>rp", render_markdown.preview, { desc = "Render markdown preview" })
+        '';
+    };
     which-key-nvim = {
       config = # lua
         ''
