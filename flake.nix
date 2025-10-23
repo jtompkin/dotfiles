@@ -76,10 +76,10 @@
         completion : Dummy for LSP : x86_64-linux (fake)
       */
       nixosConfigurations = lib.dotfiles.flattenAttrset (
-        lib.dotfiles.genConfigsFromModules lib.dotfiles.const.nixosModules { }
+        lib.dotfiles.genConfigsFromModules "nixos" lib.dotfiles.const.nixosModules { }
       );
       homeConfigurations = lib.dotfiles.flattenAttrset (
-        lib.dotfiles.genConfigsFromModules lib.dotfiles.const.homeModules { }
+        lib.dotfiles.genConfigsFromModules "home" lib.dotfiles.const.homeModules { }
       );
       darwinConfigurations."ArtSci-0KPQC4CF" = nix-darwin.lib.darwinSystem {
         specialArgs = { inherit inputs; };
@@ -99,11 +99,7 @@
       };
 
       devShells = lib.dotfiles.forAllSystems (
-        system:
-        let
-          pkgs = lib.dotfiles.const.pkgsBySystem.${system};
-        in
-        {
+        system: pkgs: {
           default = pkgs.mkShell {
             name = "dotfiles";
             packages = [ agenix.packages.${system}.default ];

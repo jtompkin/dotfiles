@@ -10,30 +10,34 @@ rec {
     ];
     linuxSystems = lib.filter (lib.hasSuffix "-linux") const.allSystems;
     darwinSystems = lib.filter (lib.hasSuffix "-darwin") const.allSystems;
-    allSystemModules = forAllSystems (system: genImportsFromDir ../hosts/${system});
+    allSystemModules = forAllSystems (system: _: genImportsFromDir ../hosts/${system});
     nixosModules = lib.genAttrs const.linuxSystems (
       filterHostsFromSystem (negatePredicate (lib.hasInfix "@"))
     );
     darwinModules = lib.genAttrs const.darwinSystems (
       filterHostsFromSystem (negatePredicate (lib.hasInfix "@"))
     );
-    homeModules = forAllSystems (filterHostsFromSystem (lib.hasInfix "@"));
+    homeModules = forAllSystems (system: _: filterHostsFromSystem (lib.hasInfix "@") system);
     overlays = [
       inputs.nixgl.overlay
     ];
-    pkgsBySystem = forAllSystems (
-      system:
-      import inputs.nixpkgs {
-        inherit (const) overlays;
-        localSystem = { inherit system; };
-        config.allowUnfree = true;
-      }
-    );
-    formatter = forAllSystems (system: const.pkgsBySystem.${system}.nixfmt-tree);
+    pkgsBySystem = forAllSystems (_: pkgs: pkgs);
+    formatter = forAllSystems (_: pkgs: pkgs.nixfmt-tree);
   };
 
+  forAllSystems =
+    f:
+    lib.genAttrs const.allSystems (
+      system:
+      f system (
+        import inputs.nixpkgs {
+          inherit (const) overlays;
+          localSystem = { inherit system; };
+          config.allowUnfree = true;
+        }
+      )
+    );
   negatePredicate = predicate: x: !(predicate x);
-  forAllSystems = f: lib.genAttrs const.allSystems f;
   filterHostsFromSystem =
     predicate: system: lib.filterAttrs (host: module: predicate host) const.allSystemModules.${system};
 
@@ -139,21 +143,20 @@ rec {
     modules: specialArgs: { <system> = { <host> = <config>; }; }
   */
   genConfigsFromModules =
-    modules: specialArgs:
-    let
-      getConfigMaker =
-        system: host:
-        if lib.elem system const.darwinSystems then
-          mkDarwinConfiguration
-        else if lib.hasInfix "@" host then
-          mkHomeManagerConfiguration
-        else
-          mkNixosConfiguration;
-    in
+    type: modules: specialArgs:
     lib.genAttrs (lib.attrNames modules) (
       system:
       lib.mapAttrs (
-        host: module: getConfigMaker system host { inherit module specialArgs system; }
+        host: module:
+        (
+          {
+            nixos = mkNixosConfiguration;
+            home = mkHomeManagerConfiguration;
+            darwin = mkDarwinConfiguration;
+          }
+          .${type}
+        )
+          { inherit module specialArgs system; }
       ) modules.${system}
     );
 
