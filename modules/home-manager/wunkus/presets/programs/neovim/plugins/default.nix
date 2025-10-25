@@ -41,14 +41,11 @@ let
               nixfmt = {
                 command = "${lib.getExe' pkgs.nixfmt-rfc-style "nixfmt"}",
               },
-              black = {
-                command = "${lib.getExe pkgs.black}",
-              },
             },
             formatters_by_ft = {
               lua = { "stylua" },
               nix = { "nixfmt" },
-              python = { "black" },
+              python = { "ruff_format", "black" },
               go = { "gofmt" },
             },
             default_format_opts = {
