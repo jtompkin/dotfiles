@@ -148,6 +148,23 @@ let
           })
         '';
     };
+    neogen = {
+      config = # lua
+        ''
+          local neogen = require("neogen")
+          neogen.setup({
+            snippet_engine= "luasnip",
+            languages = {
+              python = { 
+                template = {
+                  annotation_convention = "numpydoc",
+                },
+              },
+            },
+          })
+          vim.keymap.set("n", "<leader>nf", neogen.generate, { desc = "Generate docstring" })
+        '';
+    };
     neogit = {
       dependencies = [ pkgs.vimPlugins.diffview-nvim ];
       config = # lua
