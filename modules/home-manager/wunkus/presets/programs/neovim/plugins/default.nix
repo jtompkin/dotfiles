@@ -45,10 +45,9 @@ let
           	formatters_by_ft = {
           		lua = { "stylua" },
           		nix = { "nixfmt", "injected" },
-          		python = { "ruff_format", "black" },
+          		python = { "ruff_format", "black", stop_after_first = true },
           		go = { "gofmt" },
           		markdown = { "injected", "trim_whitespace" },
-          		-- ["*"] = {"injected"},
           		["_"] = { "trim_whitespace" },
           	},
           	default_format_opts = {
