@@ -11,22 +11,22 @@ let
       config = # lua
         ''
           vim.keymap.set(
-            "n",
-            "<leader>fml",
-            "<cmd>CellularAutomaton make_it_rain<cr>",
-            { desc = "Make it rain!" }
+          	"n",
+          	"<leader>fml",
+          	"<cmd>CellularAutomaton make_it_rain<cr>",
+          	{ desc = "Make it rain!" }
           )
           vim.keymap.set(
-            "n",
-            "<leader>fyl",
-            "<cmd>CellularAutomaton game_of_life<cr>",
-            { desc = "Game of life!" }
+          	"n",
+          	"<leader>fyl",
+          	"<cmd>CellularAutomaton game_of_life<cr>",
+          	{ desc = "Game of life!" }
           )
           vim.keymap.set(
-            "n",
-            "<leader>fol",
-            "<cmd>CellularAutomaton scramble<cr>",
-            { desc = "Scramble!" }
+          	"n",
+          	"<leader>fol",
+          	"<cmd>CellularAutomaton scramble<cr>",
+          	{ desc = "Scramble!" }
           )
         '';
     };
@@ -44,9 +44,12 @@ let
             },
             formatters_by_ft = {
               lua = { "stylua" },
-              nix = { "nixfmt" },
+              nix = { "nixfmt", "injected" },
               python = { "ruff_format", "black" },
               go = { "gofmt" },
+              markdown = {"injected", "trim_whitespace"},
+              -- ["*"] = {"injected"},
+              ["_"] = {"trim_whitespace"}
             },
             default_format_opts = {
               lsp_format = "fallback",
@@ -104,19 +107,45 @@ let
         ''
           local harpoon = require("harpoon")
           harpoon:setup()
-          vim.keymap.set("n", "<leader>ha", function() harpoon:list():add() end, { desc = "Add current file to harpoon" })
-          vim.keymap.set("n", "<leader>hd", function() harpoon:list():remove() end, { desc = "Remove file from harpoon." })
-          vim.keymap.set("n", "<leader>hh", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "Show harpoon." })
-          vim.keymap.set("n", "<leader>a", function() harpoon:list():select(1) end)
-          vim.keymap.set("n", "<leader>s", function() harpoon:list():select(2) end)
-          vim.keymap.set("n", "<leader>q", function() harpoon:list():select(3) end)
-          vim.keymap.set("n", "<leader>w", function() harpoon:list():select(4) end)
-          vim.keymap.set("n", "<leader>5", function() harpoon:list():select(5) end)
-          vim.keymap.set("n", "<leader>6", function() harpoon:list():select(6) end)
-          vim.keymap.set("n", "<leader>7", function() harpoon:list():select(7) end)
-          vim.keymap.set("n", "<leader>8", function() harpoon:list():select(8) end)
-          vim.keymap.set("n", "<leader>9", function() harpoon:list():select(9) end)
-          vim.keymap.set("n", "<leader>0", function() harpoon:list():select(10) end)
+          vim.keymap.set("n", "<leader>ha", function()
+          	harpoon:list():add()
+          end, { desc = "Add current file to harpoon" })
+          vim.keymap.set("n", "<leader>hd", function()
+          	harpoon:list():remove()
+          end, { desc = "Remove file from harpoon." })
+          vim.keymap.set("n", "<leader>hh", function()
+          	harpoon.ui:toggle_quick_menu(harpoon:list())
+          end, { desc = "Show harpoon." })
+          vim.keymap.set("n", "<leader>a", function()
+          	harpoon:list():select(1)
+          end)
+          vim.keymap.set("n", "<leader>s", function()
+          	harpoon:list():select(2)
+          end)
+          vim.keymap.set("n", "<leader>q", function()
+          	harpoon:list():select(3)
+          end)
+          vim.keymap.set("n", "<leader>w", function()
+          	harpoon:list():select(4)
+          end)
+          vim.keymap.set("n", "<leader>5", function()
+          	harpoon:list():select(5)
+          end)
+          vim.keymap.set("n", "<leader>6", function()
+          	harpoon:list():select(6)
+          end)
+          vim.keymap.set("n", "<leader>7", function()
+          	harpoon:list():select(7)
+          end)
+          vim.keymap.set("n", "<leader>8", function()
+          	harpoon:list():select(8)
+          end)
+          vim.keymap.set("n", "<leader>9", function()
+          	harpoon:list():select(9)
+          end)
+          vim.keymap.set("n", "<leader>0", function()
+          	harpoon:list():select(10)
+          end)
         '';
     };
     lualine-nvim = {
@@ -153,14 +182,14 @@ let
         ''
           local neogen = require("neogen")
           neogen.setup({
-            snippet_engine= "luasnip",
-            languages = {
-              python = { 
-                template = {
-                  annotation_convention = "numpydoc",
-                },
-              },
-            },
+          	snippet_engine = "luasnip",
+          	languages = {
+          		python = {
+          			template = {
+          				annotation_convention = "numpydoc",
+          			},
+          		},
+          	},
           })
           vim.keymap.set("n", "<leader>nf", neogen.generate, { desc = "Generate docstring" })
         '';
@@ -171,12 +200,12 @@ let
         ''
           local neogit = require("neogit")
           neogit.setup({
-            mappings = {
-              finder = {
-                ["<c-j>"] = "Next",
-                ["<c-k>"] = "Previous",
-              },
-            },
+          	mappings = {
+          		finder = {
+          			["<c-j>"] = "Next",
+          			["<c-k>"] = "Previous",
+          		},
+          	},
           })
           vim.keymap.set("n", "<leader>gs", neogit.open, { desc = "Open git integration." })
         '';
@@ -407,8 +436,8 @@ let
       config = # lua
         ''
           require("nvim-treesitter.configs").setup({
-            highlight = { enable = true },
-            indent = { enable = true },
+          	highlight = { enable = true },
+          	indent = { enable = true },
           })
         '';
     };
@@ -417,7 +446,12 @@ let
         ''
           local render_markdown = require("render-markdown")
           render_markdown.setup({})
-          vim.keymap.set("n", "<leader>rp", render_markdown.preview, { desc = "Render markdown preview" })
+          vim.keymap.set(
+          	"n",
+          	"<leader>rp",
+          	render_markdown.preview,
+          	{ desc = "Render markdown preview" }
+          )
         '';
     };
     which-key-nvim = {
