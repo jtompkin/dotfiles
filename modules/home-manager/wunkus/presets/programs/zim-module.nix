@@ -42,10 +42,11 @@ in
       (lib.mkIf config.programs.eza.enable (lib.mkOrder 1001 [ "exa" ]))
       (lib.mkIf config.programs.zoxide.enable [ "kiesman99/zim-zoxide" ])
       (lib.mkAfter [
-        "completion"
         "zsh-users/zsh-syntax-highlighting"
         "zsh-users/zsh-history-substring-search"
         "zsh-users/zsh-autosuggestions"
+        "BronzeDeer/zsh-completion-sync"
+        "completion"
       ])
     ];
     programs = {
@@ -57,6 +58,8 @@ in
           lib.mkAfter # sh
             ''
               zstyle ':zim:zmodule' use 'degit'
+              zstyle ':completion-sync:compinit:experimental:no-caching' enabled true
+              zstyle ':completion-sync:compinit:experimental:fast-add' enabled true
               ZIM_CONFIG_FILE="${config.programs.zsh.dotDir}/zimrc"
               ZIM_HOME="${config.xdg.cacheHome}/zim"
               if [[ ! -f ''${ZIM_HOME}/init.zsh ]] then
