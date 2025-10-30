@@ -376,8 +376,12 @@ let
         cmp-path
         cmp-cmdline
         (pkgs.callPackage (
-          { buildVimPlugin, fetchFromGitHub }:
-          buildVimPlugin {
+          {
+            fetchFromGitHub,
+            vimPlugins,
+            vimUtils,
+          }:
+          vimUtils.buildVimPlugin {
             pname = "cmp-mini-snippets";
             version = "main";
             src = fetchFromGitHub {
@@ -386,10 +390,10 @@ let
               rev = "582aea215ce2e65b880e0d23585c20863fbb7604";
               hash = "sha256-gSvhxrjz6PZBgqbb4eBAwWEWSdefM4qL3nb75qGPaFA=";
             };
-            doCheck = false;
+            nativeBuildInputs = [ vimPlugins.nvim-cmp ];
             meta.homepage = "https://github.com/abeldekat/cmp-mini-snippets";
           }
-        ) { inherit (pkgs.vimUtils) buildVimPlugin; })
+        ) { })
       ];
       config = # lua
         ''
