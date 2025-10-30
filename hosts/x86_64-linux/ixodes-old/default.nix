@@ -1,9 +1,6 @@
 {
   networking.hostName = "ixodes";
-  boot.initrd.systemd.enable = true;
-  users.mutableUsers = true;
-  users.users."josh".hashedPasswordFile = null;
-  users.users."josh".initialPassword = "ds";
+
   wunkus = {
     settings = {
       username = "josh";
@@ -13,7 +10,7 @@
       minimal.enable = true;
       ephemeral.enable = true;
       dualBooty.enable = true;
-      # secure.enable = true;
+      secure.enable = true;
       nvidia.enable = true;
       desktop = {
         enable = true;
@@ -36,11 +33,7 @@
         client = "qbittorrent";
       };
     };
-    disks.btrfsEncrypt = {
-      enable = true;
-      swapSize = "12G";
-      mainDevice = "/dev/nvme0n1";
-    };
+    disks.dualBooty.enable = true;
     hardware."asusRog-x86_64-linux".enable = true;
   };
 

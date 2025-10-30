@@ -83,7 +83,7 @@ rec {
         inputs.self.nixosModules.lib
         {
           imports = listModuleFiles ../modules/nixos;
-          age.secrets.password1.file = ../secrets/password1.age;
+          # age.secrets.password1.file = ../secrets/password1.age;
           nixpkgs.pkgs = const.pkgsBySystem.${system};
           nix.settings.experimental-features = [
             "nix-command"

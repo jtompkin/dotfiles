@@ -5,7 +5,7 @@ let
   mkSubvolume = name: {
     mountpoint = lib.replaceStrings [ "@" ] [ "/" ] name;
     mountOptions = [
-      "compress=zstd"
+      "compress=zstd:3"
       "noatime"
     ];
   };
@@ -39,7 +39,7 @@ in
             type = "gpt";
             partitions = {
               ESP = {
-                size = "1G";
+                size = "2G";
                 type = "EF00";
                 content = {
                   type = "filesystem";
@@ -48,6 +48,9 @@ in
                   mountOptions = [
                     "umask=0077"
                     "noatime"
+                    "nosuid"
+                    "nodev"
+                    "noexec"
                   ];
                 };
               };
@@ -55,14 +58,14 @@ in
                 size = "100%";
                 content = {
                   type = "luks";
-                  name = "nixcrypt";
+                  name = "nixcrypt2";
                   extraOpenArgs = [ ];
                   settings = {
                     allowDiscards = true;
                   };
                   content = {
                     type = "lvm_pv";
-                    vg = "nixvg";
+                    vg = "nixvg2";
                   };
                 };
               };
@@ -71,7 +74,7 @@ in
         };
       };
       lvm_vg = {
-        nixvg = {
+        nixvg2 = {
           type = "lvm_vg";
           lvs = {
             nix = {
@@ -103,6 +106,11 @@ in
         };
       };
     };
+    zramSwap = {
+      enable = lib.mkDefault true;
+      priority = lib.mkDefault 100;
+    };
     fileSystems."/persist".neededForBoot = true;
+    fileSystems."/home".neededForBoot = true;
   };
 }

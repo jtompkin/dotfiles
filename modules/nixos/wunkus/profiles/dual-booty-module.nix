@@ -13,9 +13,9 @@ in
   };
   config = mkIf cfg.enable {
 
-    users.users.${config.wunkus.settings.username}.hashedPasswordFile =
-      config.age.secrets.password1.path;
-    users.mutableUsers = false;
+    # users.users.${config.wunkus.settings.username}.hashedPasswordFile =
+    #   mkDefault config.age.secrets.password1.path;
+    # users.mutableUsers = mkDefault false;
 
     services.openssh.enable = mkDefault true;
     networking.networkmanager.enable = mkDefault true;
