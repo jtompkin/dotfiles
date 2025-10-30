@@ -11,22 +11,22 @@ let
       config = # lua
         ''
           vim.keymap.set(
-            "n",
-            "<leader>fml",
-            "<cmd>CellularAutomaton make_it_rain<cr>",
-            { desc = "Make it rain!" }
+          	"n",
+          	"<leader>fml",
+          	"<cmd>CellularAutomaton make_it_rain<cr>",
+          	{ desc = "Make it rain!" }
           )
           vim.keymap.set(
-            "n",
-            "<leader>fyl",
-            "<cmd>CellularAutomaton game_of_life<cr>",
-            { desc = "Game of life!" }
+          	"n",
+          	"<leader>fyl",
+          	"<cmd>CellularAutomaton game_of_life<cr>",
+          	{ desc = "Game of life!" }
           )
           vim.keymap.set(
-            "n",
-            "<leader>fol",
-            "<cmd>CellularAutomaton scramble<cr>",
-            { desc = "Scramble!" }
+          	"n",
+          	"<leader>fol",
+          	"<cmd>CellularAutomaton scramble<cr>",
+          	{ desc = "Scramble!" }
           )
         '';
     };
@@ -34,38 +34,41 @@ let
       config = # lua
         ''
           require("conform").setup({
-            formatters = {
-              stylua = {
-                command = "${lib.getExe pkgs.stylua}",
-              },
-              nixfmt = {
-                command = "${lib.getExe' pkgs.nixfmt-rfc-style "nixfmt"}",
-              },
-              black = {
-                command = "${lib.getExe pkgs.black}",
-              },
-            },
-            formatters_by_ft = {
-              lua = { "stylua" },
-              nix = { "nixfmt" },
-              python = { "black" },
-              go = { "gofmt" },
-            },
-            default_format_opts = {
-              lsp_format = "fallback",
-            },
-            format_on_save = { timeout_ms = 500 },
+          	formatters = {
+          		stylua = {
+          			command = [[${lib.getExe pkgs.stylua}]],
+          		},
+          		nixfmt = {
+          			command = [[${lib.getExe' pkgs.nixfmt-rfc-style "nixfmt"}]],
+          		},
+          	},
+          	formatters_by_ft = {
+          		lua = { "stylua" },
+          		nix = { "nixfmt", "injected" },
+          		python = { "ruff_format", "black", stop_after_first = true },
+          		go = { "gofmt" },
+          		markdown = { "injected", "trim_whitespace" },
+          		["_"] = { "trim_whitespace" },
+          	},
+          	default_format_opts = {
+          		lsp_format = "fallback",
+          	},
+          	format_on_save = { timeout_ms = 500 },
           })
           vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
           vim.keymap.set("", "<leader>f", function()
-            require("conform").format({ async = true }, function(err)
-              if not err then
-                local mode = vim.api.nvim_get_mode().mode
-                if vim.startswith(string.lower(mode), "v") then
-                  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
-                end
-              end
-            end)
+          	require("conform").format({ async = true }, function(err)
+          		if not err then
+          			local mode = vim.api.nvim_get_mode().mode
+          			if vim.startswith(string.lower(mode), "v") then
+          				vim.api.nvim_feedkeys(
+          					vim.api.nvim_replace_termcodes("<Esc>", true, false, true),
+          					"n",
+          					true
+          				)
+          			end
+          		end
+          	end)
           end, { desc = "Format code" })
         '';
     };
@@ -107,19 +110,45 @@ let
         ''
           local harpoon = require("harpoon")
           harpoon:setup()
-          vim.keymap.set("n", "<leader>ha", function() harpoon:list():add() end, { desc = "Add current file to harpoon" })
-          vim.keymap.set("n", "<leader>hd", function() harpoon:list():remove() end, { desc = "Remove file from harpoon." })
-          vim.keymap.set("n", "<leader>hh", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "Show harpoon." })
-          vim.keymap.set("n", "<leader>a", function() harpoon:list():select(1) end)
-          vim.keymap.set("n", "<leader>s", function() harpoon:list():select(2) end)
-          vim.keymap.set("n", "<leader>q", function() harpoon:list():select(3) end)
-          vim.keymap.set("n", "<leader>w", function() harpoon:list():select(4) end)
-          vim.keymap.set("n", "<leader>5", function() harpoon:list():select(5) end)
-          vim.keymap.set("n", "<leader>6", function() harpoon:list():select(6) end)
-          vim.keymap.set("n", "<leader>7", function() harpoon:list():select(7) end)
-          vim.keymap.set("n", "<leader>8", function() harpoon:list():select(8) end)
-          vim.keymap.set("n", "<leader>9", function() harpoon:list():select(9) end)
-          vim.keymap.set("n", "<leader>0", function() harpoon:list():select(10) end)
+          vim.keymap.set("n", "<leader>ha", function()
+          	harpoon:list():add()
+          end, { desc = "Add current file to harpoon" })
+          vim.keymap.set("n", "<leader>hd", function()
+          	harpoon:list():remove()
+          end, { desc = "Remove file from harpoon." })
+          vim.keymap.set("n", "<leader>hh", function()
+          	harpoon.ui:toggle_quick_menu(harpoon:list())
+          end, { desc = "Show harpoon." })
+          vim.keymap.set("n", "<leader>a", function()
+          	harpoon:list():select(1)
+          end)
+          vim.keymap.set("n", "<leader>s", function()
+          	harpoon:list():select(2)
+          end)
+          vim.keymap.set("n", "<leader>q", function()
+          	harpoon:list():select(3)
+          end)
+          vim.keymap.set("n", "<leader>w", function()
+          	harpoon:list():select(4)
+          end)
+          vim.keymap.set("n", "<leader>5", function()
+          	harpoon:list():select(5)
+          end)
+          vim.keymap.set("n", "<leader>6", function()
+          	harpoon:list():select(6)
+          end)
+          vim.keymap.set("n", "<leader>7", function()
+          	harpoon:list():select(7)
+          end)
+          vim.keymap.set("n", "<leader>8", function()
+          	harpoon:list():select(8)
+          end)
+          vim.keymap.set("n", "<leader>9", function()
+          	harpoon:list():select(9)
+          end)
+          vim.keymap.set("n", "<leader>0", function()
+          	harpoon:list():select(10)
+          end)
         '';
     };
     lualine-nvim = {
@@ -151,18 +180,35 @@ let
           })
         '';
     };
+    neogen = {
+      config = # lua
+        ''
+          local neogen = require("neogen")
+          neogen.setup({
+          	snippet_engine = "luasnip",
+          	languages = {
+          		python = {
+          			template = {
+          				annotation_convention = "numpydoc",
+          			},
+          		},
+          	},
+          })
+          vim.keymap.set("n", "<leader>nf", neogen.generate, { desc = "Generate docstring" })
+        '';
+    };
     neogit = {
       dependencies = [ pkgs.vimPlugins.diffview-nvim ];
       config = # lua
         ''
           local neogit = require("neogit")
           neogit.setup({
-            mappings = {
-              finder = {
-                ["<c-j>"] = "Next",
-                ["<c-k>"] = "Previous",
-              },
-            },
+          	mappings = {
+          		finder = {
+          			["<c-j>"] = "Next",
+          			["<c-k>"] = "Previous",
+          		},
+          	},
           })
           vim.keymap.set("n", "<leader>gs", neogit.open, { desc = "Open git integration." })
         '';
@@ -300,89 +346,99 @@ let
           cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
         '';
     };
-    nvim-lspconfig = {
-      config = # lua
-        ''
-          local function config_and_enable(server, config)
-            vim.lsp.config(server, config)
-            vim.lsp.enable(server)
-          end
-          config_and_enable("pyright", {
-            cmd = { "${lib.getExe' pkgs.pyright "pyright-langserver"}", "--stdio" }
-          })
-          config_and_enable("gopls", {
-            cmd = { "${lib.getExe pkgs.gopls}" },
-          })
-          config_and_enable("nixd", {
-            cmd = { "${lib.getExe pkgs.nixd}" },
-            settings = {
-              nixd = {
-                options = {
-                  nixos = {
-                    expr = '(builtins.getFlake ("${
-                      cfg.plugins.nvim-lspconfig.extraData.nixConfigDir or "github:jtompkin/dotfiles"
-                    }")).nixosConfigurations.completion.options',
-                  },
-                  home_manager = {
-                    expr = '(builtins.getFlake ("${
-                      cfg.plugins.nvim-lspconfig.extraData.nixConfigDir or "github:jtompkin/dotfiles"
-                    }")).homeConfigurations."none@completion".options',
-                  },
-                },
-              },
-            },
-          })
-          config_and_enable("lua_ls", {
-            cmd = { "${lib.getExe pkgs.lua-language-server}" },
-            on_init = function(client)
-              if client.workspace_folders then
-                local path = client.workspace_folders[1].name
-                if
-                  path ~= vim.fn.stdpath("config")
-                  and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
-                then
-                  return
-                end
-              end
+    nvim-lspconfig =
+      let
+        # Put these complex expressions in variables so injected Lua formatting works
+        nixosExpr = ''(builtins.getFlake ("${
+          cfg.plugins.nvim-lspconfig.extraData.nixConfigDir or "github:jtompkin/dotfiles"
+        }")).nixosConfigurations.completions.options'';
+        homeManagerExpr = ''(builtins.getFlake ("${
+          cfg.plugins.nvim-lspconfig.extraData.nixConfigDir or "github:jtompkin/dotfiles"
+        }")).homeConfigurations."none@completion".options'';
+      in
+      {
+        config = # lua
+          ''
+            local function config_and_enable(server, config)
+            	vim.lsp.config(server, config)
+            	vim.lsp.enable(server)
+            end
+            config_and_enable("pyright", {
+            	cmd = { [[${lib.getExe' pkgs.pyright "pyright-langserver"}, "--stdio"]] },
+            })
+            config_and_enable("gopls", {
+            	cmd = { [[${lib.getExe pkgs.gopls}]] },
+            })
+            config_and_enable("nixd", {
+            	cmd = { [[${lib.getExe pkgs.nixd}]] },
+            	settings = {
+            		nixd = {
+            			options = {
+            				nixos = {
+            					expr = [[${nixosExpr}]],
+            				},
+            				home_manager = {
+            					expr = [[${homeManagerExpr}]],
+            				},
+            			},
+            		},
+            	},
+            })
+            config_and_enable("lua_ls", {
+            	cmd = { [[${lib.getExe pkgs.lua-language-server}]] },
+            	on_init = function(client)
+            		if client.workspace_folders then
+            			local path = client.workspace_folders[1].name
+            			if
+            				path ~= vim.fn.stdpath("config")
+            				and (
+            					vim.uv.fs_stat(path .. "/.luarc.json")
+            					or vim.uv.fs_stat(path .. "/.luarc.jsonc")
+            				)
+            			then
+            				return
+            			end
+            		end
 
-              client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
-                runtime = {
-                  -- Tell the language server which version of Lua you're using (most
-                  -- likely LuaJIT in the case of Neovim)
-                  version = "LuaJIT",
-                  -- Tell the language server how to find Lua modules same way as Neovim
-                  -- (see `:h lua-module-load`)
-                  path = {
-                    "lua/?.lua",
-                    "lua/?/init.lua",
-                  },
-                },
-                -- Make the server aware of Neovim runtime files
-                workspace = {
-                  checkThirdParty = false,
-                  library = {
-                    vim.env.VIMRUNTIME
-                    -- Depending on the usage, you might want to add additional paths
-                    -- here.
-                    -- "''${3rd}/luv/library"
-                    -- "''${3rd}/busted/library"
-                  }
-                  -- Or pull in all of 'runtimepath'.
-                  -- NOTE: this is a lot slower and will cause issues when working on
-                  -- your own configuration.
-                  -- See https://github.com/neovim/nvim-lspconfig/issues/3189
-                  -- library = {
-                  --   vim.api.nvim_get_runtime_file("", true),
-                  -- }
-                }
-              })
-            end,
-            settings = {
-              Lua = {}
-            }
-          })
-        '';
-    };
+            		client.config.settings.Lua =
+            			vim.tbl_deep_extend("force", client.config.settings.Lua, {
+            				runtime = {
+            					-- Tell the language server which version of Lua you're using (most
+            					-- likely LuaJIT in the case of Neovim)
+            					version = "LuaJIT",
+            					-- Tell the language server how to find Lua modules same way as Neovim
+            					-- (see `:h lua-module-load`)
+            					path = {
+            						"lua/?.lua",
+            						"lua/?/init.lua",
+            					},
+            				},
+            				-- Make the server aware of Neovim runtime files
+            				workspace = {
+            					checkThirdParty = false,
+            					library = {
+            						vim.env.VIMRUNTIME,
+            						-- Depending on the usage, you might want to add additional paths
+            						-- here.
+            						-- "''${3rd}/luv/library"
+            						-- "''${3rd}/busted/library"
+            					},
+            					-- Or pull in all of 'runtimepath'.
+            					-- NOTE: this is a lot slower and will cause issues when working on
+            					-- your own configuration.
+            					-- See https://github.com/neovim/nvim-lspconfig/issues/3189
+            					-- library = {
+            					--   vim.api.nvim_get_runtime_file("", true),
+            					-- }
+            				},
+            			})
+            	end,
+            	settings = {
+            		Lua = {},
+            	},
+            })
+          '';
+      };
     nvim-surround = {
       config = # lua
         ''
@@ -393,8 +449,8 @@ let
       config = # lua
         ''
           require("nvim-treesitter.configs").setup({
-            highlight = { enable = true },
-            indent = { enable = true },
+          	highlight = { enable = true },
+          	indent = { enable = true },
           })
         '';
     };
@@ -403,7 +459,12 @@ let
         ''
           local render_markdown = require("render-markdown")
           render_markdown.setup({})
-          vim.keymap.set("n", "<leader>rp", render_markdown.preview, { desc = "Render markdown preview" })
+          vim.keymap.set(
+          	"n",
+          	"<leader>rp",
+          	render_markdown.preview,
+          	{ desc = "Render markdown preview" }
+          )
         '';
     };
     which-key-nvim = {

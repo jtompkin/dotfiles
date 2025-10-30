@@ -42,6 +42,7 @@ in
         harpoon2.enable = mkDefault true;
         lualine-nvim.enable = mkDefault true;
         neogit.enable = mkDefault true;
+        neogen.enable = mkDefault true;
         nightfox-nvim.enable = mkDefault true;
         nvim-autopairs.enable = mkDefault true;
         nvim-cmp.enable = mkDefault true;
