@@ -42,6 +42,10 @@
     oh-my-posh.enable = false;
   };
   services.gpg-agent.sshKeys = [ "B5BE9A6227DB43612DCA51604EF35ABB0FD50B27" ];
+  age.secrets = {
+    spotify-client-id-01.file = ../../../secrets/spotify-client-id-01.age;
+    spotify-secret-01.file = ../../../secrets/spotify-secret-01.age;
+  };
 
   home.stateVersion = "25.05";
 }

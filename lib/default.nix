@@ -121,10 +121,10 @@ rec {
             "nix-command"
             "flakes"
           ];
-          age.secrets = {
-            spotify-client-id-01.file = ../secrets/spotify-client-id-01.age;
-            spotify-secret-01.file = ../secrets/spotify-secret-01.age;
-          };
+          # age.secrets = {
+          #   spotify-client-id-01.file = ../secrets/spotify-client-id-01.age;
+          #   spotify-secret-01.file = ../secrets/spotify-secret-01.age;
+          # };
         }
         module
       ];
