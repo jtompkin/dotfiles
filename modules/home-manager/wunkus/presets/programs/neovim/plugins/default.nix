@@ -35,6 +35,7 @@ let
           		nix = { "nixfmt", "injected" },
           		python = { "ruff_format", "black", stop_after_first = true },
           		go = { "gofmt" },
+          		just = { "just", "injected" },
           		markdown = { "injected", "trim_whitespace" },
           		["_"] = { "trim_whitespace" },
           	},
@@ -481,6 +482,7 @@ let
             vim.lsp.config("*", {
             	capabilities = require("cmp_nvim_lsp").default_capabilities(),
             })
+            vim.lsp.enable("just")
             config_and_enable("pyright", {
             	cmd = { [[${lib.getExe' pkgs.pyright "pyright-langserver"}, "--stdio"]] },
             })
