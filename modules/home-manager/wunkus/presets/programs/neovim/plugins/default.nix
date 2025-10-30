@@ -10,24 +10,15 @@ let
     cellular-automaton-nvim = {
       config = # lua
         ''
-          vim.keymap.set(
-          	"n",
-          	"<leader>fml",
-          	"<cmd>CellularAutomaton make_it_rain<cr>",
-          	{ desc = "Make it rain!" }
-          )
-          vim.keymap.set(
-          	"n",
-          	"<leader>fyl",
-          	"<cmd>CellularAutomaton game_of_life<cr>",
-          	{ desc = "Game of life!" }
-          )
-          vim.keymap.set(
-          	"n",
-          	"<leader>fol",
-          	"<cmd>CellularAutomaton scramble<cr>",
-          	{ desc = "Scramble!" }
-          )
+          vim.keymap.set("n", "<leader>fml", function()
+          	vim.cmd.CellularAutomaton("make_it_rain")
+          end, { desc = "Make it rain!" })
+          vim.keymap.set("n", "<leader>fmg", function()
+          	vim.cmd.CellularAutomaton("game_of_life")
+          end, { desc = "Game of life!" })
+          vim.keymap.set("n", "<leader>fms", function()
+          	vim.cmd.CellularAutomaton("scramble")
+          end, { desc = "Scramble!" })
         '';
     };
     conform-nvim = {
@@ -35,9 +26,6 @@ let
         ''
           require("conform").setup({
           	formatters = {
-          		stylua = {
-          			command = [[${lib.getExe pkgs.stylua}]],
-          		},
           		nixfmt = {
           			command = [[${lib.getExe' pkgs.nixfmt-rfc-style "nixfmt"}]],
           		},
@@ -180,6 +168,139 @@ let
           })
         '';
     };
+    mini-clue = {
+      config = # lua
+        ''
+          local miniclue = require("mini.clue")
+          miniclue.setup({
+          	triggers = {
+          		-- Leader triggers
+          		{ mode = "n", keys = "<Leader>" },
+          		{ mode = "x", keys = "<Leader>" },
+
+          		-- Built-in completion
+          		{ mode = "i", keys = "<C-x>" },
+
+          		-- `g` key
+          		{ mode = "n", keys = "g" },
+          		{ mode = "x", keys = "g" },
+
+          		-- Marks
+          		{ mode = "n", keys = "'" },
+          		{ mode = "n", keys = "`" },
+          		{ mode = "x", keys = "'" },
+          		{ mode = "x", keys = "`" },
+
+          		-- Registers
+          		{ mode = "n", keys = '"' },
+          		{ mode = "x", keys = '"' },
+          		{ mode = "i", keys = "<C-r>" },
+          		{ mode = "c", keys = "<C-r>" },
+
+          		-- Window commands
+          		{ mode = "n", keys = "<C-w>" },
+
+          		-- `z` key
+          		{ mode = "n", keys = "z" },
+          		{ mode = "x", keys = "z" },
+          	},
+          	clues = {
+          		-- Enhance this by adding descriptions for <Leader> mapping groups
+          		miniclue.gen_clues.builtin_completion(),
+          		miniclue.gen_clues.g(),
+          		miniclue.gen_clues.marks(),
+          		miniclue.gen_clues.registers(),
+          		miniclue.gen_clues.windows(),
+          		miniclue.gen_clues.z(),
+          	},
+          })
+        '';
+    };
+    mini-diff = {
+      config = # lua
+        ''
+          require("mini.diff").setup({})
+        '';
+    };
+    mini-git = {
+      config = # lua
+        ''
+          require("mini.git").setup({})
+        '';
+    };
+    mini-icons = {
+      config = # lua
+        ''
+          require("mini.icons").setup({})
+        '';
+    };
+    mini-notify = {
+      config = # lua
+        ''
+          require("mini.notify").setup({})
+        '';
+    };
+    mini-pairs = {
+      config = # lua
+        ''
+          require("mini.pairs").setup({})
+        '';
+    };
+    mini-pick = {
+      config = # lua
+        ''
+          local pick = require("mini.pick")
+          pick.setup({
+          	mappings = {
+          		move_down = "<C-j>",
+          		move_up = "<C-k>",
+          		toggle_preview = "<C-p>",
+          	},
+          })
+          vim.keymap.set("n", "<leader>pf", pick.builtin.files, { desc = "Pick from files" })
+          vim.keymap.set(
+          	"n",
+          	"<leader>pg",
+          	pick.builtin.grep_live,
+          	{ desc = "Pick from grep pattern in files" }
+          )
+          vim.keymap.set("n", "<leader>pw", function()
+          	pick.builtin.grep({ pattern = vim.fn.expand("<cword>") })
+          end, { desc = "Pick from grep cword in files" })
+          vim.keymap.set("n", "<leader>pW", function()
+          	pick.builtin.grep({ pattern = vim.fn.expand("<cWORD>") })
+          end, { desc = "Pick from grep cWORD in files" })
+          vim.keymap.set("n", "<leader>ph", pick.builtin.help, { desc = "Pick from help" })
+        '';
+    };
+    mini-snippets = {
+      dependencies = [ pkgs.vimPlugins.friendly-snippets ];
+      config = # lua
+        ''
+          local mini_snippets = require("mini.snippets")
+          mini_snippets.setup({
+          	mappings = {
+          		jump_prev = "<C-h>",
+          		jump_next = "<C-l>",
+          	},
+          	snippets = {
+          		mini_snippets.gen_loader.from_lang(),
+          	},
+          })
+        '';
+    };
+    mini-statusline = {
+      config = # lua
+        ''
+          require("mini.statusline").setup({})
+        '';
+    };
+    mini-surround = {
+      config = # lua
+        ''
+          require("mini.surround").setup({})
+        '';
+    };
     neogen = {
       config = # lua
         ''
@@ -250,30 +371,48 @@ let
     };
     nvim-cmp = {
       dependencies = with pkgs.vimPlugins; [
-        luasnip
-        cmp_luasnip
         cmp-nvim-lsp
         cmp-buffer
         cmp-path
         cmp-cmdline
+        (pkgs.callPackage (
+          { buildVimPlugin, fetchFromGitHub }:
+          buildVimPlugin {
+            pname = "cmp-mini-snippets";
+            version = "main";
+            src = fetchFromGitHub {
+              owner = "abeldekat";
+              repo = "cmp-mini-snippets";
+              rev = "582aea215ce2e65b880e0d23585c20863fbb7604";
+              hash = "sha256-gSvhxrjz6PZBgqbb4eBAwWEWSdefM4qL3nb75qGPaFA=";
+            };
+            doCheck = false;
+            meta.homepage = "https://github.com/abeldekat/cmp-mini-snippets";
+          }
+        ) { inherit (pkgs.vimUtils) buildVimPlugin; })
       ];
       config = # lua
         ''
           local cmp = require("cmp")
-          local luasnip = require("luasnip")
+          local mini_snippets = require("mini.snippets")
           cmp.setup({
           	enabled = function()
-          		local context = require("cmp.config.context")
-          		if vim.api.nvim_get_mode().mode == "c" then
-          			return true
-          		else
-          			return not context.in_treesitter_capture("comment")
-          				and not context.in_syntax_group("Comment")
-          		end
+          		local disabled = false
+          		disabled = disabled
+          			or (vim.api.nvim_get_option_value("buftype", { buf = 0 }) == "prompt")
+          		disabled = disabled or (vim.fn.reg_recording() ~= "")
+          		disabled = disabled or (vim.fn.reg_executing() ~= "")
+          		disabled = disabled
+          			or require("cmp.config.context").in_treesitter_capture("comment")
+          		return not disabled
           	end,
           	snippet = {
           		expand = function(args)
-          			luasnip.lsp_expand(args.body)
+          			local insert = mini_snippets.config.expand.insert
+          				or mini_snippets.default_insert
+          			insert({ body = args.body })
+          			cmp.resubscribe({ "TextChangedI", "TextChangedP" })
+          			require("cmp.config").set_onetime({ sources = {} })
           		end,
           	},
           	window = {
@@ -281,43 +420,17 @@ let
           		documentation = cmp.config.window.bordered(),
           	},
           	mapping = cmp.mapping.preset.insert({
-          		["<C-s>"] = cmp.mapping.scroll_docs(-4),
-          		["<C-a>"] = cmp.mapping.scroll_docs(4),
-          		["<C-f>"] = cmp.mapping.complete(),
+          		["<C-j>"] = cmp.mapping.select_next_item(),
+          		["<C-k>"] = cmp.mapping.select_prev_item(),
+          		["<C-b>"] = cmp.mapping.scroll_docs(-4),
+          		["<C-f>"] = cmp.mapping.scroll_docs(4),
+          		["<C-space>"] = cmp.mapping.complete(),
           		["<C-e>"] = cmp.mapping.abort(),
-          		["<C-y>"] = cmp.mapping(function()
-          			if cmp.visible() then
-          				if luasnip.expandable() then
-          					luasnip.expand()
-          				else
-          					cmp.confirm({ select = true })
-          				end
-          			else
-          				cmp.confirm({ select = true })
-          			end
-          		end),
-          		["<C-j>"] = cmp.mapping(function(fallback)
-          			if cmp.visible() then
-          				cmp.select_next_item()
-          			elseif luasnip.locally_jumpable(1) then
-          				luasnip.jump(1)
-          			else
-          				fallback()
-          			end
-          		end, { "i", "s" }),
-          		["<C-k>"] = cmp.mapping(function(fallback)
-          			if cmp.visible() then
-          				cmp.select_prev_item()
-          			elseif luasnip.locally_jumpable(-1) then
-          				luasnip.jump(-1)
-          			else
-          				fallback()
-          			end
-          		end, { "i", "s" }),
+          		["<C-y>"] = cmp.mapping.confirm({ select = true }),
           	}),
           	sources = cmp.config.sources({
           		{ name = "nvim_lsp" },
-          		{ name = "luasnip" },
+          		{ name = "mini_snippets" },
           	}, {
           		{ name = "buffer" },
           	}),
@@ -342,8 +455,6 @@ let
           	}),
           	matching = { disallow_symbol_nonprefix_matching = false },
           })
-          local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-          cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
         '';
     };
     nvim-lspconfig =
@@ -363,6 +474,9 @@ let
             	vim.lsp.config(server, config)
             	vim.lsp.enable(server)
             end
+            vim.lsp.config("*", {
+            	capabilities = require("cmp_nvim_lsp").default_capabilities(),
+            })
             config_and_enable("pyright", {
             	cmd = { [[${lib.getExe' pkgs.pyright "pyright-langserver"}, "--stdio"]] },
             })

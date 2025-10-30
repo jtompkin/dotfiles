@@ -102,7 +102,10 @@
         system: pkgs: {
           default = pkgs.mkShell {
             name = "dotfiles";
-            packages = [ agenix.packages.${system}.default ];
+            packages = [
+              agenix.packages.${system}.default
+              pkgs.stylua
+            ];
           };
         }
       );

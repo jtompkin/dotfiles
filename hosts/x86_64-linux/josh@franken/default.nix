@@ -13,6 +13,7 @@
         meantToFly.enable = true;
         zim.enable = true;
         neovim.plugins.plugins.render-markdown-nvim.enable = true;
+        neovim.dist = "mini";
       };
       themes.dark.enable = true;
     };

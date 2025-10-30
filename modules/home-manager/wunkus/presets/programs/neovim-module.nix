@@ -12,7 +12,16 @@ in
   imports = [ ./neovim/plugins ];
   options.wunkus.presets.programs.neovim = {
     enable = lib.mkEnableOption "Neovim preset configuration";
-    minimal = lib.mkEnableOption "building neovim with all plugins (false) or just basic configuration (true)";
+    dist = lib.mkOption {
+      type = lib.types.nullOr (
+        lib.types.enum [
+          "mini"
+          "oldschool"
+        ]
+      );
+      default = null;
+      description = "Name of preset set of plugins to enable";
+    };
     nixConfigDir = lib.mkOption {
       type = lib.types.str;
       default = "${config.home.homeDirectory or ""}/dotfiles";
@@ -35,25 +44,41 @@ in
           };
         };
       };
-      plugins = {
-        cellular-automaton-nvim.enable = mkDefault true;
-        conform-nvim.enable = mkDefault true;
-        fzf-lua.enable = mkDefault true;
-        harpoon2.enable = mkDefault true;
-        lualine-nvim.enable = mkDefault true;
-        neogit.enable = mkDefault true;
-        neogen.enable = mkDefault true;
-        nightfox-nvim.enable = mkDefault true;
-        nvim-autopairs.enable = mkDefault true;
-        nvim-cmp.enable = mkDefault true;
-        nvim-lspconfig = {
-          enable = mkDefault true;
-          extraData = { inherit (cfg) nixConfigDir; };
-        };
-        nvim-surround.enable = mkDefault true;
-        nvim-treesitter.enable = mkDefault true;
-        which-key-nvim.enable = mkDefault true;
-      };
+      plugins = lib.mkMerge [
+        {
+          cellular-automaton-nvim.enable = mkDefault true;
+          conform-nvim.enable = mkDefault true;
+          neogit.enable = mkDefault true;
+          nightfox-nvim.enable = mkDefault true;
+          nvim-treesitter.enable = mkDefault true;
+          nvim-lspconfig = {
+            enable = mkDefault true;
+            extraData = { inherit (cfg) nixConfigDir; };
+          };
+          mini-snippets.enable = mkDefault true;
+          nvim-cmp.enable = mkDefault true;
+        }
+        (lib.mkIf (cfg.dist == "mini") {
+          mini-clue.enable = mkDefault true;
+          mini-pick.enable = mkDefault true;
+          mini-diff.enable = mkDefault true;
+          mini-git.enable = mkDefault true;
+          mini-icons.enable = mkDefault true;
+          mini-notify.enable = mkDefault true;
+          mini-pairs.enable = mkDefault true;
+          mini-statusline.enable = mkDefault true;
+          mini-surround.enable = mkDefault true;
+        })
+        (lib.mkIf (cfg.dist == "oldschool") {
+          fzf-lua.enable = mkDefault true;
+          harpoon2.enable = mkDefault true;
+          lualine-nvim.enable = mkDefault true;
+          neogen.enable = mkDefault true;
+          nvim-autopairs.enable = mkDefault true;
+          nvim-surround.enable = mkDefault true;
+          which-key-nvim.enable = mkDefault true;
+        })
+      ];
     };
     programs.neovim = {
       enable = mkDefault true;

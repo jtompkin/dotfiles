@@ -75,7 +75,7 @@ autocmd("LspAttach", {
 			vim.lsp.buf.rename()
 		end, opts({ desc = "Rename object in scope." }))
 
-		vim.keymap.set({ "n", "i" }, "<C-h>", function()
+		vim.keymap.set({ "n", "i" }, "<C-g>", function()
 			vim.lsp.buf.signature_help()
 		end, opts({ desc = "Show signature help." }))
 
