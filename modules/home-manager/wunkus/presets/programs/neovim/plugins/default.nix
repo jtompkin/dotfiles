@@ -299,7 +299,16 @@ let
     mini-surround = {
       config = # lua
         ''
-          require("mini.surround").setup({})
+          require("mini.surround").setup({
+          	mappings = {
+          		add = "gsa",
+          		delete = "gsd",
+          		find = "gsf",
+          		find_left = "gsF",
+          		highlight = "gsh",
+          		replace = "gsr",
+          	},
+          })
         '';
     };
     neogen = {
@@ -483,12 +492,14 @@ let
             	capabilities = require("cmp_nvim_lsp").default_capabilities(),
             })
             vim.lsp.enable("just")
-            config_and_enable("pyright", {
-            	cmd = { [[${lib.getExe' pkgs.pyright "pyright-langserver"}, "--stdio"]] },
-            })
-            config_and_enable("gopls", {
-            	cmd = { [[${lib.getExe pkgs.gopls}]] },
-            })
+            vim.lsp.enable("pyright")
+            -- config_and_enable("pyright", {
+            -- 	cmd = { [[${lib.getExe' pkgs.pyright "pyright-langserver"}, "--stdio"]] },
+            -- })
+            vim.lsp.enable("gopls")
+            -- config_and_enable("gopls", {
+            -- 	cmd = { [[${lib.getExe pkgs.gopls}]] },
+            -- })
             config_and_enable("nixd", {
             	cmd = { [[${lib.getExe pkgs.nixd}]] },
             	settings = {
