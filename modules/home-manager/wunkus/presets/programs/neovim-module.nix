@@ -90,7 +90,9 @@ in
           vim.g.mapleader = " "
           vim.g.maplocalleader = "\\"
         '')
-        (lib.concatMapStrings lib.readFile (config.lib.dotfiles.listLuaFiles ./data/neovim/config))
+        (lib.concatMapStrings (
+          f: "-- START: ${baseNameOf f}\n" + lib.readFile f + "-- END: ${baseNameOf f}\n"
+        ) (config.lib.dotfiles.listLuaFiles ./data/neovim/config))
       ];
     };
     xdg = {
