@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 let
@@ -17,5 +18,6 @@ in
       interop.includePath = mkDefault false;
     };
     services.openssh.enable = mkDefault true;
+    environment.systemPackages = [ pkgs.wl-clipboard ];
   };
 }
