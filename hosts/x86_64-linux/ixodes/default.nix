@@ -1,6 +1,8 @@
 {
   networking.hostName = "ixodes";
+  # Set by secure module once enabled after install
   boot.initrd.systemd.enable = true;
+  # Fix user password after install
   users.mutableUsers = true;
   users.users."josh".hashedPasswordFile = null;
   users.users."josh".initialPassword = "ds";
@@ -11,8 +13,16 @@
     };
     profiles = {
       minimal.enable = true;
-      ephemeral.enable = true;
+      ephemeral = {
+        enable = true;
+        # Remove once mutableUsers = false
+        extraFiles = [
+          "/etc/passwd"
+          "/etc/group"
+        ];
+      };
       dualBooty.enable = true;
+      # Enable after install
       # secure.enable = true;
       nvidia.enable = true;
       desktop = {
