@@ -65,6 +65,10 @@ in
               if [[ ! -f ''${ZIM_HOME}/init.zsh ]] then
                 source ''${ZIM_HOME}/zimfw.zsh init
               fi
+              if [[ ! -n $(find ''${ZIM_HOME} -type f -mtime -1 -name updated) ]] then
+                source ''${ZIM_HOME}/zimfw.zsh update
+                touch ''${ZIM_HOME}/updated
+              fi
               source ''${ZIM_HOME}/init.zsh
               zmodload -F zsh/terminfo +p:terminfo
               for key ('^[[A' '^P' ''${terminfo[kcuu1]}) bindkey ''${key} history-substring-search-up
