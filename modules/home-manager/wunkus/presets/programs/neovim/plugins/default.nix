@@ -295,13 +295,16 @@ let
     mini-sessions = {
       config = # lua
         ''
-          require("mini.sessions").setup({
-          	autoread = true,
-          })
+          require("mini.sessions").setup({})
           vim.keymap.set("n", "<leader>sw", function()
           	MiniSessions.write(MiniSessions.config.file)
           end, { desc = "Write local session" })
+          vim.keymap.set("n", "<leader>sn", function()
+          	local session = vim.fn.input("Session name: ")
+          	MiniSessions.write(session)
+          end, { desc = "Write new session" })
           vim.keymap.set("n", "<leader>sr", MiniSessions.read, { desc = "Read default session" })
+          vim.keymap.set("n", "<leader>ps", MiniSessions.select, { desc = "Pick sessions" })
         '';
     };
     mini-snippets = {
@@ -316,6 +319,20 @@ let
           	},
           	snippets = {
           		mini_snippets.gen_loader.from_lang(),
+          	},
+          })
+        '';
+    };
+    mini-starter = {
+      config = # lua
+        ''
+          local starter = require("mini.starter")
+          starter.setup({
+          	evaluate_single = true,
+          	items = {
+          		starter.sections.sessions(),
+          		starter.sections.builtin_actions(),
+          		starter.sections.pick(),
           	},
           })
         '';
