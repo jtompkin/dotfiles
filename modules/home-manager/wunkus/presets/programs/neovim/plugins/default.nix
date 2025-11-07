@@ -242,6 +242,12 @@ let
           require("mini.icons").setup({})
         '';
     };
+    mini-jump = {
+      config = # lua
+        ''
+          require("mini.jump").setup({})
+        '';
+    };
     mini-notify = {
       config = # lua
         ''
