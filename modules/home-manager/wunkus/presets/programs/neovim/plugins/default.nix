@@ -314,12 +314,12 @@ let
         ''
           require("mini.surround").setup({
           	mappings = {
-          		add = "gsa",
-          		delete = "gsd",
-          		find = "gsf",
-          		find_left = "gsF",
-          		highlight = "gsh",
-          		replace = "gsr",
+          		add = "<leader>sa",
+          		delete = "<leader>sd",
+          		find = "<leader>sf",
+          		find_left = "<leader>sF",
+          		highlight = "<leader>sh",
+          		replace = "<leader>sr",
           	},
           })
         '';
