@@ -223,6 +223,13 @@ let
           require("mini.diff").setup({})
         '';
     };
+    mini-files = {
+      config = # lua
+        ''
+          require("mini.files").setup({})
+          vim.keymap.set("n", "<leader>pv", MiniFiles.open, { desc = "Open file explorer." })
+        '';
+    };
     mini-git = {
       config = # lua
         ''
