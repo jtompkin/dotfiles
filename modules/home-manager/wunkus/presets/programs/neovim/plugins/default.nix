@@ -263,28 +263,45 @@ let
     mini-pick = {
       config = # lua
         ''
-          local pick = require("mini.pick")
-          pick.setup({
+          require("mini.pick").setup({
           	mappings = {
           		move_down = "<C-j>",
           		move_up = "<C-k>",
           		toggle_preview = "<C-p>",
           	},
           })
-          vim.keymap.set("n", "<leader>pf", pick.builtin.files, { desc = "Pick from files" })
+          vim.keymap.set("n", "<leader>pf", MiniPick.builtin.files, { desc = "Pick from files" })
           vim.keymap.set(
           	"n",
           	"<leader>pg",
-          	pick.builtin.grep_live,
+          	MiniPick.builtin.grep_live,
           	{ desc = "Pick from grep pattern in files" }
           )
           vim.keymap.set("n", "<leader>pw", function()
-          	pick.builtin.grep({ pattern = vim.fn.expand("<cword>") })
+          	MiniPick.builtin.grep({ pattern = vim.fn.expand("<cword>") })
           end, { desc = "Pick from grep cword in files" })
           vim.keymap.set("n", "<leader>pW", function()
-          	pick.builtin.grep({ pattern = vim.fn.expand("<cWORD>") })
+          	MiniPick.builtin.grep({ pattern = vim.fn.expand("<cWORD>") })
           end, { desc = "Pick from grep cWORD in files" })
-          vim.keymap.set("n", "<leader>ph", pick.builtin.help, { desc = "Pick from help" })
+          vim.keymap.set("n", "<leader>ph", MiniPick.builtin.help, { desc = "Pick from help" })
+          vim.keymap.set(
+          	"n",
+          	"<leader>pr",
+          	MiniPick.builtin.resume,
+          	{ desc = "Resume last picker" }
+          )
+        '';
+    };
+    mini-sessions = {
+      config = # lua
+        ''
+          require("mini.sessions").setup({
+          	autoread = true,
+          })
+          vim.keymap.set("n", "<leader>sw", function()
+          	MiniSessions.write(MiniSessions.config.file)
+          end, { desc = "Write local session" })
+          vim.keymap.set("n", "<leader>sr", MiniSessions.read, { desc = "Read default session" })
         '';
     };
     mini-snippets = {
@@ -314,12 +331,12 @@ let
         ''
           require("mini.surround").setup({
           	mappings = {
-          		add = "<leader>sa",
-          		delete = "<leader>sd",
-          		find = "<leader>sf",
-          		find_left = "<leader>sF",
-          		highlight = "<leader>sh",
-          		replace = "<leader>sr",
+          		add = "<leader>ra",
+          		delete = "<leader>rd",
+          		find = "<leader>rf",
+          		find_left = "<leader>rF",
+          		highlight = "<leader>rh",
+          		replace = "<leader>rr",
           	},
           })
         '';
@@ -605,7 +622,7 @@ let
           render_markdown.setup({})
           vim.keymap.set(
           	"n",
-          	"<leader>rp",
+          	"<leader>mp",
           	render_markdown.preview,
           	{ desc = "Render markdown preview" }
           )

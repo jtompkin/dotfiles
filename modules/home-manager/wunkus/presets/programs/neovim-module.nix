@@ -64,6 +64,7 @@ in
           mini-diff.enable = mkDefault true;
           mini-files.enable = mkDefault true;
           mini-git.enable = mkDefault true;
+          mini-sessions.enable = mkDefault true;
           mini-icons.enable = mkDefault true;
           mini-jump.enable = mkDefault true;
           mini-notify.enable = mkDefault true;
