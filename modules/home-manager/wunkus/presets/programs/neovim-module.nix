@@ -62,8 +62,10 @@ in
           mini-clue.enable = mkDefault true;
           mini-pick.enable = mkDefault true;
           mini-diff.enable = mkDefault true;
+          mini-files.enable = mkDefault true;
           mini-git.enable = mkDefault true;
           mini-icons.enable = mkDefault true;
+          mini-jump.enable = mkDefault true;
           mini-notify.enable = mkDefault true;
           mini-pairs.enable = mkDefault true;
           mini-statusline.enable = mkDefault true;
