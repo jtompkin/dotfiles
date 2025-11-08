@@ -17,10 +17,11 @@ in
         lib.types.enum [
           "mini"
           "oldschool"
+          "none"
         ]
       );
       default = null;
-      description = "Name of preset set of plugins to enable";
+      description = "Name of preset set of plugins to enable. `none` will not enable any plugins by default";
     };
     nixConfigDir = lib.mkOption {
       type = lib.types.str;
@@ -33,19 +34,9 @@ in
       enable = mkDefault true;
       pluginMapping = {
         nvim-treesitter = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
-        # TODO: remove once version is updated in Nixpkgs to one that has preview function
-        render-markdown-nvim = pkgs.vimPlugins.render-markdown-nvim.overrideAttrs {
-          version = "475d3ad8cae486b0df6fc6050cf5b5ea1de42db8";
-          src = pkgs.fetchFromGitHub {
-            owner = "MeanderingProgrammer";
-            repo = "render-markdown.nvim";
-            rev = "475d3ad8cae486b0df6fc6050cf5b5ea1de42db8";
-            sha256 = "sha256-BXOBnDVH6e4MUvod5bYvaP9e+TU6UJzDNqNL64tVaAw=";
-          };
-        };
       };
       plugins = lib.mkMerge [
-        {
+        (lib.mkIf (cfg.dist != "none") {
           cellular-automaton-nvim.enable = mkDefault true;
           conform-nvim.enable = mkDefault true;
           neogit.enable = mkDefault true;
@@ -57,7 +48,9 @@ in
           };
           mini-snippets.enable = mkDefault true;
           nvim-cmp.enable = mkDefault true;
-        }
+          render-markdown-nvim.enable = mkDefault true;
+          markdown-preview-nvim.enable = mkDefault true;
+        })
         (lib.mkIf (cfg.dist == "mini") {
           mini-clue.enable = mkDefault true;
           mini-pick.enable = mkDefault true;

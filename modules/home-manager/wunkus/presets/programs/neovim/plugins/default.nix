@@ -45,7 +45,14 @@ let
           	format_on_save = { timeout_ms = 500 },
           })
           vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
-          vim.keymap.set("", "<leader>f", function()
+          vim.keymap.set("n", "<leader>fe", function()
+          	if vim.o.formatexpr == "" then
+          		vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+          	else
+          		vim.o.formatexpr = ""
+          	end
+          end, { desc = "Toggle using conform to format" })
+          vim.keymap.set("", "<leader>ff", function()
           	require("conform").format({ async = true }, function(err)
           		if not err then
           			local mode = vim.api.nvim_get_mode().mode
@@ -217,12 +224,7 @@ let
           })
         '';
     };
-    mini-diff = {
-      config = # lua
-        ''
-          require("mini.diff").setup({})
-        '';
-    };
+    mini-diff.config = ''require("mini.diff").setup({})'' + "\n";
     mini-files = {
       config = # lua
         ''
@@ -230,36 +232,11 @@ let
           vim.keymap.set("n", "<leader>pv", MiniFiles.open, { desc = "Open file explorer." })
         '';
     };
-    mini-git = {
-      config = # lua
-        ''
-          require("mini.git").setup({})
-        '';
-    };
-    mini-icons = {
-      config = # lua
-        ''
-          require("mini.icons").setup({})
-        '';
-    };
-    mini-jump = {
-      config = # lua
-        ''
-          require("mini.jump").setup({})
-        '';
-    };
-    mini-notify = {
-      config = # lua
-        ''
-          require("mini.notify").setup({})
-        '';
-    };
-    mini-pairs = {
-      config = # lua
-        ''
-          require("mini.pairs").setup({})
-        '';
-    };
+    mini-git.config = ''require("mini.git").setup({})'' + "\n";
+    mini-icons.config = ''require("mini.icons").setup({})'' + "\n";
+    mini-jump.config = ''require("mini.jump").setup({})'' + "\n";
+    mini-notify.config = ''require("mini.notify").setup({})'' + "\n";
+    mini-pairs.config = ''require("mini.pairs").setup({})'' + "\n";
     mini-pick = {
       config = # lua
         ''
@@ -337,12 +314,7 @@ let
           })
         '';
     };
-    mini-statusline = {
-      config = # lua
-        ''
-          require("mini.statusline").setup({})
-        '';
-    };
+    mini-statusline.config = ''require("mini.statusline").setup({})'' + "\n";
     mini-surround = {
       config = # lua
         ''
@@ -420,18 +392,14 @@ let
           vim.cmd.highlight("Normal guibg=none")
         '';
     };
-    nvim-autopairs = {
-      config = # lua
-        ''
-          require("nvim-autopairs").setup({})
-        '';
-    };
+    nvim-autopairs.config = ''require("nvim-autopairs").setup({})'' + "\n";
     nvim-cmp = {
       dependencies = with pkgs.vimPlugins; [
         cmp-nvim-lsp
         cmp-buffer
         cmp-path
         cmp-cmdline
+        # TODO: Remove if https://github.com/abeldekat/cmp-mini-snippets is added to nixpkgs
         (pkgs.callPackage (
           {
             fetchFromGitHub,
@@ -440,7 +408,7 @@ let
           }:
           vimUtils.buildVimPlugin {
             pname = "cmp-mini-snippets";
-            version = "main";
+            version = "2025-01-26";
             src = fetchFromGitHub {
               owner = "abeldekat";
               repo = "cmp-mini-snippets";
@@ -540,13 +508,7 @@ let
             })
             vim.lsp.enable("just")
             vim.lsp.enable("pyright")
-            -- config_and_enable("pyright", {
-            -- 	cmd = { [[${lib.getExe' pkgs.pyright "pyright-langserver"}, "--stdio"]] },
-            -- })
             vim.lsp.enable("gopls")
-            -- config_and_enable("gopls", {
-            -- 	cmd = { [[${lib.getExe pkgs.gopls}]] },
-            -- })
             config_and_enable("nixd", {
             	cmd = { [[${lib.getExe pkgs.nixd}]] },
             	settings = {
@@ -562,8 +524,8 @@ let
             		},
             	},
             })
+            -- From: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#lua_ls
             config_and_enable("lua_ls", {
-            	cmd = { [[${lib.getExe pkgs.lua-language-server}]] },
             	on_init = function(client)
             		if client.workspace_folders then
             			local path = client.workspace_folders[1].name
@@ -577,37 +539,20 @@ let
             				return
             			end
             		end
-
             		client.config.settings.Lua =
             			vim.tbl_deep_extend("force", client.config.settings.Lua, {
             				runtime = {
-            					-- Tell the language server which version of Lua you're using (most
-            					-- likely LuaJIT in the case of Neovim)
             					version = "LuaJIT",
-            					-- Tell the language server how to find Lua modules same way as Neovim
-            					-- (see `:h lua-module-load`)
             					path = {
             						"lua/?.lua",
             						"lua/?/init.lua",
             					},
             				},
-            				-- Make the server aware of Neovim runtime files
             				workspace = {
             					checkThirdParty = false,
             					library = {
             						vim.env.VIMRUNTIME,
-            						-- Depending on the usage, you might want to add additional paths
-            						-- here.
-            						-- "''${3rd}/luv/library"
-            						-- "''${3rd}/busted/library"
             					},
-            					-- Or pull in all of 'runtimepath'.
-            					-- NOTE: this is a lot slower and will cause issues when working on
-            					-- your own configuration.
-            					-- See https://github.com/neovim/nvim-lspconfig/issues/3189
-            					-- library = {
-            					--   vim.api.nvim_get_runtime_file("", true),
-            					-- }
             				},
             			})
             	end,
@@ -617,12 +562,7 @@ let
             })
           '';
       };
-    nvim-surround = {
-      config = # lua
-        ''
-          require("nvim-surround").setup({})
-        '';
-    };
+    nvim-surround.config = ''require("nvim-surround").setup({})'' + "\n";
     nvim-treesitter = {
       config = # lua
         ''

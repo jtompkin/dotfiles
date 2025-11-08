@@ -105,6 +105,7 @@
             packages = [
               agenix.packages.${system}.default
               pkgs.stylua
+              pkgs.lua-language-server
             ];
           };
         }
