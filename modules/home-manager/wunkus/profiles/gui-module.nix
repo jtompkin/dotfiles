@@ -28,12 +28,13 @@ in
       xsel
       xclip
     ];
-    wunkus.presets.programs.alacritty.enable = mkDefault true;
+    wunkus.presets.programs.kitty.enable = true;
     programs = {
       mpv = {
         enable = mkDefault true;
-        package = mkIf cfg.nixgl.enable (config.lib.nixGL.wrap pkgs.alacritty);
+        package = mkIf cfg.nixgl.enable (config.lib.nixGL.wrap pkgs.mpv);
       };
+      kitty.package = mkIf cfg.nixgl.enable (config.lib.nixGL.wrap pkgs.kitty);
     };
     fonts.fontconfig.enable = mkDefault true;
     nixGL = {

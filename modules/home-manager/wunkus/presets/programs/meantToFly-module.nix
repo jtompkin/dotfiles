@@ -31,6 +31,7 @@ in
           disabled = false;
           style = "bright-cyan";
           symbols = {
+            Linux = " ";
             Windows = "󰨡  ";
             NixOS = "  ";
           };
