@@ -278,7 +278,9 @@ let
           end, { desc = "Write local session" })
           vim.keymap.set("n", "<leader>sn", function()
           	local session = vim.fn.input("Session name: ")
-          	MiniSessions.write(session)
+          	if session ~= "" then
+          		MiniSessions.write(session)
+          	end
           end, { desc = "Write new session" })
           vim.keymap.set("n", "<leader>sr", MiniSessions.read, { desc = "Read default session" })
           vim.keymap.set("n", "<leader>ps", MiniSessions.select, { desc = "Pick sessions" })
