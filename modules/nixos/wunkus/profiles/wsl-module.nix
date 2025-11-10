@@ -12,6 +12,7 @@ in
 {
   options.wunkus.profiles.wsl.enable = lib.mkEnableOption "WSL Linux config";
   config = mkIf cfg.enable {
+    boot.tmp.useTmpfs = true;
     wsl = {
       enable = true;
       defaultUser = mkDefault username;
