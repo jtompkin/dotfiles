@@ -6,6 +6,11 @@
 }:
 let
   inherit (lib) mkDefault;
+  enablePluginList =
+    pluginList:
+    lib.listToAttrs (
+      lib.map (plugin: lib.nameValuePair plugin { enable = lib.mkDefault true; }) pluginList
+    );
   cfg = config.wunkus.presets.programs.neovim;
 in
 {
@@ -36,45 +41,43 @@ in
         nvim-treesitter = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
       };
       plugins = lib.mkMerge [
-        (lib.mkIf (cfg.dist != "none") {
-          cellular-automaton-nvim.enable = mkDefault true;
-          conform-nvim.enable = mkDefault true;
-          neogit.enable = mkDefault true;
-          nightfox-nvim.enable = mkDefault true;
-          nvim-treesitter.enable = mkDefault true;
-          nvim-lspconfig = {
-            enable = mkDefault true;
-            extraData = { inherit (cfg) nixConfigDir; };
-          };
-          mini-snippets.enable = mkDefault true;
-          nvim-cmp.enable = mkDefault true;
-          render-markdown-nvim.enable = mkDefault true;
-          markdown-preview-nvim.enable = mkDefault true;
-        })
-        (lib.mkIf (cfg.dist == "mini") {
-          mini-clue.enable = mkDefault true;
-          mini-pick.enable = mkDefault true;
-          mini-diff.enable = mkDefault true;
-          mini-files.enable = mkDefault true;
-          mini-git.enable = mkDefault true;
-          mini-sessions.enable = mkDefault true;
-          mini-starter.enable = mkDefault true;
-          mini-icons.enable = mkDefault true;
-          mini-jump.enable = mkDefault true;
-          mini-notify.enable = mkDefault true;
-          mini-pairs.enable = mkDefault true;
-          mini-statusline.enable = mkDefault true;
-          mini-surround.enable = mkDefault true;
-        })
-        (lib.mkIf (cfg.dist == "oldschool") {
-          fzf-lua.enable = mkDefault true;
-          harpoon2.enable = mkDefault true;
-          lualine-nvim.enable = mkDefault true;
-          neogen.enable = mkDefault true;
-          nvim-autopairs.enable = mkDefault true;
-          nvim-surround.enable = mkDefault true;
-          which-key-nvim.enable = mkDefault true;
-        })
+        { nvim-lspconfig.extraData = { inherit (cfg) nixConfigDir; }; }
+        (lib.mkIf (cfg.dist != "none") (enablePluginList [
+          "cellular-automaton-nvim"
+          "conform-nvim"
+          "neogit"
+          "nightfox-nvim"
+          "nvim-treesitter"
+          "nvim-lspconfig"
+          "mini-snippets"
+          "nvim-cmp"
+          "render-markdown-nvim"
+          "markdown-preview-nvim"
+        ]))
+        (lib.mkIf (cfg.dist == "mini") (enablePluginList [
+          "mini-clue"
+          "mini-pick"
+          "mini-diff"
+          "mini-files"
+          "mini-git"
+          "mini-sessions"
+          "mini-starter"
+          "mini-icons"
+          "mini-jump"
+          "mini-notify"
+          "mini-pairs"
+          "mini-statusline"
+          "mini-surround"
+        ]))
+        (lib.mkIf (cfg.dist == "oldschool") (enablePluginList [
+          "fzf-lua"
+          "harpoon2"
+          "lualine-nvim"
+          "neogen"
+          "nvim-autopairs"
+          "nvim-surround"
+          "which-key-nvim"
+        ]))
       ];
     };
     programs.neovim = {
