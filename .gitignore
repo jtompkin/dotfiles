@@ -1,3 +1,6 @@
-/test
-.direnv/
+/.direnv/
+/.envrc
+
 Session.vim
+
+/test
