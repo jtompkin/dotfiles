@@ -499,6 +499,7 @@ let
         }")).homeConfigurations."none@completion".options'';
       in
       {
+        order = 1001;
         config = # lua
           ''
             local function config_and_enable(server, config)
@@ -631,6 +632,11 @@ let
           };
           description = "Configuration of plugin including plugin type, package, and config text";
         };
+        order = lib.mkOption {
+          type = lib.types.int;
+          description = "Order to merge this plugin. default = 1000; mkBefore = 500; mkAfter = 1500";
+          default = pluginConfigs.${name}.order or 1000;
+        };
         dependencies = lib.mkOption {
           type = lib.types.listOf lib.types.package;
           description = "List of plugin packages that will be installed along with the plugin";
@@ -665,8 +671,11 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
-    programs.neovim.plugins = lib.concatMap (
-      module: lib.optionals module.enable ([ module.config ] ++ module.dependencies)
-    ) (lib.attrValues cfg.plugins);
+    programs.neovim.plugins = lib.pipe cfg.plugins [
+      lib.attrValues
+      (lib.filter (module: module.enable))
+      (lib.map (module: lib.mkOrder module.order ([ module.config ] ++ module.dependencies)))
+      lib.mkMerge
+    ];
   };
 }
