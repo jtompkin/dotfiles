@@ -493,7 +493,7 @@ let
         # Put these complex expressions in variables so injected Lua formatting works
         nixosExpr = ''(builtins.getFlake ("${
           cfg.plugins.nvim-lspconfig.extraData.nixConfigDir or "github:jtompkin/dotfiles"
-        }")).nixosConfigurations.completions.options'';
+        }")).nixosConfigurations.completion.options'';
         homeManagerExpr = ''(builtins.getFlake ("${
           cfg.plugins.nvim-lspconfig.extraData.nixConfigDir or "github:jtompkin/dotfiles"
         }")).homeConfigurations."none@completion".options'';
@@ -506,13 +506,12 @@ let
             	vim.lsp.config(server, config)
             	vim.lsp.enable(server)
             end
-            vim.lsp.config("*", {
-            	capabilities = require("cmp_nvim_lsp").default_capabilities(),
-            })
-            vim.lsp.enable("just")
-            vim.lsp.enable("pyright")
-            vim.lsp.enable("gopls")
+            local capabilities = require("cmp_nvim_lsp").default_capabilities()
+            config_and_enable("just", { capabilities = capabilities })
+            config_and_enable("pyright", { capabilities = capabilities })
+            config_and_enable("gopls", { capabilities = capabilities })
             config_and_enable("nixd", {
+            	capabilities = capabilities,
             	cmd = { [[${lib.getExe pkgs.nixd}]] },
             	settings = {
             		nixd = {
@@ -529,6 +528,7 @@ let
             })
             -- From: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#lua_ls
             config_and_enable("lua_ls", {
+            	capabilities = capabilities,
             	on_init = function(client)
             		if client.workspace_folders then
             			local path = client.workspace_folders[1].name
