@@ -18,7 +18,7 @@ in
   };
   config = lib.mkIf cfg.enable {
     xdg.cacheFile."zim/zimfw.zsh".source = "${pkgs.zimfw}/zimfw.zsh";
-    home.file."${config.programs.zsh.dotDir}/zimrc" = {
+    home.file."${config.programs.zsh.dotDir}/.zimrc" = {
       text = lib.concatMapStrings (plugin: "zmodule ${plugin}\n") cfg.plugins;
       onChange = "rm ${config.xdg.cacheHome}/zim/init.zsh";
     };
@@ -52,22 +52,29 @@ in
     programs = {
       zsh = {
         enable = mkDefault true;
-        oh-my-zsh.enable = false;
+        oh-my-zsh.enable = lib.mkForce false;
         completionInit = "";
+        defaultKeymap = "viins";
         initContent =
           lib.mkAfter # sh
             ''
               zstyle ':zim:zmodule' use 'degit'
               zstyle ':completion-sync:compinit:experimental:no-caching' enabled true
               zstyle ':completion-sync:compinit:experimental:fast-add' enabled true
-              ZIM_CONFIG_FILE="${config.programs.zsh.dotDir}/zimrc"
+              ZIM_CONFIG_FILE="${config.programs.zsh.dotDir}/.zimrc"
               ZIM_HOME="${config.xdg.cacheHome}/zim"
               if [[ ! -f ''${ZIM_HOME}/init.zsh ]] then
                 source ''${ZIM_HOME}/zimfw.zsh init
               fi
-              if [[ ! -n $(find ''${ZIM_HOME} -type f -mtime -1 -name updated) ]] then
-                source ''${ZIM_HOME}/zimfw.zsh update
-                touch ''${ZIM_HOME}/updated
+              if [[ ! -n $(find ''${ZIM_HOME} -type f -mtime -1 -name .updated) ]] then # last update was more than 1 day ago
+                print $'\E[33m'zimfw: Checking for plugin updates...
+                if [[ -n $(source ''${ZIM_HOME}/zimfw.zsh check) ]] then # updates are available
+                  print $'\E[33m'zimfw: Updating plugins...
+                  source ''${ZIM_HOME}/zimfw.sh update
+                else
+                  print $'\E[32m'zimfw: No updates available ':)'
+                fi
+                touch ''${ZIM_HOME}/.updated
               fi
               source ''${ZIM_HOME}/init.zsh
               zmodload -F zsh/terminfo +p:terminfo
