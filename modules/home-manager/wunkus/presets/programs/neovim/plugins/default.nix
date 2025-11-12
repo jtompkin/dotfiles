@@ -229,7 +229,32 @@ let
       config = # lua
         ''
           require("mini.files").setup({})
-          vim.keymap.set("n", "<leader>pv", MiniFiles.open, { desc = "Open file explorer." })
+          vim.keymap.set("n", "<leader>pV", MiniFiles.open, { desc = "Open file explorer" })
+          vim.keymap.set("n", "<leader>pv", function()
+          	MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
+          	MiniFiles.reveal_cwd()
+          end, { desc = "Open file explorer to current file" })
+          local set_mark = function(id, path, desc)
+          	MiniFiles.set_bookmark(id, path, { desc = desc })
+          end
+          local minifiles_group = vim.api.nvim_create_augroup("minifiles", {})
+          vim.api.nvim_create_autocmd("user", {
+          	group = minifiles_group,
+          	pattern = "MiniFilesBufferCreate",
+          	callback = function(args)
+          		local b = args.data.buf_id
+          		vim.keymap.set("n", "gy", function()
+          			local path = (MiniFiles.get_fs_entry() or {}).path
+          			if path == nil then
+          				return vim.notify("Cursor is not on valid entry")
+          			end
+          			vim.fn.setreg(vim.v.register, path)
+          		end, { buffer = b, desc = "Yank path" })
+          		vim.keymap.set("n", "gX", function()
+          			vim.ui.open(MiniFiles.get_fs_entry().path)
+          		end, { buffer = b, desc = "Open with default OS handler" })
+          	end,
+          })
         '';
     };
     mini-git.config = ''require("mini.git").setup({})'' + "\n";
