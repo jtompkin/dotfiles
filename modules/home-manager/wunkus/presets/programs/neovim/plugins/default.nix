@@ -401,8 +401,6 @@ let
         cmp-buffer
         cmp-path
         cmp-cmdline
-        # TODO: Remove if https://github.com/abeldekat/cmp-mini-snippets is added to nixpkgs
-        config.mornix.programs.vimPlugins.cmp-mini-snippets.package
       ];
       config = # lua
         ''
@@ -443,7 +441,6 @@ let
           	}),
           	sources = cmp.config.sources({
           		{ name = "nvim_lsp" },
-          		{ name = "mini_snippets" },
           	}, {
           		{ name = "buffer" },
           	}),
