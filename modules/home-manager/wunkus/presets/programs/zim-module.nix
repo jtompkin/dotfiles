@@ -70,7 +70,7 @@ in
                 print $'\E[33m'zimfw: Checking for plugin updates...
                 if [[ -n $(source ''${ZIM_HOME}/zimfw.zsh check) ]] then # updates are available
                   print $'\E[33m'zimfw: Updating plugins...
-                  source ''${ZIM_HOME}/zimfw.sh update
+                  source ''${ZIM_HOME}/zimfw.zsh update
                 else
                   print $'\E[32m'zimfw: No updates available ':)'
                 fi
