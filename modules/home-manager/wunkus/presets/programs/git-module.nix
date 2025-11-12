@@ -13,6 +13,11 @@ in
     programs = {
       git = {
         enable = mkDefault true;
+        ignores = [
+          "Session.vim"
+          ".direnv/"
+          ".envrc"
+        ];
         settings = {
           user = {
             name = mkDefault "jtompkin";
