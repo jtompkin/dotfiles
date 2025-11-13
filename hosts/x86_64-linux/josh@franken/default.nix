@@ -12,14 +12,15 @@
       programs = {
         meantToFly.enable = true;
         zim.enable = true;
-        neovim.plugins.plugins.render-markdown-nvim.enable = true;
-        neovim.dist = "mini";
+        neovim = {
+          plugins.plugins.render-markdown-nvim.enable = true;
+          dist = "mini";
+        };
       };
       themes.dark.enable = true;
     };
   };
   programs = {
-    zsh.oh-my-zsh.enable = false;
     oh-my-posh.enable = false;
     git.signing.key = "151220FF9D7FB5F6D029E1B2CD8D2FC234AE5981";
   };

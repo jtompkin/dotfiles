@@ -229,7 +229,32 @@ let
       config = # lua
         ''
           require("mini.files").setup({})
-          vim.keymap.set("n", "<leader>pv", MiniFiles.open, { desc = "Open file explorer." })
+          vim.keymap.set("n", "<leader>pV", MiniFiles.open, { desc = "Open file explorer" })
+          vim.keymap.set("n", "<leader>pv", function()
+          	MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
+          	MiniFiles.reveal_cwd()
+          end, { desc = "Open file explorer to current file" })
+          local set_mark = function(id, path, desc)
+          	MiniFiles.set_bookmark(id, path, { desc = desc })
+          end
+          local minifiles_group = vim.api.nvim_create_augroup("minifiles", {})
+          vim.api.nvim_create_autocmd("user", {
+          	group = minifiles_group,
+          	pattern = "MiniFilesBufferCreate",
+          	callback = function(args)
+          		local b = args.data.buf_id
+          		vim.keymap.set("n", "gy", function()
+          			local path = (MiniFiles.get_fs_entry() or {}).path
+          			if path == nil then
+          				return vim.notify("Cursor is not on valid entry")
+          			end
+          			vim.fn.setreg(vim.v.register, path)
+          		end, { buffer = b, desc = "Yank path" })
+          		vim.keymap.set("n", "gX", function()
+          			vim.ui.open(MiniFiles.get_fs_entry().path)
+          		end, { buffer = b, desc = "Open with default OS handler" })
+          	end,
+          })
         '';
     };
     mini-git.config = ''require("mini.git").setup({})'' + "\n";
@@ -278,7 +303,9 @@ let
           end, { desc = "Write local session" })
           vim.keymap.set("n", "<leader>sn", function()
           	local session = vim.fn.input("Session name: ")
-          	MiniSessions.write(session)
+          	if session ~= "" then
+          		MiniSessions.write(session)
+          	end
           end, { desc = "Write new session" })
           vim.keymap.set("n", "<leader>sr", MiniSessions.read, { desc = "Read default session" })
           vim.keymap.set("n", "<leader>ps", MiniSessions.select, { desc = "Pick sessions" })
@@ -399,26 +426,6 @@ let
         cmp-buffer
         cmp-path
         cmp-cmdline
-        # TODO: Remove if https://github.com/abeldekat/cmp-mini-snippets is added to nixpkgs
-        (pkgs.callPackage (
-          {
-            fetchFromGitHub,
-            vimPlugins,
-            vimUtils,
-          }:
-          vimUtils.buildVimPlugin {
-            pname = "cmp-mini-snippets";
-            version = "2025-01-26";
-            src = fetchFromGitHub {
-              owner = "abeldekat";
-              repo = "cmp-mini-snippets";
-              rev = "582aea215ce2e65b880e0d23585c20863fbb7604";
-              hash = "sha256-gSvhxrjz6PZBgqbb4eBAwWEWSdefM4qL3nb75qGPaFA=";
-            };
-            nativeBuildInputs = [ vimPlugins.nvim-cmp ];
-            meta.homepage = "https://github.com/abeldekat/cmp-mini-snippets";
-          }
-        ) { })
       ];
       config = # lua
         ''
@@ -459,7 +466,6 @@ let
           	}),
           	sources = cmp.config.sources({
           		{ name = "nvim_lsp" },
-          		{ name = "mini_snippets" },
           	}, {
           		{ name = "buffer" },
           	}),
@@ -491,25 +497,25 @@ let
         # Put these complex expressions in variables so injected Lua formatting works
         nixosExpr = ''(builtins.getFlake ("${
           cfg.plugins.nvim-lspconfig.extraData.nixConfigDir or "github:jtompkin/dotfiles"
-        }")).nixosConfigurations.completions.options'';
+        }")).nixosConfigurations.completion.options'';
         homeManagerExpr = ''(builtins.getFlake ("${
           cfg.plugins.nvim-lspconfig.extraData.nixConfigDir or "github:jtompkin/dotfiles"
         }")).homeConfigurations."none@completion".options'';
       in
       {
+        order = 1001;
         config = # lua
           ''
             local function config_and_enable(server, config)
             	vim.lsp.config(server, config)
             	vim.lsp.enable(server)
             end
-            vim.lsp.config("*", {
-            	capabilities = require("cmp_nvim_lsp").default_capabilities(),
-            })
-            vim.lsp.enable("just")
-            vim.lsp.enable("pyright")
-            vim.lsp.enable("gopls")
+            local capabilities = require("cmp_nvim_lsp").default_capabilities()
+            config_and_enable("just", { capabilities = capabilities })
+            config_and_enable("pyright", { capabilities = capabilities })
+            config_and_enable("gopls", { capabilities = capabilities })
             config_and_enable("nixd", {
+            	capabilities = capabilities,
             	cmd = { [[${lib.getExe pkgs.nixd}]] },
             	settings = {
             		nixd = {
@@ -526,6 +532,7 @@ let
             })
             -- From: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#lua_ls
             config_and_enable("lua_ls", {
+            	capabilities = capabilities,
             	on_init = function(client)
             		if client.workspace_folders then
             			local path = client.workspace_folders[1].name
@@ -550,6 +557,7 @@ let
             				},
             				workspace = {
             					checkThirdParty = false,
+            					ignoreDir = { ".direnv" },
             					library = {
             						vim.env.VIMRUNTIME,
             					},
@@ -629,6 +637,11 @@ let
           };
           description = "Configuration of plugin including plugin type, package, and config text";
         };
+        order = lib.mkOption {
+          type = lib.types.int;
+          description = "Order to merge this plugin. default = 1000; mkBefore = 500; mkAfter = 1500";
+          default = pluginConfigs.${name}.order or 1000;
+        };
         dependencies = lib.mkOption {
           type = lib.types.listOf lib.types.package;
           description = "List of plugin packages that will be installed along with the plugin";
@@ -663,8 +676,11 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
-    programs.neovim.plugins = lib.concatMap (
-      module: lib.optionals module.enable ([ module.config ] ++ module.dependencies)
-    ) (lib.attrValues cfg.plugins);
+    programs.neovim.plugins = lib.pipe cfg.plugins [
+      lib.attrValues
+      (lib.filter (module: module.enable))
+      (lib.map (module: lib.mkOrder module.order ([ module.config ] ++ module.dependencies)))
+      lib.mkMerge
+    ];
   };
 }

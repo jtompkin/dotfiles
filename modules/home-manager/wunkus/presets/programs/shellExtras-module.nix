@@ -94,6 +94,15 @@ in
           batwatch
           batpipe
         ];
+        themes = {
+          carbonfox = {
+            src = pkgs.vimPlugins.nightfox-nvim;
+            file = "extra/carbonfox/carbonfox.tmTheme";
+          };
+        };
+        config = {
+          theme = "carbonfox";
+        };
       };
       zsh = lib.mkIf config.programs.zsh.enable {
         shellAliases = lib.mkIf config.programs.bat.enable {

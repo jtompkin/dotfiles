@@ -5,9 +5,7 @@
   ...
 }:
 let
-  inherit (lib)
-    mkDefault
-    ;
+  inherit (lib) mkDefault;
   uwsmExe = lib.getExe pkgs.uwsm;
   launchWithTerminal =
     extaArgs: package: exe:
