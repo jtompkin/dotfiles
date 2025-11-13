@@ -21,6 +21,9 @@ in
           package = mkDefault pkgs.nerd-fonts.iosevka;
           size = mkDefault 16;
         };
+        settings = {
+          enable_audio_bell = "no";
+        };
         # TODO: extaConfig becuase Carbonfox themeFile does not exist in Nix packaged kitty yet!
         # themeFile = "Carbonfox";
         extraConfig = lib.mkOrder 520 ''
