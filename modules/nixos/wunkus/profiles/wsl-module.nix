@@ -23,6 +23,7 @@ in
     environment.systemPackages = [
       pkgs.wl-clipboard
       pkgs.kmod
+      pkgs.systemd
     ];
   };
 }
