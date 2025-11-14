@@ -426,6 +426,7 @@ let
         cmp-buffer
         cmp-path
         cmp-cmdline
+        config.mornix.programs.vimPlugins.cmp-mini-snippets.package
       ];
       config = # lua
         ''
@@ -466,6 +467,7 @@ let
           	}),
           	sources = cmp.config.sources({
           		{ name = "nvim_lsp" },
+          		{ name = "mini_snippets", option = { use_items_cache = false } },
           	}, {
           		{ name = "buffer" },
           	}),
