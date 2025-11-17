@@ -18,6 +18,7 @@ in
       defaultUser = mkDefault username;
       interop.includePath = mkDefault false;
       docker-desktop.enable = mkDefault true;
+      extraBin = [ { src = "/mnt/c/Windows/System32/cmd.exe"; } ];
     };
     services.openssh.enable = mkDefault true;
     environment.systemPackages = [
