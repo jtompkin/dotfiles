@@ -17,7 +17,10 @@ in
       defaultUser = mkDefault config.wunkus.settings.username;
       interop.includePath = mkDefault false;
       docker-desktop.enable = mkDefault true;
-      extraBin = [ { src = "/mnt/c/Windows/System32/cmd.exe"; } ];
+      extraBin = [
+        { src = "/mnt/c/Windows/System32/cmd.exe"; }
+        { src = "/mnt/c/Windows/System32/clip.exe"; }
+      ];
     };
     services.openssh.enable = mkDefault true;
     environment.systemPackages = [
