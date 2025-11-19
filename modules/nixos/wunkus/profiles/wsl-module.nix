@@ -24,7 +24,6 @@ in
     };
     services.openssh.enable = mkDefault true;
     environment.systemPackages = [
-      pkgs.wl-clipboard
       pkgs.kmod
       pkgs.systemd
     ];
