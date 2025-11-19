@@ -21,12 +21,12 @@
   };
   programs = {
     oh-my-posh.enable = false;
-    git.signing.key = "151220FF9D7FB5F6D029E1B2CD8D2FC234AE5981";
+    git.signing.key = "7DF0C6189DB5B71EF73118FFB826F212FE4581A5";
   };
   age = {
     identityPaths = [ "/home/josh/.ssh/id_ed25519" ];
     secrets.pypi-token.file = ../../../secrets/pypi-token.age;
   };
-  services.gpg-agent.sshKeys = [ "842B7A45D05692CB8C7EDBF0694EFA4941BC592B" ];
+  services.gpg-agent.sshKeys = [ "A81E27028CAAA2BB304B86278C44EB1587BA4874" ];
   home.stateVersion = "25.05";
 }
