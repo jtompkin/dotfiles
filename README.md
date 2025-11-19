@@ -23,6 +23,37 @@ helpful here. :)
 - Document nothing.
 - Learn something new every day.
 
+## Layout
+
+All paths are relative from the root of this repository.
+
+### Setup stuff
+
+| File / directory        | Purpose |
+| ----------------------- | ------- |
+| `flake.nix`             | Define Nix system configurations |
+| `lib/default.nix`       | Define Nix functions and constants used in the flake. Also available to all modules through `config.lib.dotfiles`. |
+
+### Modules
+
+Module files must end in `-module.nix` to be automatically imported into system configurations.
+
+| File / directory                       | Purpose |
+| -------------------------------------- | ------- |
+| `modules/`                             | Store modules by configuration type (e.g. NixOS, home-manager). |
+| `modules/*/`                           | Store modules by namespace (e.g. "wunkus", the primary namespace for all custom modules). |
+| `modules/*/*/settings-module.nix`      | Define settings potentially used by all other modules in the namespace. This should not be enableable or change any config. |
+| `modules/home-manager/wunkus/presets`  | Store modules defining preset configurations for individual programs or services. |
+| `modules/home-manager/wunkus/profiles` | Store modules defining overarching configurations that enable and apply broad swaths of good stuff. |
+| `modules/**/data/`                     | Store non-Nix code and arbitrary data files. Should have subdirectories that specify which module the data is used for. |
+| `modules/**/<module_name-"-module">/`  | Store extra Nix code to be used by the matching module but not to be imported by the top-level system configs. |
+
+### Hosts
+
+| File / directory                | Purpose |
+| ------------------------------- | ------- |
+| `hosts/`                        |  |
+
 ## TODO
 
 - Rework module sets to be more clear: difference between presets, profiles, etc. has been muddied.
