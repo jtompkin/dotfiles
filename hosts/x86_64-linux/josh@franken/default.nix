@@ -21,7 +21,8 @@
   };
   programs = {
     oh-my-posh.enable = false;
-    git.signing.key = "151220FF9D7FB5F6D029E1B2CD8D2FC234AE5981";
+    git.signing.key = "1512 20FF 9D7F B5F6 D029  E1B2 CD8D 2FC2 34AE 5981";
+    gpg.settings.default-key = "4749 D691 0BEC 9978 DEE7  F700 ABD5 BA88 1F98 BDF3";
   };
   age = {
     identityPaths = [ "/home/josh/.ssh/id_ed25519" ];
