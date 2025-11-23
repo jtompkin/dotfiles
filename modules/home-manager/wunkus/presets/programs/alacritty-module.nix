@@ -5,8 +5,8 @@
   ...
 }:
 let
-  cfg = config.wunkus.presets.programs.alacritty;
   inherit (lib) mkDefault;
+  cfg = config.wunkus.presets.programs.alacritty;
 in
 {
   options.wunkus.presets.programs.alacritty.enable = lib.mkEnableOption "alacritty preset config";

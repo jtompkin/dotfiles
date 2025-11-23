@@ -26,7 +26,7 @@ in
         ]
       );
       default = null;
-      description = "Name of preset set of plugins to enable. `none` will not enable any plugins by default";
+      description = "Name of preset set of plugins to enable. \"none\" will not enable any plugins by default";
     };
     nixConfigDir = lib.mkOption {
       type = lib.types.str;
