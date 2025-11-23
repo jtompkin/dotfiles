@@ -18,9 +18,7 @@ rec {
       filterHostsFromSystem (negatePredicate (lib.hasInfix "@"))
     );
     homeModules = forAllSystems (system: _: filterHostsFromSystem (lib.hasInfix "@") system);
-    overlays = [
-      inputs.nixgl.overlay
-    ];
+    overlays = [ ];
     pkgsBySystem = forAllSystems (_: pkgs: pkgs);
     formatter = forAllSystems (_: pkgs: pkgs.nixfmt-tree);
   };

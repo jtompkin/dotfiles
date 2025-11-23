@@ -3,8 +3,6 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     # Ephemeral filesystem management
     impermanence.url = "github:nix-community/impermanence";
-    # GUI apps on non-NixOS support
-    nixgl.url = "github:nix-community/nixGL";
     # Secrets management
     agenix = {
       url = "github:ryantm/agenix";

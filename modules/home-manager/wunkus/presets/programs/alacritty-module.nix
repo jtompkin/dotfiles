@@ -19,7 +19,6 @@ in
       alacritty = {
         enable = mkDefault true;
         theme = mkDefault "carbonfox";
-        package = lib.mkIf config.wunkus.profiles.gui.nixgl.enable (config.lib.nixGL.wrap pkgs.alacritty);
         settings = {
           terminal.shell = lib.mkIf config.programs.zsh.enable (lib.getExe pkgs.zsh);
           font = {
