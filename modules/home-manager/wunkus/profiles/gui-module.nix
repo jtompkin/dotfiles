@@ -21,7 +21,13 @@ in
       xclip
     ];
     wunkus.presets.programs.kitty.enable = true;
-    programs.mpv.enable = mkDefault true;
+    programs = {
+      mpv.enable = mkDefault true;
+      zsh.shellAliases = {
+        clipcopy = mkDefault "${lib.getExe pkgs.xclip} -selection clipboard";
+        clippaste = mkDefault "${lib.getExe pkgs.xclip} -selection clipboard -o";
+      };
+    };
     fonts.fontconfig.enable = mkDefault true;
   };
 }

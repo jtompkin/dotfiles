@@ -18,7 +18,6 @@
     };
   };
   programs = {
-    oh-my-posh.enable = false;
     git.signing.key = "151220FF9D7FB5F6D029E1B2CD8D2FC234AE5981";
   };
 
