@@ -1,25 +1,23 @@
 let
-  josh_ixodes = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJDjOc7br/xaws2hbaPgG2ilza/cUoZxmkF4H+sSnBzS";
   josh_franken = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINbmsUpHamS9g+sfhNhsBZ0DU5dO+7XpYMg+oPrMgeot";
+  deck_steamdeck = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILt5cxf21yGBEsSpqHIY/uzZwliBx4itTh9tqbBzXa1c";
   users = [
-    josh_ixodes
     josh_franken
+    deck_steamdeck
   ];
-  ixodes = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBp852Rd5uF1dbsXAV3YlkJp5nNy4K+RlAG7QWAM0VgY";
   franken = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDNHi5giEnLrSrWzuqg9G+lGaUfUq/1TbA1TOzC8Nzs+";
   systems = [
-    ixodes
     franken
   ];
 in
 {
-  "password1.age".publicKeys = [
-    josh_ixodes
-    ixodes
-  ];
-  "pypi-token.age".publicKeys = [
-    josh_franken
-  ];
-  "spotify-client-id-01.age".publicKeys = [ josh_ixodes ];
-  "spotify-secret-01.age".publicKeys = [ josh_ixodes ];
+  "pypi-token.age" = {
+    publicKeys = [
+      josh_franken
+      deck_steamdeck
+    ];
+    armor = true;
+  };
+  # "spotify-client-id-01.age".publicKeys = [ josh_ixodes ];
+  # "spotify-secret-01.age".publicKeys = [ josh_ixodes ];
 }
