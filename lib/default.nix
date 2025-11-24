@@ -113,11 +113,14 @@ rec {
         inputs.walker.homeManagerModules.default
         {
           imports = listModuleFiles ../modules/home-manager;
-          nix.package = const.pkgsBySystem.${system}.nix;
-          nix.settings.experimental-features = [
-            "nix-command"
-            "flakes"
-          ];
+          nix = {
+            package = const.pkgsBySystem.${system}.nix;
+            channels = { inherit (inputs) nixpkgs; };
+            settings.experimental-features = [
+              "nix-command"
+              "flakes"
+            ];
+          };
         }
         module
       ];
