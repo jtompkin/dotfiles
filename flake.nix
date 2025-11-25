@@ -43,11 +43,6 @@
       url = "github:nix-darwin/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Application runner for Wayland - TODO: remove once updated in nixpkgs
-    walker = {
-      url = "github:abenz1267/walker/master";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
   outputs =
     inputs@{

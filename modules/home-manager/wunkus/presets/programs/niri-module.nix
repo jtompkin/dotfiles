@@ -50,7 +50,6 @@ in
         .${cfg.defaultApps.fileManager.name};
       appLauncher.package =
         {
-          walker = config.programs.walker.package;
           anyrun = config.programs.anyrun.package;
           fuzzel = config.programs.fuzzel.package;
         }

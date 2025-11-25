@@ -84,7 +84,6 @@ in
         .${cfg.defaultApps.fileManager.name};
       appLauncher.package =
         {
-          walker = config.programs.walker.package;
           anyrun = config.programs.anyrun.package;
           fuzzel = config.programs.fuzzel.package;
         }
@@ -496,7 +495,6 @@ in
     };
     wunkus.presets.programs = {
       anyrun = mkIf (isDefaultApp "appLauncher" "anyrun") { enable = true; };
-      walker = mkIf (isDefaultApp "appLauncher" "walker") { enable = true; };
       alacritty = mkIf (isDefaultApp "terminal" "alacritty") { enable = true; };
       kitty = mkIf (isDefaultApp "terminal" "kitty") { enable = true; };
       notCone = mkIf (isDefaultApp "videoPlayer" "mpv") { enable = true; };

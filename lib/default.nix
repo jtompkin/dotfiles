@@ -110,7 +110,6 @@ rec {
         inputs.mornix.homeModules.default
         inputs.niri-flake.homeModules.niri
         inputs.self.homeModules.lib
-        inputs.walker.homeManagerModules.default
         {
           imports = listModuleFiles ../modules/home-manager;
           nix = {
@@ -168,7 +167,6 @@ rec {
           ];
           fileManager = [ "thunar" ];
           appLauncher = [
-            "walker"
             "anyrun"
             "fuzzel"
           ];
