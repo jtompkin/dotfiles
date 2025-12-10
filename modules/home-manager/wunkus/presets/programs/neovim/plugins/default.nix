@@ -6,6 +6,7 @@
 }:
 let
   cfg = config.wunkus.presets.programs.neovim.plugins;
+  appendNewline = s: s + "\n";
   pluginConfigs = {
     cellular-automaton-nvim = {
       config = # lua
@@ -218,7 +219,7 @@ let
           })
         '';
     };
-    mini-diff.config = ''require("mini.diff").setup({})'' + "\n";
+    mini-diff.config = appendNewline ''require("mini.diff").setup({})'';
     mini-files = {
       config = # lua
         ''
@@ -251,11 +252,11 @@ let
           })
         '';
     };
-    mini-git.config = ''require("mini.git").setup({})'' + "\n";
-    mini-icons.config = ''require("mini.icons").setup({})'' + "\n";
-    mini-jump.config = ''require("mini.jump").setup({})'' + "\n";
-    mini-notify.config = ''require("mini.notify").setup({})'' + "\n";
-    mini-pairs.config = ''require("mini.pairs").setup({})'' + "\n";
+    mini-git.config = appendNewline ''require("mini.git").setup({})'';
+    mini-icons.config = appendNewline ''require("mini.icons").setup({})'';
+    mini-jump.config = appendNewline ''require("mini.jump").setup({})'';
+    mini-notify.config = appendNewline ''require("mini.notify").setup({})'';
+    mini-pairs.config = appendNewline ''require("mini.pairs").setup({})'';
     mini-pick = {
       config = # lua
         ''
@@ -335,7 +336,7 @@ let
           })
         '';
     };
-    mini-statusline.config = ''require("mini.statusline").setup({})'' + "\n";
+    mini-statusline.config = appendNewline ''require("mini.statusline").setup({})'';
     mini-surround = {
       config = # lua
         ''
@@ -413,7 +414,7 @@ let
           vim.cmd.highlight("Normal guibg=none")
         '';
     };
-    nvim-autopairs.config = ''require("nvim-autopairs").setup({})'' + "\n";
+    nvim-autopairs.config = appendNewline ''require("nvim-autopairs").setup({})'';
     nvim-cmp = {
       dependencies = with pkgs.vimPlugins; [
         cmp-nvim-lsp
@@ -508,7 +509,7 @@ let
             end
             local capabilities = require("cmp_nvim_lsp").default_capabilities()
             config_and_enable("just", { capabilities = capabilities })
-            config_and_enable("pyright", { capabilities = capabilities })
+            config_and_enable("basedpyright", { capabilities = capabilities })
             config_and_enable("gopls", { capabilities = capabilities })
             config_and_enable("nixd", {
             	capabilities = capabilities,
@@ -566,7 +567,7 @@ let
             })
           '';
       };
-    nvim-surround.config = ''require("nvim-surround").setup({})'' + "\n";
+    nvim-surround.config = appendNewline ''require("nvim-surround").setup({})'';
     nvim-treesitter = {
       config = # lua
         ''
