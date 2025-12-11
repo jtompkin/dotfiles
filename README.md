@@ -14,7 +14,7 @@ helpful here. :)
 - Have a single, generic "make configuration" function that works to merge the host file for every host type (NixOS, Home-Manager, Nix-Darwin).
 - Heavily opinionate while maintaining modularity.
 - Use filesystem paths as data.
-- Maximalism is next to Godlinism.
+- Maximalism is next to godliness.
 - More lines of code more gooder.
 - Use as few external flakes as possible.
 - Complexity is beauty.
@@ -38,21 +38,21 @@ All paths are relative from the root of this repository.
 
 Module files must end in `-module.nix` to be automatically imported into system configurations.
 
-| File / directory                       | Purpose |
-| -------------------------------------- | ------- |
-| `modules/`                             | Store modules by configuration type (e.g. NixOS, home-manager). |
-| `modules/*/`                           | Store modules by namespace (e.g. "wunkus", the primary namespace for all custom modules). |
-| `modules/*/*/settings-module.nix`      | Define settings potentially used by all other modules in the namespace. This should not be enableable or change any config. |
-| `modules/home-manager/wunkus/presets`  | Store modules defining preset configurations for individual programs or services. |
-| `modules/home-manager/wunkus/profiles` | Store modules defining overarching configurations that enable and apply broad swaths of good stuff. |
-| `modules/**/data/`                     | Store non-Nix code and arbitrary data files. Should have subdirectories that specify which module the data is used for. |
-| `modules/**/<module_name-"-module">/`  | Store extra Nix code to be used by the matching module but not to be imported by the top-level system configs. |
+| File / directory                        | Purpose |
+| --------------------------------------  | ------- |
+| `modules/`                              | Store modules by configuration type (e.g. NixOS, Home-Manager). |
+| `modules/*/`                            | Store modules by namespace (e.g. "wunkus", the primary namespace for all custom modules). |
+| `modules/*/*/settings-module.nix`       | Define settings potentially used by all other modules in the namespace. This should not be enableable or change any config. |
+| `modules/home-manager/wunkus/presets/`  | Store modules defining preset configurations for individual programs or services. |
+| `modules/home-manager/wunkus/profiles/` | Store modules defining overarching configurations that enable and apply broad swaths of good stuff. |
+| `modules/**/data/`                      | Store non-Nix code and arbitrary data files. Should have subdirectories that specify which module the data is used for. |
+| `modules/**/${module_name}/`            | Store extra Nix code to be used by the matching module but not to be imported by the top-level system configs. |
 
 ### Hosts
 
 | File / directory                | Purpose |
 | ------------------------------- | ------- |
-| `hosts/`                        |  |
+| `hosts/`                        | **In progress** |
 
 ## TODO
 
