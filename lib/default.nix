@@ -22,7 +22,12 @@ rec {
     pkgsBySystem = forAllSystems (_: pkgs: pkgs);
     formatter = forAllSystems (_: pkgs: pkgs.nixfmt-tree);
   };
-
+  /**
+    Args:
+      f <func> : Function that takes two arguments: `system` and `pkgs`
+    Returns:
+      Attribute set that is the result of applying `f` to every `system` in `allSystems`
+  */
   forAllSystems =
     f:
     lib.genAttrs const.allSystems (

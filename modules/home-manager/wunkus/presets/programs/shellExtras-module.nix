@@ -12,6 +12,7 @@ in
   options.wunkus.presets.programs.shellExtras.enable =
     lib.mkEnableOption "oh-my-posh, direnv, zoxide, bat, fzf, fd, ripgrep configuration";
   config = lib.mkIf cfg.enable {
+    mornix.programs.nix-search-cli.enable = mkDefault true;
     programs = {
       oh-my-posh = {
         enable = mkDefault true;
