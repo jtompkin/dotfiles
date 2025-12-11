@@ -15,3 +15,4 @@ vim.keymap.set(
 
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "Yank into clipboard." })
 vim.keymap.set("n", "<leader>Y", [["+Y]], { desc = "Yank into clipboard." })
+vim.keymap.set("n", "<leader>c", ":!", { desc = "Begin shell command input." })

@@ -32,12 +32,13 @@ let
           		},
           	},
           	formatters_by_ft = {
-          		lua = { "stylua" },
-          		nix = { "nixfmt", "injected" },
-          		python = { "ruff_format", "black", stop_after_first = true },
           		go = { "gofmt" },
           		just = { "just", "injected" },
+          		lua = { "stylua" },
           		markdown = { "injected", "trim_whitespace" },
+          		nix = { "nixfmt", "injected" },
+          		python = { "ruff_format", "black", stop_after_first = true },
+          		toml = { "tombi" },
           		["_"] = { "trim_whitespace" },
           	},
           	default_format_opts = {
@@ -511,6 +512,7 @@ let
             config_and_enable("just", { capabilities = capabilities })
             config_and_enable("basedpyright", { capabilities = capabilities })
             config_and_enable("gopls", { capabilities = capabilities })
+            config_and_enable("tombi", { capabilities = capabilities })
             config_and_enable("nixd", {
             	capabilities = capabilities,
             	cmd = { [[${lib.getExe pkgs.nixd}]] },
