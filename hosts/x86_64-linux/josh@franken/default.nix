@@ -11,7 +11,10 @@
     presets = {
       programs = {
         meantToFly.enable = true;
-        zim.enable = true;
+        zim = {
+          enable = true;
+          wslClip = true;
+        };
         neovim = {
           dist = "mini";
         };

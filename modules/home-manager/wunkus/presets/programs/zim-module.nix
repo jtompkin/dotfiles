@@ -11,6 +11,7 @@ in
 {
   options.wunkus.presets.programs.zim = {
     enable = lib.mkEnableOption "Zim Zsh configuration manager prest config";
+    wslClip = lib.mkEnableOption "WSL clipboard support for zsh-vi-mode";
     plugins = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ ];
@@ -24,11 +25,19 @@ in
         onChange = "rm ${config.xdg.cacheHome}/zim/init.zsh";
       };
       sessionVariables =
-        # zsh-vi-mode does not play nice with other plugin bindings without these set
-        lib.mkIf (lib.elem "jeffreytse/zsh-vi-mode" config.wunkus.presets.programs.zim.plugins) {
-          ZVM_LAZY_KEYBINDINGS = "false";
-          ZVM_INIT_MODE = "sourcing";
-        };
+        # zsh-vi-mode does not play nice with other plugin bindings without the fist two set
+        lib.mkIf (lib.elem "jeffreytse/zsh-vi-mode" config.wunkus.presets.programs.zim.plugins) (
+          {
+            ZVM_LAZY_KEYBINDINGS = "false";
+            ZVM_INIT_MODE = "sourcing";
+            ZVM_VI_SURROUND_BINDKEY = "s-prefix";
+            ZVM_SYSTEM_CLIPBOARD_ENABLED = "true";
+          }
+          // lib.optionalAttrs cfg.wslClip {
+            ZVM_CLIPBOARD_COPY_CMD = "clip.exe";
+            ZVM_CLIPBOARD_PASTE_CMD = "pwsh.exe -NoProfile -Command Get-Clipboard";
+          }
+        );
     };
     wunkus.presets.programs.zim.plugins = lib.mkMerge [
       (lib.mkBefore [

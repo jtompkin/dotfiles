@@ -19,6 +19,7 @@ in
       docker-desktop.enable = mkDefault true;
       extraBin = [
         { src = "/mnt/c/Windows/System32/cmd.exe"; }
+        { src = "/mnt/c/Program Files/PowerShell/7/pwsh.exe"; }
         { src = "/mnt/c/Windows/System32/clip.exe"; }
       ];
     };

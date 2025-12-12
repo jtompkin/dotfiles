@@ -602,7 +602,7 @@ let
         '';
     };
   };
-  pluginConfigType = lib.types.submodule {
+  pluginConfigType = {
     options = {
       type = lib.mkOption {
         type = lib.types.enum [ "lua" ];
@@ -619,13 +619,13 @@ let
       };
     };
   };
-  pluginType = lib.types.submodule (
+  pluginType =
     { config, name, ... }:
     {
       options = {
         enable = lib.mkEnableOption "${name} Neovim plugin";
         config = lib.mkOption {
-          type = pluginConfigType;
+          type = lib.types.submodule pluginConfigType;
           default = {
             plugin = cfg.pluginMapping.${name} or pkgs.vimPlugins.${name};
             config =
@@ -657,8 +657,7 @@ let
           default = { };
         };
       };
-    }
-  );
+    };
 in
 {
   options.wunkus.presets.programs.neovim.plugins = {
@@ -669,7 +668,7 @@ in
       default = { };
     };
     plugins = lib.mkOption {
-      type = lib.types.attrsOf pluginType;
+      type = lib.types.attrsOf (lib.types.submodule pluginType);
       description = "Attribute set of plugin names to their configuration";
       default = { };
     };
