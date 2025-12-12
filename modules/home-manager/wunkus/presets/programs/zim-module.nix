@@ -18,9 +18,17 @@ in
   };
   config = lib.mkIf cfg.enable {
     xdg.cacheFile."zim/zimfw.zsh".source = "${pkgs.zimfw}/zimfw.zsh";
-    home.file."${config.programs.zsh.dotDir}/.zimrc" = {
-      text = lib.concatMapStrings (plugin: "zmodule ${plugin}\n") cfg.plugins;
-      onChange = "rm ${config.xdg.cacheHome}/zim/init.zsh";
+    home = {
+      file."${config.programs.zsh.dotDir}/.zimrc" = {
+        text = lib.concatMapStrings (plugin: "zmodule ${plugin}\n") cfg.plugins;
+        onChange = "rm ${config.xdg.cacheHome}/zim/init.zsh";
+      };
+      sessionVariables =
+        # zsh-vi-mode does not play nice with other plugin bindings without these set
+        lib.mkIf (lib.elem "jeffreytse/zsh-vi-mode" config.wunkus.presets.programs.zim.plugins) {
+          ZVM_LAZY_KEYBINDINGS = "false";
+          ZVM_INIT_MODE = "sourcing";
+        };
     };
     wunkus.presets.programs.zim.plugins = lib.mkMerge [
       (lib.mkBefore [
@@ -78,10 +86,12 @@ in
               fi
               source ''${ZIM_HOME}/init.zsh
               zmodload -F zsh/terminfo +p:terminfo
-              for key ('^[[A' '^P' ''${terminfo[kcuu1]}) bindkey ''${key} history-substring-search-up
-              for key ('^[[B' '^N' ''${terminfo[kcud1]}) bindkey ''${key} history-substring-search-down
-              for key ('k') bindkey -M vicmd ''${key} history-substring-search-up
-              for key ('j') bindkey -M vicmd ''${key} history-substring-search-down
+
+              bindkey '^K' history-substring-search-up
+              bindkey '^J' history-substring-search-down
+              bindkey -M vicmd 'k' history-substring-search-up
+              bindkey -M vicmd 'j' history-substring-search-down
+              bindkey '^L' vi-forward-char
             '';
       };
       zoxide.enableZshIntegration = false;

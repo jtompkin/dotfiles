@@ -131,7 +131,6 @@ in
       };
       fzf = {
         enable = mkDefault true;
-        changeDirWidgetCommand = mkDefault "";
       };
       eza = {
         enable = true;
