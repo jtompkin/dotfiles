@@ -76,6 +76,7 @@ in
           lib.mkAfter # sh
             ''
               zstyle ':zim:zmodule' use 'degit'
+              zstyle ':zim' disable-version-check yes
               zstyle ':completion-sync:compinit:experimental:no-caching' enabled true
               zstyle ':completion-sync:compinit:experimental:fast-add' enabled true
               ZIM_CONFIG_FILE="${config.programs.zsh.dotDir}/.zimrc"
