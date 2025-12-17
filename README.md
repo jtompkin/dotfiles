@@ -18,7 +18,7 @@ helpful here. :)
 - More lines of code more gooder.
 - Use as few external flakes as possible.
 - Complexity is beauty.
-- No LLMs (gross) allowed.
+- No stochastic hallucination machines allowed.
 - Wunkify everything.
 - Document nothing.
 - Learn something new every day.
