@@ -6,13 +6,8 @@
 }:
 let
   inherit (lib) mkDefault;
+  inherit (config.mornix.programs) zshPlugins;
   cfg = config.wunkus.presets.programs.zshDiy;
-  zimfw-completion = pkgs.fetchFromGitHub {
-    owner = "zimfw";
-    repo = "completion";
-    rev = "efc94ced311dd181835ccfd3f08ecb422c8465b2";
-    hash = "sha256-8V3c3lFEyfJZuWNifMY+6Lw4qCXtBsX4I6ClLlCivSE=";
-  };
 in
 {
   options.wunkus.presets.programs.zshDiy = {
@@ -62,14 +57,14 @@ in
               g = "git";
               "git a" = "git add";
               "git b" = "git branch";
-              "git b x" = "git branch --delete";
-              "git b X" = "git branch -D";
+              "git branch x" = "git branch --delete";
+              "git branch X" = "git branch -D";
               "git c" = "git commit";
-              "git c m" = "git commit --message";
-              "git co" = "git checkout";
+              "git commit m" = "git commit --message";
+              "git o" = "git checkout";
               "git w" = "git status";
               "git y" = "git switch";
-              "git y c" = "git switch create";
+              "git switch c" = "git switch --create";
             }
           ];
         };
@@ -98,33 +93,15 @@ in
             }
             {
               name = "zimfw-environment";
-              file = "init.zsh";
-              src = pkgs.fetchFromGitHub {
-                owner = "zimfw";
-                repo = "environment";
-                rev = "d4bceaa3da89cd819843334dba1a5bf7dc137e14";
-                hash = "sha256-B8Cki4uCcSce0xewZ91P9wCpA5+x/AlT1IwC+HVs6OI=";
-              };
+              src = zshPlugins.zimfw-environment.package;
             }
             {
               name = "zimfw-input";
-              file = "init.zsh";
-              src = pkgs.fetchFromGitHub {
-                owner = "zimfw";
-                repo = "input";
-                rev = "da6b1cccac5e56104088acc2d66e181f3317192a";
-                hash = "sha256-QWyQpOxU3+P2+EGTkzt9HdEwhVnBa3yPwv7JA2o5YIQ=";
-              };
+              src = zshPlugins.zimfw-input.package;
             }
             {
               name = "zimfw-termtitle";
-              file = "init.zsh";
-              src = pkgs.fetchFromGitHub {
-                owner = "zimfw";
-                repo = "termtitle";
-                rev = "96aff3e49bc0c8665b20226b06517a8ee7452914";
-                hash = "sha256-OQEIL12nqruTZzWGMv7p2Lx1EADOv2dr71xAE2aHww4=";
-              };
+              src = zshPlugins.zimfw-termtitle.package;
             }
             {
               name = "zsh-completions";
@@ -139,17 +116,11 @@ in
                 };
               };
             }
-            # {
-            #   name = "zsh-completion-sync";
-            #   src = pkgs.zsh-completion-sync;
-            #   file = "share/zsh-completion-sync/zsh-completion-sync.plugin.zsh";
-            # }
           ]
           (lib.mkAfter [
             {
               name = "zimfw-completion";
-              src = zimfw-completion;
-              file = "init.zsh";
+              src = zshPlugins.zimfw-completion.package;
             }
           ])
         ];
