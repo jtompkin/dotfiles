@@ -79,13 +79,7 @@ in
           ];
         };
       };
-      zoxide = {
-        enable = mkDefault true;
-        options = [
-          "--cmd"
-          "cd"
-        ];
-      };
+      zoxide.enable = mkDefault true;
       bat = {
         enable = mkDefault true;
         extraPackages = with pkgs.bat-extras; [
@@ -106,24 +100,15 @@ in
         };
       };
       zsh = lib.mkIf config.programs.zsh.enable {
-        shellAliases = lib.mkIf config.programs.bat.enable {
-          cat = mkDefault "bat --paging=never";
-        };
-        shellGlobalAliases = lib.mkIf config.programs.bat.enable {
-          "--belp" = "--help 2>&1 | bat --language=help --style=plain";
-        };
+        # shellAliases = lib.mkIf config.programs.bat.enable {
+        #   cat = mkDefault "bat --paging=never";
+        # };
+        # shellGlobalAliases = lib.mkIf config.programs.bat.enable {
+        #   "--belp" = "--help 2>&1 | bat --language=help --style=plain";
+        # };
         initContent = lib.mkIf config.programs.bat.enable ''
           eval "$(batpipe)"
         '';
-        oh-my-zsh = {
-          enable = mkDefault true;
-          theme = mkDefault "gallifrey";
-          plugins = [
-            "git"
-            "sudo"
-            "direnv"
-          ];
-        };
       };
       direnv = {
         enable = mkDefault true;
@@ -134,12 +119,15 @@ in
       };
       eza = {
         enable = true;
-        extraOptions = lib.mkIf (!config.wunkus.presets.programs.zim.enable) [
-          "--group-directories-first"
-          "--header"
-          "--smart-group"
-          "--git"
-        ];
+        extraOptions =
+          lib.mkIf
+            (!(config.wunkus.presets.programs.zim.enable || config.wunkus.presets.programs.zshDiy.enable))
+            [
+              "--group-directories-first"
+              "--header"
+              "--smart-group"
+              "--git"
+            ];
       };
       fastfetch.enable = mkDefault true;
       fd.enable = mkDefault true;

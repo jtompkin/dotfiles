@@ -11,9 +11,10 @@ in
     lib.mkEnableOption "starship preset configuration";
   config = lib.mkIf cfg.enable {
     programs = {
-      oh-my-posh.enable = false;
+      oh-my-posh.enable = lib.mkForce false;
       starship = {
         enable = lib.mkDefault true;
+        enableZshIntegration = true;
         settings = {
           format = lib.concatStrings [
             "$os"
