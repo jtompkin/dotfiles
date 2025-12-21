@@ -70,11 +70,10 @@ in
         };
         initContent = lib.mkMerge [
           (lib.mkBefore ''
-            fpath+="${pkgs.just}/share/zsh/site-functions"
-            fpath+="${pkgs.uv}/share/zsh/site-functions"
-          '')
-          (lib.mkIf config.programs.zsh.zsh-abbr.enable ''
-            bindkey ' ' abbr-expand-and-insert
+            fpath+=(
+              "${pkgs.just}/share/zsh/site-functions"
+              "${pkgs.uv}/share/zsh/site-functions"
+            )
           '')
           (lib.mkIf config.programs.zsh.historySubstringSearch.enable ''
             bindkey -M vicmd 'k' history-substring-search-up
@@ -96,25 +95,22 @@ in
               src = zshPlugins.zimfw-environment.package;
             }
             {
-              name = "zimfw-input";
-              src = zshPlugins.zimfw-input.package;
-            }
-            {
               name = "zimfw-termtitle";
               src = zshPlugins.zimfw-termtitle.package;
             }
             {
               name = "zsh-completions";
               # TODO: remove once updated in nixpkgs
-              src = pkgs.zsh-completions.overrideAttrs {
-                version = "2025-12-16";
-                src = pkgs.fetchFromGitHub {
-                  owner = "zsh-users";
-                  repo = "zsh-completions";
-                  rev = "6ceec63710a422c0b5e5c6eecb7ddeff3506a7a3";
-                  hash = "sha256-EUnR/iIzNE9/ba4O+dPu68JJtgoMIQAjhNcy/Ib6XTg=";
-                };
-              };
+              src = pkgs.zsh-completions.overrideAttrs (
+                _: prevAttrs: {
+                  version = "2025-12-16";
+                  src = pkgs.fetchFromGitHub {
+                    inherit (prevAttrs.src) owner repo;
+                    rev = "6ceec63710a422c0b5e5c6eecb7ddeff3506a7a3";
+                    hash = "sha256-EUnR/iIzNE9/ba4O+dPu68JJtgoMIQAjhNcy/Ib6XTg=";
+                  };
+                }
+              );
             }
           ]
           (lib.mkAfter [

@@ -12,10 +12,6 @@
       programs = {
         meantToFly.enable = true;
         zshDiy.enable = true;
-        # zim = {
-        #   enable = true;
-        #   wslClip = true;
-        # };
         neovim = {
           dist = "mini";
         };
