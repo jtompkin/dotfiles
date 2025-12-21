@@ -106,8 +106,8 @@ in
                   version = "2025-12-16";
                   src = pkgs.fetchFromGitHub {
                     inherit (prevAttrs.src) owner repo;
-                    rev = "6ceec63710a422c0b5e5c6eecb7ddeff3506a7a3";
-                    hash = "sha256-EUnR/iIzNE9/ba4O+dPu68JJtgoMIQAjhNcy/Ib6XTg=";
+                    rev = "727876e7f688cff5c8fb6bf0495cb41b381ce01b";
+                    hash = "sha256-Pd7OVDuhi2U27q2Hk6cXOweEpZR6SXgKUbA1H/Z4TSE=";
                   };
                 }
               );
