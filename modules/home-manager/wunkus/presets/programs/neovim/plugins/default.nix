@@ -493,17 +493,77 @@ let
     nvim-lspconfig =
       let
         # Put these complex expressions in variables so injected Lua formatting works
-        nixosExpr = ''(builtins.getFlake ("${
-          cfg.plugins.nvim-lspconfig.extraData.nixConfigDir or "github:jtompkin/dotfiles"
-        }")).nixosConfigurations.completion.options'';
-        homeManagerExpr = ''(builtins.getFlake ("${
-          cfg.plugins.nvim-lspconfig.extraData.nixConfigDir or "github:jtompkin/dotfiles"
-        }")).homeConfigurations."none@completion".options'';
+        configDir = cfg.plugins.nvim-lspconfig.extraData.nixConfigDir or "github:jtompkin/dotfiles";
+        nixosExpr = ''(builtins.getFlake ("${configDir}")).nixosConfigurations.completion.options'';
+        homeManagerExpr = ''(builtins.getFlake ("${configDir}")).homeConfigurations."none@completion".options'';
+        homeConfigNames = lib.concatStringsSep " " (
+          lib.attrNames config.lib.dotfiles.const.self.homeConfigurations
+        );
+        nixosConfigNames = lib.concatStringsSep " " (
+          lib.attrNames config.lib.dotfiles.const.self.nixosConfigurations
+        );
       in
       {
         order = 1001;
         config = # lua
           ''
+            -- These mappings are an affront to God but I love them
+            vim.api.nvim_create_autocmd("FileType", {
+            	group = vim.api.nvim_create_augroup("lsp", { clear = false }),
+            	pattern = { "nix" },
+            	callback = function()
+            		vim.keymap.set("n", "<leader>nsn", function()
+            			vim.ui.select(vim.split("${nixosConfigNames}", " "), {
+            				prompt = "Switch NixOS config",
+            			}, function(choice)
+            				if choice ~= nil then
+            					vim.cmd(
+            						[[!nixos-rebuild --flake '${configDir}\#]]
+            							.. choice
+            							.. "' --sudo switch"
+            					)
+            				end
+            			end)
+            		end, { desc = "Switch NixOS configuration" })
+            		vim.keymap.set("n", "<leader>nsh", function()
+            			vim.ui.select(vim.split("${homeConfigNames}", " "), {
+            				prompt = "Switch home-manager config",
+            			}, function(choice)
+            				if choice ~= nil then
+            					vim.notify(
+            						string.format(
+            							"Switching to new home-manager config: %s...",
+            							choice
+            						),
+            						vim.log.levels.INFO
+            					)
+            					vim.system({
+            						"home-manager",
+            						"--flake",
+            						"${configDir}#" .. choice,
+            						"switch",
+            					}, { text = true }, function(obj)
+            						if obj.code == 0 then
+            							vim.notify(
+            								"Switched to new home-manager configuration: " .. choice,
+            								vim.log.levels.INFO
+            							)
+            						else
+            							vim.notify(
+            								string.format(
+            									"Could not switch to new home-manager config: %s\n%s",
+            									choice,
+            									obj.stderr
+            								),
+            								vim.log.levels.ERROR
+            							)
+            						end
+            					end)
+            				end
+            			end)
+            		end, { desc = "Switch home-manager configuration" })
+            	end,
+            })
             local function config_and_enable(server, config)
             	vim.lsp.config(server, config)
             	vim.lsp.enable(server)

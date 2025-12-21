@@ -21,6 +21,7 @@ rec {
     overlays = [ ];
     pkgsBySystem = forAllSystems (_: pkgs: pkgs);
     formatter = forAllSystems (_: pkgs: pkgs.nixfmt-tree);
+    inherit (inputs) self;
   };
   /**
     Args:
