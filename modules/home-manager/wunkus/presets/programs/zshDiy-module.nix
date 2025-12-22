@@ -65,6 +65,10 @@ in
               "git w" = "git status";
               "git y" = "git switch";
               "git switch c" = "git switch --create";
+              n = "nix";
+              "nix s" = "nix shell";
+              "nix r" = "nix repl";
+              "nix d" = "nix develop";
             }
           ];
         };
