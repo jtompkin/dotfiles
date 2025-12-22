@@ -529,37 +529,35 @@ let
             			vim.ui.select(vim.split("${homeConfigNames}", " "), {
             				prompt = "Switch home-manager config",
             			}, function(choice)
-            				if choice ~= nil then
-            					vim.notify(
-            						string.format(
-            							"Switching to new home-manager config: %s...",
-            							choice
-            						),
-            						vim.log.levels.INFO
-            					)
-            					vim.system({
-            						"home-manager",
-            						"--flake",
-            						"${configDir}#" .. choice,
-            						"switch",
-            					}, { text = true }, function(obj)
-            						if obj.code == 0 then
-            							vim.notify(
-            								"Switched to new home-manager configuration: " .. choice,
-            								vim.log.levels.INFO
-            							)
-            						else
-            							vim.notify(
-            								string.format(
-            									"Could not switch to new home-manager config: %s\n%s",
-            									choice,
-            									obj.stderr
-            								),
-            								vim.log.levels.ERROR
-            							)
-            						end
-            					end)
+            				if choice == nil then
+            					return
             				end
+            				vim.notify(
+            					string.format("Switching to new home-manager config: %s...", choice),
+            					vim.log.levels.INFO
+            				)
+            				vim.system({
+            					"home-manager",
+            					"--flake",
+            					"${configDir}#" .. choice,
+            					"switch",
+            				}, { text = true }, function(obj)
+            					if obj.code == 0 then
+            						vim.notify(
+            							"Switched to new home-manager configuration: " .. choice,
+            							vim.log.levels.INFO
+            						)
+            					else
+            						vim.notify(
+            							string.format(
+            								"Could not switch to new home-manager config: %s\n%s",
+            								choice,
+            								obj.stderr
+            							),
+            							vim.log.levels.ERROR
+            						)
+            					end
+            				end)
             			end)
             		end, { desc = "Switch home-manager configuration" })
             	end,
