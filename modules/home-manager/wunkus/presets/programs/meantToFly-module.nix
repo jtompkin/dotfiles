@@ -45,6 +45,7 @@ in
             bash_indicator = "β";
             zsh_indicator = "ζ";
             nu_indicator = "ν";
+            fish_indicator = "φ";
             powershell_indicator = " ";
           };
           nix_shell = {
