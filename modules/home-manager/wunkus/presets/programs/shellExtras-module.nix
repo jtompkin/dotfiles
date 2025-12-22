@@ -12,7 +12,6 @@ in
   options.wunkus.presets.programs.shellExtras.enable =
     lib.mkEnableOption "oh-my-posh, direnv, zoxide, bat, fzf, fd, ripgrep configuration";
   config = lib.mkIf cfg.enable {
-    mornix.programs.nix-search-cli.enable = mkDefault true;
     programs = {
       oh-my-posh = {
         enable = mkDefault true;
@@ -79,6 +78,11 @@ in
           ];
         };
       };
+      nh = {
+        enable = mkDefault true;
+        homeFlake = mkDefault config.wunkus.settings.flakeDir;
+        osFlake = mkDefault config.wunkus.settings.flakeDir;
+      };
       zoxide.enable = mkDefault true;
       bat = {
         enable = mkDefault true;
@@ -100,12 +104,6 @@ in
         };
       };
       zsh = lib.mkIf config.programs.zsh.enable {
-        # shellAliases = lib.mkIf config.programs.bat.enable {
-        #   cat = mkDefault "bat --paging=never";
-        # };
-        # shellGlobalAliases = lib.mkIf config.programs.bat.enable {
-        #   "--belp" = "--help 2>&1 | bat --language=help --style=plain";
-        # };
         initContent = lib.mkIf config.programs.bat.enable ''
           eval "$(batpipe)"
         '';
@@ -130,6 +128,8 @@ in
             ];
       };
       fastfetch.enable = mkDefault true;
+      htop.enable = mkDefault true;
+      btop.enable = mkDefault true;
       fd.enable = mkDefault true;
       ripgrep.enable = mkDefault true;
     };
