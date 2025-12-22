@@ -29,8 +29,8 @@ in
       description = "Name of preset set of plugins to enable. \"none\" will not enable any plugins by default";
     };
     nixConfigDir = lib.mkOption {
-      type = lib.types.str;
-      default = "${config.home.homeDirectory or ""}/dotfiles";
+      type = lib.types.nullOr lib.types.str;
+      default = config.wunkus.settings.flakeDir;
       description = "Path to flake directory with NixOS and Home Manager configurations for nixd completion options";
     };
   };

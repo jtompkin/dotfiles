@@ -493,7 +493,9 @@ let
     nvim-lspconfig =
       let
         # Put these complex expressions in variables so injected Lua formatting works
-        configDir = cfg.plugins.nvim-lspconfig.extraData.nixConfigDir or "github:jtompkin/dotfiles";
+        inherit (cfg.plugins.nvim-lspconfig) extraData;
+        configDir =
+          if extraData.nixConfigDir != null then extraData.nixConfigDir else "github:jtompkin/dotfiles";
         nixosExpr = ''(builtins.getFlake ("${configDir}")).nixosConfigurations.completion.options'';
         homeManagerExpr = ''(builtins.getFlake ("${configDir}")).homeConfigurations."none@completion".options'';
         homeConfigNames = lib.concatStringsSep " " (

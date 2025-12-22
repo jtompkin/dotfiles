@@ -14,5 +14,10 @@
       type = lib.types.enum config.lib.dotfiles.const.allSystems;
       description = "System to build this configuration on";
     };
+    flakeDir = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      description = "Path to directory containing home-manager flake";
+      default = if config.home ? "homeDirectory" then config.home.homeDirectory + "/dotfiles" else null;
+    };
   };
 }
