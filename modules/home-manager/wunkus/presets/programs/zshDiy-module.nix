@@ -71,6 +71,9 @@ in
               "nix d" = "nix develop";
             }
           ];
+          globalAbbreviations = {
+            H = "--help 2>&1 | bat --language=help --style=plain";
+          };
         };
         initContent = lib.mkMerge [
           (lib.mkBefore ''

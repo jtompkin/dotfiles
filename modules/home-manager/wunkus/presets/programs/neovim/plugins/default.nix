@@ -510,8 +510,14 @@ let
         config = # lua
           ''
             -- These mappings are an affront to God but I love them
+            local lsp_group = vim.api.nvim_create_augroup("lsp", { clear = false })
             vim.api.nvim_create_autocmd("FileType", {
-            	group = vim.api.nvim_create_augroup("lsp", { clear = false }),
+            	group = lsp_group,
+            	pattern = { "python" },
+            	command = "set fo-=t",
+            })
+            vim.api.nvim_create_autocmd("FileType", {
+            	group = lsp_group,
             	pattern = { "nix" },
             	callback = function()
             		vim.keymap.set("n", "<leader>nsn", function()
