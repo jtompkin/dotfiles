@@ -646,13 +646,12 @@ let
         # lua
         ''
           vim.api.nvim_create_autocmd("FileType", {
-          	group = vim.api.nvim_create_augroup("treesitter", {}),
-          	-- currently generating Lua table of langs at runtime (GROSS!)
-          	pattern = vim.split([[${lib.concatStringsSep " " extraData.supportedLangs}]], " "),
+          	group = vim.api.nvim_create_augroup("treesitter", { clear = false }),
+          	pattern = [[${lib.concatStringsSep "," extraData.supportedLangs}]],
           	callback = function()
           		vim.treesitter.start()
-          		vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
-          		vim.wo[0][0].foldmethod = "expr"
+          		-- vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+          		-- vim.wo[0][0].foldmethod = "expr"
           	end,
           })
         '';
@@ -661,7 +660,9 @@ let
       config = # lua
         ''
           local render_markdown = require("render-markdown")
-          render_markdown.setup({})
+          render_markdown.setup({
+          	latex = { enabled = false },
+          })
           vim.keymap.set(
           	"n",
           	"<leader>mp",

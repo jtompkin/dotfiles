@@ -36,10 +36,13 @@ in
     supportedLangs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [
-        "nix"
+        "go"
         "lua"
+        "markdown"
+        "nix"
+        "python"
       ];
-      description = "List of filetypes to enable treesitter highlighting for";
+      description = "List of filetypes to enable nvim-treesitter highlighting for";
     };
   };
   config = lib.mkIf cfg.enable {
