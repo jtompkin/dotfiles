@@ -637,11 +637,23 @@ let
       };
     nvim-surround.config = appendNewline ''require("nvim-surround").setup({})'';
     nvim-treesitter = {
-      config = # lua
+      config =
+        let
+          inherit (cfg.plugins.nvim-treesitter) extraData;
+          # TODO: find way to use this table directly without breaking inbedded Lua formatting
+          # langsLuaTable = ''{ ${lib.concatMapStringsSep ", " (s: "'${s}'") extraData.supportedLangs} }'';
+        in
+        # lua
         ''
-          require("nvim-treesitter.configs").setup({
-          	highlight = { enable = true },
-          	indent = { enable = true },
+          vim.api.nvim_create_autocmd("FileType", {
+          	group = vim.api.nvim_create_augroup("treesitter", {}),
+          	-- currently generating Lua table of langs at runtime (GROSS!)
+          	pattern = vim.split([[${lib.concatStringsSep " " extraData.supportedLangs}]], " "),
+          	callback = function()
+          		vim.treesitter.start()
+          		vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+          		vim.wo[0][0].foldmethod = "expr"
+          	end,
           })
         '';
     };

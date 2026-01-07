@@ -33,6 +33,14 @@ in
       default = config.wunkus.settings.flakeDir;
       description = "Path to flake directory with NixOS and Home Manager configurations for nixd completion options";
     };
+    supportedLangs = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [
+        "nix"
+        "lua"
+      ];
+      description = "List of filetypes to enable treesitter highlighting for";
+    };
   };
   config = lib.mkIf cfg.enable {
     wunkus.presets.programs.neovim.plugins = {
@@ -41,7 +49,10 @@ in
         nvim-treesitter = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
       };
       plugins = lib.mkMerge [
-        { nvim-lspconfig.extraData = { inherit (cfg) nixConfigDir; }; }
+        {
+          nvim-lspconfig.extraData = { inherit (cfg) nixConfigDir; };
+          nvim-treesitter.extraData = { inherit (cfg) supportedLangs; };
+        }
         (lib.mkIf (cfg.dist != "none") (enablePluginList [
           "cellular-automaton-nvim"
           "conform-nvim"
