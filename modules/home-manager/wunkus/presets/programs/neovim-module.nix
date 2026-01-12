@@ -70,6 +70,7 @@ in
           "markdown-preview-nvim"
         ]))
         (lib.mkIf (cfg.dist == "mini") (enablePluginList [
+          "mini-ai"
           "mini-clue"
           "mini-pick"
           "mini-diff"
