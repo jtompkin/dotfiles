@@ -62,6 +62,7 @@ in
           "neogit"
           "nightfox-nvim"
           "nvim-treesitter"
+          "nvim-treesitter-context"
           "nvim-lspconfig"
           "mini-snippets"
           "nvim-cmp"

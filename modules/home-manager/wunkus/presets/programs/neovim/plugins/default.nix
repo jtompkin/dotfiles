@@ -650,9 +650,20 @@ let
           	pattern = [[${lib.concatStringsSep "," extraData.supportedLangs}]],
           	callback = function()
           		vim.treesitter.start()
+          		vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
           		-- vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
           		-- vim.wo[0][0].foldmethod = "expr"
           	end,
+          })
+        '';
+    };
+    nvim-treesitter-context = {
+      config = # lua
+        ''
+          vim.api.nvim_create_autocmd("FileType", {
+          	group = vim.api.nvim_create_augroup("treesitter", { clear = false }),
+          	pattern = "nix",
+          	command = "TSContext disable",
           })
         '';
     };
