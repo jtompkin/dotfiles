@@ -657,14 +657,7 @@ let
         '';
     };
     nvim-treesitter-context = {
-      config = # lua
-        ''
-          vim.api.nvim_create_autocmd("FileType", {
-          	group = vim.api.nvim_create_augroup("treesitter", { clear = false }),
-          	pattern = "nix",
-          	command = "TSContext disable",
-          })
-        '';
+      config = appendNewline ''require("treesitter-context").setup({ max_lines = 3 })'';
     };
     render-markdown-nvim = {
       config = # lua
