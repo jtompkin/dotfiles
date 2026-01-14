@@ -99,7 +99,7 @@
               agenix.packages.${system}.default
               pkgs.stylua
               pkgs.lua-language-server
-              pkgs.nixfmt-rfc-style
+              pkgs.nixfmt
             ];
           };
         }

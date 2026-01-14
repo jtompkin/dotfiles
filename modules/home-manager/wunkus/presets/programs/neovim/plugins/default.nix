@@ -28,7 +28,7 @@ let
           require("conform").setup({
           	formatters = {
           		nixfmt = {
-          			command = [[${lib.getExe' pkgs.nixfmt-rfc-style "nixfmt"}]],
+          			command = [[${lib.getExe' pkgs.nixfmt "nixfmt"}]],
           		},
           	},
           	formatters_by_ft = {
