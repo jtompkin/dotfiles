@@ -17,6 +17,8 @@ in
     programs.tmux = {
       enable = mkDefault true;
       keyMode = mkDefault "vi";
+      clock24 = mkDefault true;
+      terminal = "screen-256color";
       shell = lib.mkIf config.programs.zsh.enable (lib.getExe pkgs.zsh);
       extraConfig = # tmux
         ''
@@ -25,8 +27,8 @@ in
           bind-key C-t set status
           set-option -a terminal-features 'xterm-256color:RGB'
         '';
+      sensibleOnTop = lib.mkIf (!cfg.minimal) (mkDefault true);
       plugins = lib.mkIf (!cfg.minimal) [
-        pkgs.tmuxPlugins.sensible
         pkgs.tmuxPlugins.pain-control
       ];
     };
