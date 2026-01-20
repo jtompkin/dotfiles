@@ -8,6 +8,51 @@ let
   cfg = config.wunkus.presets.programs.neovim.plugins;
   appendNewline = s: s + "\n";
   pluginConfigs = {
+    blink-cmp = {
+      dependencies = [ pkgs.vimPlugins.friendly-snippets ];
+      config = # lua
+        ''
+          require("blink.cmp").setup({
+          	keymap = {
+          		preset = "default",
+          		["<C-j>"] = { "select_next", "fallback" },
+          		["<C-k>"] = { "select_prev", "fallback" },
+          		["<C-l>"] = { "snippet_forward" },
+          		["<C-h>"] = { "snippet_backward" },
+          		["<C-e>"] = { "hide", "fallback" },
+          		["<C-S-e>"] = { "cancel", "fallback" },
+          		["<C-S-Space>"] = {
+          			"show",
+          			"show_documentation",
+          			"hide_documentation",
+          		},
+          		["<C-g>"] = { "show_signature", "hide_signature", "fallback" },
+          		["<C-u>"] = { "scroll_signature_up", "fallback" },
+          		["<C-d>"] = { "scroll_documentation_down", "fallback" },
+          		["<C-n>"] = false,
+          		["<C-p>"] = false,
+          	},
+          	signature = { enabled = true },
+          	completion = {
+          		documentation = { auto_show = true, auto_show_delay_ms = 500 },
+          		ghost_text = { enabled = true },
+          	},
+          	sources = {
+          		providers = {
+          			snippets = {
+          				opts = { extended_filetypes = {
+          					lua = { "luadoc" },
+          				} },
+          			},
+          		},
+          	},
+          	cmdline = {
+          		keymap = { preset = "inherit" },
+          		completion = { menu = { auto_show = true } },
+          	},
+          })
+        '';
+    };
     cellular-automaton-nvim = {
       config = # lua
         ''
@@ -430,16 +475,16 @@ let
           local cmp = require("cmp")
           local mini_snippets = require("mini.snippets")
           cmp.setup({
-          	enabled = function()
-          		local disabled = false
-          		disabled = disabled
-          			or (vim.api.nvim_get_option_value("buftype", { buf = 0 }) == "prompt")
-          		disabled = disabled or (vim.fn.reg_recording() ~= "")
-          		disabled = disabled or (vim.fn.reg_executing() ~= "")
-          		disabled = disabled
-          			or require("cmp.config.context").in_treesitter_capture("comment")
-          		return not disabled
-          	end,
+          	-- enabled = function()
+          	-- 	local disabled = false
+          	-- 	disabled = disabled
+          	-- 		or (vim.api.nvim_get_option_value("buftype", { buf = 0 }) == "prompt")
+          	-- 	disabled = disabled or (vim.fn.reg_recording() ~= "")
+          	-- 	disabled = disabled or (vim.fn.reg_executing() ~= "")
+          	-- 	disabled = disabled
+          	-- 		or require("cmp.config.context").in_treesitter_capture("comment")
+          	-- 	return not disabled
+          	-- end,
           	snippet = {
           		expand = function(args)
           			local insert = mini_snippets.config.expand.insert
@@ -575,13 +620,11 @@ let
             	vim.lsp.config(server, config)
             	vim.lsp.enable(server)
             end
-            local capabilities = require("cmp_nvim_lsp").default_capabilities()
-            config_and_enable("just", { capabilities = capabilities })
-            config_and_enable("basedpyright", { capabilities = capabilities })
-            config_and_enable("gopls", { capabilities = capabilities })
-            config_and_enable("tombi", { capabilities = capabilities })
+            config_and_enable("just", {})
+            config_and_enable("basedpyright", {})
+            config_and_enable("gopls", {})
+            config_and_enable("tombi", {})
             config_and_enable("nixd", {
-            	capabilities = capabilities,
             	cmd = { [[${lib.getExe pkgs.nixd}]] },
             	settings = {
             		nixd = {
@@ -598,7 +641,6 @@ let
             })
             -- From: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#lua_ls
             config_and_enable("lua_ls", {
-            	capabilities = capabilities,
             	on_init = function(client)
             		if client.workspace_folders then
             			local path = client.workspace_folders[1].name

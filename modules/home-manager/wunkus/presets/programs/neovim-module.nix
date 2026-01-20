@@ -64,8 +64,7 @@ in
           "nvim-treesitter"
           "nvim-treesitter-context"
           "nvim-lspconfig"
-          "mini-snippets"
-          "nvim-cmp"
+          "blink-cmp"
           "render-markdown-nvim"
           "markdown-preview-nvim"
         ]))

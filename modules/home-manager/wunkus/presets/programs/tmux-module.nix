@@ -19,6 +19,7 @@ in
       keyMode = mkDefault "vi";
       clock24 = mkDefault true;
       terminal = "screen-256color";
+      escapeTime = 0;
       shell = lib.mkIf config.programs.zsh.enable (lib.getExe pkgs.zsh);
       extraConfig = # tmux
         ''
