@@ -40,9 +40,12 @@ let
           	sources = {
           		providers = {
           			snippets = {
-          				opts = { extended_filetypes = {
-          					lua = { "luadoc" },
-          				} },
+          				opts = {
+          					extended_filetypes = {
+          						lua = { "luadoc" },
+          						python = { "pydoc" },
+          					},
+          				},
           			},
           		},
           	},
