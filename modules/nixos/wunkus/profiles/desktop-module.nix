@@ -25,22 +25,20 @@ let
       });
 in
 {
-  options = {
-    wunkus.profiles.desktop = {
-      enable = mkEnableOption "desktop system configuration";
-      spotify.enable = mkEnableOption "open ports required for Spotify";
-      displayManager.enable = mkEnableOption "display manager system configuration";
-      fileManager.enable = mkEnableOption "Thunar file manager configuration";
-      compositors = lib.mkOption {
-        type = lib.types.listOf (
-          lib.types.enum [
-            "hyprland"
-            "niri"
-          ]
-        );
-        default = [ "hyprland" ];
-        description = "Name of the Wayland compositors to build configurations for";
-      };
+  options.wunkus.profiles.desktop = {
+    enable = mkEnableOption "desktop system configuration";
+    spotify.enable = mkEnableOption "open ports required for Spotify";
+    displayManager.enable = mkEnableOption "display manager system configuration";
+    fileManager.enable = mkEnableOption "Thunar file manager configuration";
+    compositors = lib.mkOption {
+      type = lib.types.listOf (
+        lib.types.enum [
+          "hyprland"
+          "niri"
+        ]
+      );
+      default = [ ];
+      description = "Name of the Wayland compositors to build configurations for";
     };
   };
   config = mkIf cfg.enable {
@@ -61,7 +59,8 @@ in
         ];
       };
     };
-    security.pam.services.hyprlock = { };
+    niri-flake.cache.enable = false;
+    # security.pam.services.hyprlock = { };
     environment = {
       systemPackages = mkIf cfg.displayManager.enable [ sddm-astronaut-custom ];
       pathsToLink = [
@@ -69,8 +68,8 @@ in
         "/share/applications"
       ];
     };
-    security.rtkit.enable = mkDefault true;
-    hardware.bluetooth.enable = mkDefault true;
+    # security.rtkit.enable = mkDefault true;
+    # hardware.bluetooth.enable = mkDefault true;
     networking = mkIf cfg.spotify.enable {
       firewall = {
         allowedTCPPorts = [ 57621 ];
@@ -81,17 +80,17 @@ in
         "0.0.0.0" = [ "apresolve.spotify.com" ];
       };
     };
-    services = {
-      blueman.enable = mkDefault true;
-      gvfs.enable = mkDefault true;
-      displayManager.sddm = mkIf cfg.displayManager.enable {
-        enable = mkDefault true;
-        package = mkDefault pkgs.kdePackages.sddm;
-        wayland.enable = mkDefault true;
-        autoNumlock = mkDefault true;
-        extraPackages = [ pkgs.kdePackages.qtmultimedia ];
-        theme = mkDefault "sddm-astronaut-theme";
-      };
-    };
+    # services = {
+    #   blueman.enable = mkDefault true;
+    #   gvfs.enable = mkDefault true;
+    #   displayManager.sddm = mkIf cfg.displayManager.enable {
+    #     enable = mkDefault true;
+    #     package = mkDefault pkgs.kdePackages.sddm;
+    #     wayland.enable = mkDefault true;
+    #     autoNumlock = mkDefault true;
+    #     extraPackages = [ pkgs.kdePackages.qtmultimedia ];
+    #     theme = mkDefault "sddm-astronaut-theme";
+    #   };
+    # };
   };
 }

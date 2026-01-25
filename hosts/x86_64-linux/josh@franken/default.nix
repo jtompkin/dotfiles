@@ -15,6 +15,7 @@
         neovim = {
           dist = "mini";
         };
+        niri.enable = true;
       };
       themes.dark.enable = true;
     };

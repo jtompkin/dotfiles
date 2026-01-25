@@ -100,7 +100,7 @@ in
       defaultEditor = mkDefault true;
       viAlias = mkDefault true;
       vimAlias = mkDefault true;
-      extraLuaConfig = lib.mkMerge [
+      initLua = lib.mkMerge [
         (lib.mkBefore ''
           vim.g.mapleader = " "
           vim.g.maplocalleader = "\\"

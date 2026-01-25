@@ -9,6 +9,10 @@
     profiles = {
       minimal.enable = true;
       wsl.enable = true;
+      desktop = {
+        enable = true;
+        compositors = [ "niri" ];
+      };
     };
   };
   programs.dconf.enable = true;

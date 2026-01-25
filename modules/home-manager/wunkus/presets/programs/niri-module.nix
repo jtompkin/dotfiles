@@ -9,13 +9,10 @@ let
     mkDefault
     mkEnableOption
     mkIf
-    mkMerge
     mkOption
     types
     ;
   cfg = config.wunkus.presets.programs.niri;
-  isDefaultApp = type: name: cfg.defaultApps.${type}.name == name;
-  getDefaltAppExe = type: lib.getExe cfg.defaultApps.${type}.package;
 in
 {
   options.wunkus.presets.programs.niri = {
@@ -74,62 +71,6 @@ in
     programs = {
       niri = {
         enable = mkDefault true;
-        settings = {
-          input = {
-            keyboard = {
-              xkb.options = "caps:swapescape";
-              numlock = true;
-            };
-            warp-mouse-to-focus.enable = true;
-            focus-follows-mouse = {
-              enable = true;
-              max-scroll-amount = "0%";
-            };
-          };
-          layout = {
-            focus-ring = { };
-          };
-          binds =
-            with config.lib.niri.actions;
-            let
-              noctalia = spawn "noctalia-shell" "ipc" "call";
-            in
-            {
-              "Mod+Return".action = spawn "${getDefaltAppExe "terminal"}";
-
-              "Mod+D".action = noctalia "launcher" "toggle";
-              "Mod+S".action = noctalia "sidePanel" "toggle";
-              "Mod+P".action = noctalia "powerPanel" "toggle";
-              "Mod+V".action = noctalia "launcher" "clipboard";
-              "Mod+C".action = noctalia "launcher" "calculator";
-
-              "XF86AudioRaiseVolume" = {
-                action = noctalia "volume" "increase";
-                allow-when-locked = true;
-              };
-              "XF86AudioLowerVolume" = {
-                action = noctalia "volume" "decrease";
-                allow-when-locked = true;
-              };
-              "XF86AudioMute" = {
-                action = noctalia "volume" "muteOutput";
-                allow-when-locked = true;
-              };
-
-              "XF86MonBrightnessUp" = {
-                action = noctalia "brightness" "increase";
-                allow-when-locked = true;
-              };
-              "XF86MonBrightnessDown" = {
-                action = noctalia "brightness" "decrease";
-                allow-when-locked = true;
-              };
-
-              "Mod+Shift+X".action = quit;
-              "Mod+Shift+L".action = noctalia "lockScreen" "toggle";
-              "Mod+Control+L".action = noctalia "idleInhibitor" "toggle";
-            };
-        };
       };
     };
   };

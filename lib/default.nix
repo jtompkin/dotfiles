@@ -18,7 +18,9 @@ rec {
       filterHostsFromSystem (negatePredicate (lib.hasInfix "@"))
     );
     homeModules = forAllSystems (system: _: filterHostsFromSystem (lib.hasInfix "@") system);
-    overlays = [ ];
+    overlays = [
+      inputs.niri-flake.overlays.niri
+    ];
     pkgsBySystem = forAllSystems (_: pkgs: pkgs);
     formatter = forAllSystems (_: pkgs: pkgs.nixfmt-tree);
     inherit (inputs) self;
