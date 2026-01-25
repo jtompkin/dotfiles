@@ -50,7 +50,7 @@ in
             (lib.mkIf config.programs.eza.enable (
               let
                 lsCmd = "eza --group-directories-first";
-                lsLongCmd = "${lsCmd} -l --git --header --smart-group --git";
+                lsLongCmd = "${lsCmd} -lh --git --smart-group";
               in
               {
                 ls = lsCmd;
