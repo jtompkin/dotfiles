@@ -21,6 +21,12 @@ let
           		["<C-h>"] = { "snippet_backward" },
           		["<C-e>"] = { "hide", "fallback" },
           		["<C-S-e>"] = { "cancel", "fallback" },
+          		["<C-]>"] = {
+          			function(cmp)
+          				cmp.show({ providers = { "snippets" } })
+          			end,
+          			"fallback",
+          		},
           		["<C-S-Space>"] = {
           			"show",
           			"show_documentation",
@@ -35,16 +41,14 @@ let
           	signature = { enabled = true },
           	completion = {
           		documentation = { auto_show = true, auto_show_delay_ms = 500 },
+          		accept = { auto_brackets = { enabled = false } },
           		ghost_text = { enabled = true },
           	},
           	sources = {
           		providers = {
           			snippets = {
           				opts = {
-          					extended_filetypes = {
-          						lua = { "luadoc" },
-          						python = { "pydoc" },
-          					},
+          					extended_filetypes = { lua = { "luadoc" }, python = { "pydoc" } },
           				},
           			},
           		},
@@ -558,13 +562,13 @@ let
         order = 1001;
         config = # lua
           ''
-            -- These mappings are an affront to God but I love them
             local lsp_group = vim.api.nvim_create_augroup("lsp", { clear = false })
             vim.api.nvim_create_autocmd("FileType", {
             	group = lsp_group,
             	pattern = { "python" },
             	command = "set fo-=t",
             })
+            -- These mappings are an affront to God but I love them
             vim.api.nvim_create_autocmd("FileType", {
             	group = lsp_group,
             	pattern = { "nix" },

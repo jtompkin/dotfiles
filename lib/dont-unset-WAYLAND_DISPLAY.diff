@@ -1,0 +1,15 @@
+diff --git a/src/main.rs b/src/main.rs
+index caceebfc..bf8b8934 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -77,10 +77,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
+             warn!("running as a session but DISPLAY is set, removing it");
+             env::remove_var("DISPLAY");
+         }
+-        if env::var_os("WAYLAND_DISPLAY").is_some() {
+-            warn!("running as a session but WAYLAND_DISPLAY is set, removing it");
+-            env::remove_var("WAYLAND_DISPLAY");
+-        }
+         if env::var_os("WAYLAND_SOCKET").is_some() {
+             warn!("running as a session but WAYLAND_SOCKET is set, removing it");
+             env::remove_var("WAYLAND_SOCKET");

@@ -15,7 +15,14 @@
         neovim = {
           dist = "mini";
         };
-        niri.enable = true;
+        kitty.enable = true;
+        niri = {
+          enable = true;
+          defaultApps = {
+            terminal.name = "kitty";
+            appLauncher.name = "fuzzel";
+          };
+        };
       };
       themes.dark.enable = true;
     };

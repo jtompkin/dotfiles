@@ -35,6 +35,8 @@ vim.opt.isfname:append("@-@")
 
 vim.o.updatetime = 50
 
+vim.o.winborder = "single"
+
 vim.o.textwidth = 88
 vim.o.colorcolumn = "88"
 
