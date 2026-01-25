@@ -29,7 +29,6 @@ in
     enable = mkEnableOption "desktop system configuration";
     spotify.enable = mkEnableOption "open ports required for Spotify";
     displayManager.enable = mkEnableOption "display manager system configuration";
-    fileManager.enable = mkEnableOption "Thunar file manager configuration";
     compositors = lib.mkOption {
       type = lib.types.listOf (
         lib.types.enum [
@@ -52,13 +51,6 @@ in
         enable = mkDefault true;
         package = mkDefault pkgs.niri-unstable;
       };
-      thunar = mkIf cfg.fileManager.enable {
-        enable = mkDefault true;
-        plugins = with pkgs.xfce; [
-          thunar-vcs-plugin
-          thunar-archive-plugin
-        ];
-      };
     };
     niri-flake.cache.enable = false;
     # security.pam.services.hyprlock = { };
@@ -80,6 +72,10 @@ in
       hosts = {
         "0.0.0.0" = [ "apresolve.spotify.com" ];
       };
+    };
+    services.gvfs = {
+      enable = mkDefault true;
+      package = pkgs.gvfs;
     };
     # services = {
     #   blueman.enable = mkDefault true;

@@ -169,14 +169,14 @@ rec {
       let
         appTypeToApps = {
           terminal = [
+            "kitty"
             "alacritty"
             "foot"
-            "kitty"
           ];
           fileManager = [ "thunar" ];
           appLauncher = [
-            "anyrun"
             "fuzzel"
+            "anyrun"
           ];
           screenShotter = [
             "hyprshot"

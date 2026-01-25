@@ -5,28 +5,22 @@
   ...
 }:
 let
-  inherit (lib)
-    mkDefault
-    mkEnableOption
-    mkIf
-    mkOption
-    types
-    ;
+  inherit (lib) mkDefault;
   cfg = config.wunkus.presets.programs.niri;
 in
 {
   options.wunkus.presets.programs.niri = {
-    enable = mkEnableOption "Niri preset config";
-    defaultApps = mkOption {
-      type = types.attrsOf (types.submodule config.lib.dotfiles.types.defaultApp);
+    enable = lib.mkEnableOption "Niri preset config";
+    defaultApps = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.submodule config.lib.dotfiles.types.defaultApp);
       default = { };
     };
-    wallpaperDir = mkOption {
-      type = types.nullOr types.str;
+    wallpaperDir = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     wunkus.presets.programs = {
       niri.defaultApps = {
         terminal.package =
@@ -71,6 +65,15 @@ in
       };
       kitty = lib.mkIf (cfg.defaultApps.terminal.name == "kitty") {
         enable = mkDefault true;
+      };
+      thunar = lib.mkIf (cfg.defaultApps.fileManager.name == "thunar") {
+        enable = mkDefault true;
+        plugins = [
+          pkgs.thunar-vcs-plugin
+          pkgs.thunar-archive-plugin
+          pkgs.thunar-media-tags-plugin
+          pkgs.thunar-volman
+        ];
       };
     };
     programs = {
@@ -205,5 +208,6 @@ in
         };
       };
     };
+    home.packages = [ pkgs.kdePackages.ark ];
   };
 }
