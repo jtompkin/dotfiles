@@ -27,11 +27,18 @@ in
         };
         sizes.terminal = mkDefault 16;
       };
+      icons = {
+        enable = mkDefault true;
+        dark = mkDefault "breeze-dark";
+        light = mkDefault "breeze-light";
+        package = mkDefault pkgs.kdePackages.breeze-icons;
+      };
       cursor = {
         name = mkDefault "Bibata-Modern-Classic";
         package = mkDefault pkgs.bibata-cursors;
         size = mkDefault 24;
       };
+      polarity = "dark";
       targets.neovim.enable = !config.wunkus.presets.programs.neovim.enable;
     };
     home.file.".face".source = ./data/stylish/burger_king_cropped.png;
