@@ -6,10 +6,10 @@
 }:
 let
   inherit (lib) mkDefault;
-  cfg = config.wunkus.presets.themes.mime;
+  cfg = config.wunkus._unused.mime;
 in
 {
-  options.wunkus.presets.themes.mime = {
+  options.wunkus._unused.mime = {
     enable = lib.mkEnableOption "xdg mime options";
   };
   config = lib.mkIf cfg.enable {

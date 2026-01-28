@@ -88,6 +88,7 @@ rec {
         inputs.niri-flake.nixosModules.niri
         inputs.nixos-wsl.nixosModules.default
         inputs.self.nixosModules.lib
+        inputs.stylix.nixosModules.stylix
         {
           imports = listModuleFiles ../modules/nixos;
           nixpkgs.pkgs = const.pkgsBySystem.${system};
@@ -118,7 +119,9 @@ rec {
         inputs.agenix.homeManagerModules.default
         inputs.mornix.homeModules.default
         inputs.niri-flake.homeModules.niri
+        inputs.niri-flake.homeModules.stylix
         inputs.self.homeModules.lib
+        inputs.stylix.homeModules.stylix
         {
           imports = listModuleFiles ../modules/home-manager;
           nix = {

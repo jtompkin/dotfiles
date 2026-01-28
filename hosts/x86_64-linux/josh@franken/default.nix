@@ -24,7 +24,7 @@
           };
         };
       };
-      themes.dark.enable = true;
+      themes.stylish.enable = true;
     };
   };
   programs = {

@@ -10,74 +10,9 @@ let
 in
 {
   options.wunkus.presets.programs.shellExtras.enable =
-    lib.mkEnableOption "oh-my-posh, direnv, zoxide, bat, fzf, fd, ripgrep configuration";
+    lib.mkEnableOption "nh, direnv, zoxide, bat, fzf, fd, ripgrep configuration";
   config = lib.mkIf cfg.enable {
     programs = {
-      oh-my-posh = {
-        enable = mkDefault true;
-        settings = {
-          version = 3;
-          blocks = [
-            {
-              type = "prompt";
-              alignment = "left";
-              segments = [
-                {
-                  template = "{{ if .WSL }}WSL at {{ end }}{{.Icon}}";
-                  foreground = "#26C6DA";
-                  type = "os";
-                  style = "plain";
-                  properties = {
-                    macos = "mac";
-                  };
-                }
-                {
-                  template = " {{ .UserName }}: ";
-                  foreground = "#26C6DA";
-                  type = "session";
-                  style = "plain";
-                }
-                {
-                  template = "{{ .Path }} ";
-                  foreground = "lightGreen";
-                  type = "path";
-                  style = "plain";
-                  properties = {
-                    style = "unique";
-                  };
-                }
-                {
-                  template = "{{ .UpstreamIcon }} {{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }}  {{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }}  {{ .Staging.String }}{{ end }}{{ if gt .StashCount 0 }}  {{ .StashCount }}{{ end }} ";
-                  type = "git";
-                  style = "plain";
-                  properties = {
-                    fetch_status = true;
-                    fetch_upstream_icon = true;
-                  };
-                }
-                {
-                  template = "[ {{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}{{ .Venv }} {{ end }}{{ .Full }}{{ end }}] ";
-                  foreground = "#906cff";
-                  type = "python";
-                  style = "powerline";
-                }
-                {
-                  template = "[ {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }}] ";
-                  foreground = "#7FD5EA";
-                  type = "go";
-                  style = "powerline";
-                }
-                {
-                  template = "❯ ";
-                  foreground = "#FFD54F";
-                  type = "text";
-                  style = "plain";
-                }
-              ];
-            }
-          ];
-        };
-      };
       nh = {
         enable = mkDefault true;
         homeFlake = mkDefault config.wunkus.settings.flakeDir;
@@ -93,15 +28,6 @@ in
           batwatch
           batpipe
         ];
-        themes = {
-          carbonfox = {
-            src = pkgs.vimPlugins.nightfox-nvim;
-            file = "extra/carbonfox/carbonfox.tmTheme";
-          };
-        };
-        config = {
-          theme = "carbonfox";
-        };
       };
       zsh = lib.mkIf config.programs.zsh.enable {
         initContent = lib.mkIf config.programs.bat.enable ''
