@@ -120,6 +120,7 @@ rec {
         inputs.mornix.homeModules.default
         inputs.niri-flake.homeModules.niri
         inputs.niri-flake.homeModules.stylix
+        inputs.noctalia.homeModules.default
         inputs.self.homeModules.lib
         inputs.stylix.homeModules.stylix
         {
@@ -193,7 +194,7 @@ rec {
       {
         options = {
           name = lib.mkOption {
-            type = lib.types.enum appTypeToApps.${config.appType};
+            type = lib.types.enum (appTypeToApps.${config.appType} ++ [ "" ]);
             default = lib.head appTypeToApps.${config.appType};
             description = "Name of the program to be used as the default application for this application type";
           };
@@ -204,7 +205,7 @@ rec {
             description = "Class of the program, based on the name";
           };
           package = lib.mkOption {
-            type = lib.types.package;
+            type = lib.types.nullOr lib.types.package;
             description = "Package to use for app";
           };
         };

@@ -18,9 +18,9 @@
         kitty.enable = true;
         niri = {
           enable = true;
+          noctalia.enable = true;
           defaultApps = {
             terminal.name = "kitty";
-            appLauncher.name = "fuzzel";
           };
         };
       };
