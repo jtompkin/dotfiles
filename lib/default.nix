@@ -20,6 +20,7 @@ rec {
     homeModules = forAllSystems (system: _: filterHostsFromSystem (lib.hasInfix "@") system);
     overlays = [
       inputs.niri-flake.overlays.niri
+      (final: prev: inputs.self.packages.${prev.stdenv.hostPlatform.system})
     ];
     pkgsBySystem = forAllSystems (_: pkgs: pkgs);
     formatter = forAllSystems (_: pkgs: pkgs.nixfmt-tree);

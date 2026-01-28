@@ -79,7 +79,7 @@ in
     programs = {
       niri = {
         enable = mkDefault true;
-        package = mkDefault pkgs.niri-unstable;
+        package = mkDefault pkgs.niri-patched;
         settings = {
           binds =
             let
@@ -131,11 +131,10 @@ in
 
               "Mod+U".action.focus-workspace-up = [ ];
               "Mod+I".action.focus-workspace-down = [ ];
-              "Mod+Ctrl+U".action.move-column-to-workspace-up = [ ];
-              "Mod+Ctrl+I".action.move-column-to-workspace-down = [ ];
-
-              "Mod+Shift+U".action.move-workspace-down = [ ];
-              "Mod+Shift+I".action.move-workspace-up = [ ];
+              "Mod+Shift+U".action.move-column-to-workspace-up = [ ];
+              "Mod+Shift+I".action.move-column-to-workspace-down = [ ];
+              "Mod+Ctrl+U".action.move-workspace-up = [ ];
+              "Mod+Ctrl+I".action.move-workspace-down = [ ];
 
               "Mod+WheelScrollDown" = {
                 cooldown-ms = 150;

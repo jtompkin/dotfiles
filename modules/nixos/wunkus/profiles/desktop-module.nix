@@ -49,7 +49,7 @@ in
       };
       niri = mkIf (lib.elem "niri" cfg.compositors) {
         enable = mkDefault true;
-        package = mkDefault pkgs.niri-unstable;
+        package = mkDefault pkgs.niri-patched;
       };
     };
     niri-flake.cache.enable = false;
