@@ -10,7 +10,17 @@ let
   inherit (lib) mkIf mkDefault;
 in
 {
-  options.wunkus.profiles.minimal.enable = lib.mkEnableOption "minimal Linux config";
+  options.wunkus.profiles.minimal = {
+    enable = lib.mkEnableOption "minimal Linux config";
+    passwords = {
+      enable = lib.mkEnableOption "Password configuration for default user";
+      secretName = lib.mkOption {
+        type = lib.types.str;
+        default = "password-01";
+        description = "Name of age encrypted secret storing hashed password";
+      };
+    };
+  };
   config = mkIf cfg.enable {
     nixpkgs.hostPlatform = config.wunkus.settings.system;
     time.timeZone = mkDefault "America/New_York";
@@ -27,6 +37,9 @@ in
           "wheel"
           "networkmanager"
         ];
+        hashedPasswordFile =
+          lib.mkIf cfg.passwords.enable
+            config.age.secrets.${cfg.passwords.secretName}.path;
       };
     };
   };

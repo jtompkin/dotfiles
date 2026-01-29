@@ -40,4 +40,8 @@ makeEntries {
   pypi-token = groups.python;
   spotify-client-id-01 = [ keys.franken.users.josh ];
   spotify-secret-01 = [ keys.franken.users.josh ];
+  password-01 = [
+    keys.franken.users.josh
+    keys.franken.system
+  ];
 }
