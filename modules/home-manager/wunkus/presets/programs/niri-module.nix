@@ -265,7 +265,7 @@ in
               name = "Cincinnati";
               useFahrenheit = true;
             };
-            general.avatarImage = ../themes/data/stylish/burger_king_cropped.png;
+            general.avatarImage = ./data/niri/burger_king_cropped.png;
           };
           systemd.enable = mkDefault true;
         };

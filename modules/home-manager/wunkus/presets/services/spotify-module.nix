@@ -140,7 +140,7 @@ in
         client_id_command = lib.mkIf (config.wunkus.settings.userid != null) {
           command = "cat";
           args = [
-            "/run/user/${builtins.toString config.wunkus.settings.userid}/agenix/spotify-client-id-01"
+            "/run/user/${toString config.wunkus.settings.userid}/agenix/spotify-client-id-01"
           ];
         };
       };
