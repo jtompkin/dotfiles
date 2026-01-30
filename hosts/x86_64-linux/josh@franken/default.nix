@@ -21,6 +21,8 @@
             "nix"
             "python"
             "roc"
+            "toml"
+            "just"
           ];
         };
         kitty.enable = true;

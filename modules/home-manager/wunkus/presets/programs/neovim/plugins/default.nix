@@ -7,6 +7,7 @@
 let
   cfg = config.wunkus.presets.programs.neovim.plugins;
   appendNewline = s: s + "\n";
+  removePlaceholders = config: builtins.replaceStrings [ "--REMOVE" ] [ "" ] config;
   pluginConfigs = {
     blink-cmp = {
       dependencies = [ pkgs.vimPlugins.friendly-snippets ];
@@ -76,52 +77,59 @@ let
         '';
     };
     conform-nvim = {
-      config = # lua
-        ''
-          require("conform").setup({
-          	formatters = {
-          		nixfmt = {
-          			command = [[${lib.getExe' pkgs.nixfmt "nixfmt"}]],
-          		},
-          	},
-          	formatters_by_ft = {
-          		go = { "gofmt" },
-          		just = { "just", "injected" },
-          		lua = { "stylua" },
-          		markdown = { "injected", "trim_whitespace" },
-          		nix = { "nixfmt", "injected" },
-          		python = { "ruff_format", "black", stop_after_first = true },
-          		toml = { "tombi" },
-          		["_"] = { "trim_whitespace" },
-          	},
-          	default_format_opts = {
-          		lsp_format = "fallback",
-          	},
-          	format_on_save = { timeout_ms = 500 },
-          })
-          vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
-          vim.keymap.set("n", "<leader>fe", function()
-          	if vim.o.formatexpr == "" then
-          		vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
-          	else
-          		vim.o.formatexpr = ""
-          	end
-          end, { desc = "Toggle using conform to format" })
-          vim.keymap.set("", "<leader>ff", function()
-          	require("conform").format({ async = true }, function(err)
-          		if not err then
-          			local mode = vim.api.nvim_get_mode().mode
-          			if vim.startswith(string.lower(mode), "v") then
-          				vim.api.nvim_feedkeys(
-          					vim.api.nvim_replace_termcodes("<Esc>", true, false, true),
-          					"n",
-          					true
-          				)
-          			end
-          		end
-          	end)
-          end, { desc = "Format code" })
-        '';
+      config =
+        let
+          inherit (cfg.plugins.nvim-treesitter) extraData;
+          isSupported = lang: lib.elem lang extraData.supportedLangs;
+        in
+        removePlaceholders
+          # lua
+          ''
+            require("conform").setup({
+            	formatters = {
+            		nixfmt = {
+            			command = [[${lib.getExe' pkgs.nixfmt "nixfmt"}]],
+            		},
+            	},
+            	formatters_by_ft = {
+            		--REMOVE${lib.optionalString (isSupported "go") ''go = { "gofmt" },''}
+            		--REMOVE${lib.optionalString (isSupported "just") ''just = { "just", "injected" },''}
+            		--REMOVE${lib.optionalString (isSupported "lua") ''lua = { "stylua" },''}
+            		--REMOVE${lib.optionalString (isSupported "markdown") ''markdown = { "injected", "trim_whitespace" },''}
+            		--REMOVE${lib.optionalString (isSupported "nix") ''nix = { "nixfmt", "injected" },''}
+            		--REMOVE${lib.optionalString (isSupported "python") ''python = { "ruff_format", "black", stop_after_first = true },''}
+            		--REMOVE${lib.optionalString (isSupported "roc") ''roc = { "roc" },''}
+            		--REMOVE${lib.optionalString (isSupported "toml") ''toml = { "tombi" },''}
+            		["_"] = { "trim_whitespace" },
+            	},
+            	default_format_opts = {
+            		lsp_format = "fallback",
+            	},
+            	format_on_save = { timeout_ms = 500 },
+            })
+            vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+            vim.keymap.set("n", "<leader>fe", function()
+            	if vim.o.formatexpr == "" then
+            		vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+            	else
+            		vim.o.formatexpr = ""
+            	end
+            end, { desc = "Toggle using conform to format" })
+            vim.keymap.set("", "<leader>ff", function()
+            	require("conform").format({ async = true }, function(err)
+            		if not err then
+            			local mode = vim.api.nvim_get_mode().mode
+            			if vim.startswith(string.lower(mode), "v") then
+            				vim.api.nvim_feedkeys(
+            					vim.api.nvim_replace_termcodes("<Esc>", true, false, true),
+            					"n",
+            					true
+            				)
+            			end
+            		end
+            	end)
+            end, { desc = "Format code" })
+          '';
     };
     fzf-lua = {
       dependencies = [ pkgs.vimPlugins.nvim-web-devicons ];
@@ -632,6 +640,7 @@ let
             config_and_enable("basedpyright", {})
             config_and_enable("gopls", {})
             config_and_enable("tombi", {})
+            config_and_enable("roc_ls", {})
             config_and_enable("nixd", {
             	cmd = { [[${lib.getExe pkgs.nixd}]] },
             	settings = {
@@ -692,19 +701,21 @@ let
         let
           inherit (cfg.plugins.nvim-treesitter) extraData;
           # TODO: find way to use this table directly without breaking inbedded Lua formatting
-          # langsLuaTable = ''{ ${lib.concatMapStringsSep ", " (s: "'${s}'") extraData.supportedLangs} }'';
+          langsLuaTable = "{ ${lib.concatMapStringsSep ", " (s: "'${s}'") extraData.supportedLangs} }";
         in
-        # lua
-        ''
-          vim.api.nvim_create_autocmd("FileType", {
-          	group = vim.api.nvim_create_augroup("treesitter", { clear = false }),
-          	pattern = [[${lib.concatStringsSep "," extraData.supportedLangs}]],
-          	callback = function()
-          		vim.treesitter.start()
-          		vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-          	end,
-          })
-        '';
+        removePlaceholders
+          # lua
+          ''
+            vim.api.nvim_create_autocmd("FileType", {
+            	group = vim.api.nvim_create_augroup("treesitter", { clear = false }),
+            	--REMOVE${"pattern = ${langsLuaTable},"}
+            	-- pattern = [[${lib.concatStringsSep "," extraData.supportedLangs}]],
+            	callback = function()
+            		vim.treesitter.start()
+            		vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+            	end,
+            })
+          '';
     };
     nvim-treesitter-context = {
       config = appendNewline ''require("treesitter-context").setup({ max_lines = 3 })'';
