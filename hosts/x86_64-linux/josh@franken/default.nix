@@ -17,14 +17,15 @@
           nixosConfigName = "franken";
           supportedLangs = [
             "go"
+            "just"
             "lua"
             "markdown"
             "nix"
             "python"
             "roc"
             "toml"
-            "just"
           ];
+          installSupportedLangs = true;
         };
         kitty.enable = true;
         niri = {

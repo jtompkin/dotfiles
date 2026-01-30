@@ -72,22 +72,14 @@ let
     conform-nvim = {
       config =
         let
-          # extraData = { inherit (cfg.plugins.nvim-treesitter) extraData; };
-          extraData = {
-            nvim-treesitter = cfg.plugins.nvim-treesitter.extraData;
-          };
-          isSupported = lang: lib.elem lang extraData.nvim-treesitter.supportedLangs;
+          inherit (cfg.plugins.conform-nvim) extraData;
+          isSupported = lang: lib.elem lang extraData.supportedLangs;
           ifSupported = lang: s: lib.optionalString (isSupported lang) s;
         in
         useEmbeds
           # lua
           ''
             require("conform").setup({
-            	formatters = {
-            		nixfmt = {
-            			command = [[${lib.getExe' pkgs.nixfmt "nixfmt"}]],
-            		},
-            	},
             	formatters_by_ft = {
             		--EMBED${ifSupported "go" ''go = { "gofmt" },''}
             		--EMBED${ifSupported "just" ''just = { "just", "injected" },''}
@@ -497,10 +489,8 @@ let
       let
         # Put these complex expressions in variables so injected Lua formatting works
         # inherit (cfg.plugins.nvim-lspconfig) extraData;
-        extraData = cfg.plugins.nvim-lspconfig.extraData // {
-          nvim-treesitter = cfg.plugins.nvim-treesitter.extraData;
-        };
-        isSupported = lang: lib.elem lang extraData.nvim-treesitter.supportedLangs;
+        inherit (cfg.plugins.nvim-lspconfig) extraData;
+        isSupported = lang: lib.elem lang extraData.supportedLangs;
         ifSupported = lang: s: lib.optionalString (isSupported lang) s;
         configDir =
           if extraData.nixConfigDir != null then extraData.nixConfigDir else "github:jtompkin/dotfiles";
@@ -516,7 +506,6 @@ let
         nixdConfig = # lua
           ''
             config_and_enable("nixd", {
-            	cmd = { [[${lib.getExe pkgs.nixd}]] },
             	settings = {
             		nixd = {
             			nixpkgs = {
@@ -602,8 +591,10 @@ let
       config =
         let
           inherit (cfg.plugins.nvim-treesitter) extraData;
-          # TODO: find way to use this table directly without breaking inbedded Lua formatting
-          langsLuaTable = "{ ${lib.concatMapStringsSep ", " (s: "'${s}'") extraData.supportedLangs} }";
+          # Remove just because nvim-treesitter is worse than builtin
+          langsLuaTable = "{ ${
+            lib.concatMapStringsSep ", " (s: "'${s}'") (lib.remove "just" extraData.supportedLangs)
+          } }";
         in
         useEmbeds
           # lua
@@ -611,7 +602,6 @@ let
             vim.api.nvim_create_autocmd("FileType", {
             	group = vim.api.nvim_create_augroup("treesitter", { clear = false }),
             	--EMBED${"pattern = ${langsLuaTable},"}
-            	-- pattern = [[${lib.concatStringsSep "," extraData.supportedLangs}]],
             	callback = function()
             		vim.treesitter.start()
             		vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"

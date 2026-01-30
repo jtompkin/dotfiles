@@ -6,12 +6,13 @@
 }:
 let
   inherit (lib) mkDefault;
+  cfg = config.wunkus.presets.programs.neovim;
   enablePluginList =
     pluginList:
     lib.listToAttrs (
       lib.map (plugin: lib.nameValuePair plugin { enable = lib.mkDefault true; }) pluginList
     );
-  cfg = config.wunkus.presets.programs.neovim;
+  isSupported = lang: lib.elem lang cfg.supportedLangs;
 in
 {
   imports = [ ./neovim/plugins ];
@@ -46,8 +47,9 @@ in
     supportedLangs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ ];
-      description = "List of filetypes to enable nvim-treesitter highlighting for";
+      description = "List of filetypes to enable support for. Used by nvim-treesitter, conform, nvim-lspconfig";
     };
+    installSupportedLangs = lib.mkEnableOption "installing editor tools for supportedLangs";
   };
   config = lib.mkIf cfg.enable {
     wunkus.presets.programs.neovim.plugins = {
@@ -56,10 +58,18 @@ in
         nvim-treesitter = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
       };
       plugins = lib.mkMerge [
-        {
-          nvim-lspconfig.extraData = { inherit (cfg) nixConfigDir nixosConfigName homeConfigName; };
-          nvim-treesitter.extraData = { inherit (cfg) supportedLangs; };
-        }
+        (builtins.mapAttrs (plugin: extraData: { inherit extraData; }) {
+          nvim-lspconfig = {
+            inherit (cfg)
+              nixConfigDir
+              nixosConfigName
+              homeConfigName
+              supportedLangs
+              ;
+          };
+          nvim-treesitter = { inherit (cfg) supportedLangs; };
+          conform-nvim = { inherit (cfg) supportedLangs; };
+        })
         (lib.mkIf (cfg.dist != "none") (enablePluginList [
           "cellular-automaton-nvim"
           "conform-nvim"
@@ -117,5 +127,34 @@ in
     xdg = {
       configFile.stylua.source = mkDefault ./data/neovim/stylua;
     };
+    home.packages = lib.mkIf cfg.installSupportedLangs (
+      [ ]
+      ++ lib.optionals (isSupported "go") [
+        pkgs.gopls
+        pkgs.go
+      ]
+      ++ lib.optionals (isSupported "just") [
+        pkgs.just
+        pkgs.just-lsp
+      ]
+      ++ lib.optionals (isSupported "lua") [
+        pkgs.lua-language-server
+        pkgs.stylua
+      ]
+      ++ lib.optionals (isSupported "nix") [
+        pkgs.nixd
+        pkgs.nixfmt
+      ]
+      ++ lib.optionals (isSupported "python") [
+        pkgs.basedpyright
+        pkgs.ruff
+      ]
+      ++ lib.optionals (isSupported "roc") [
+        pkgs.roc
+      ]
+      ++ lib.optionals (isSupported "toml") [
+        pkgs.tombi
+      ]
+    );
   };
 }
