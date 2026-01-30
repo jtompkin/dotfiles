@@ -7,7 +7,8 @@
 let
   cfg = config.wunkus.presets.programs.neovim.plugins;
   appendNewline = s: s + "\n";
-  removePlaceholders = config: builtins.replaceStrings [ "--REMOVE" ] [ "" ] config;
+  # Use --EMBED in lua code to introduce Nix code without breaking formatting
+  useEmbeds = config: builtins.replaceStrings [ "--EMBED" ] [ "" ] config;
   pluginConfigs = {
     blink-cmp = {
       dependencies = [ pkgs.vimPlugins.friendly-snippets ];
@@ -85,7 +86,7 @@ let
           };
           isSupported = lang: lib.elem lang extraData.nvim-treesitter.supportedLangs;
         in
-        removePlaceholders
+        useEmbeds
           # lua
           ''
             require("conform").setup({
@@ -95,14 +96,14 @@ let
             		},
             	},
             	formatters_by_ft = {
-            		--REMOVE${lib.optionalString (isSupported "go") ''go = { "gofmt" },''}
-            		--REMOVE${lib.optionalString (isSupported "just") ''just = { "just", "injected" },''}
-            		--REMOVE${lib.optionalString (isSupported "lua") ''lua = { "stylua" },''}
-            		--REMOVE${lib.optionalString (isSupported "markdown") ''markdown = { "injected", "trim_whitespace" },''}
-            		--REMOVE${lib.optionalString (isSupported "nix") ''nix = { "nixfmt", "injected" },''}
-            		--REMOVE${lib.optionalString (isSupported "python") ''python = { "ruff_format", "black", stop_after_first = true },''}
-            		--REMOVE${lib.optionalString (isSupported "roc") ''roc = { "roc" },''}
-            		--REMOVE${lib.optionalString (isSupported "toml") ''toml = { "tombi" },''}
+            		--EMBED${lib.optionalString (isSupported "go") ''go = { "gofmt" },''}
+            		--EMBED${lib.optionalString (isSupported "just") ''just = { "just", "injected" },''}
+            		--EMBED${lib.optionalString (isSupported "lua") ''lua = { "stylua" },''}
+            		--EMBED${lib.optionalString (isSupported "markdown") ''markdown = { "injected", "trim_whitespace" },''}
+            		--EMBED${lib.optionalString (isSupported "nix") ''nix = { "nixfmt", "injected" },''}
+            		--EMBED${lib.optionalString (isSupported "python") ''python = { "ruff_format", "black", stop_after_first = true },''}
+            		--EMBED${lib.optionalString (isSupported "roc") ''roc = { "roc" },''}
+            		--EMBED${lib.optionalString (isSupported "toml") ''toml = { "tombi" },''}
             		["_"] = { "trim_whitespace" },
             	},
             	default_format_opts = {
@@ -582,14 +583,14 @@ let
             	settings = {
             		nixd = {
             			nixpkgs = {
-            				--REMOVE${''expr = [[import (builtins.getFlake "${configDir}").inputs.nixpkgs {}]],''}
+            				--EMBED${''expr = [[import (builtins.getFlake "${configDir}").inputs.nixpkgs {}]],''}
             			},
             			options = {
             				nixos = {
-            					--REMOVE${''expr = [[(builtins.getFlake "${configDir}").nixosConfigurations."${nixosConfigName}".options]],''}
+            					--EMBED${''expr = [[(builtins.getFlake "${configDir}").nixosConfigurations."${nixosConfigName}".options]],''}
             				},
             				home_manager = {
-            					--REMOVE${''expr = [[(builtins.getFlake "${configDir}").homeConfigurations."${homeConfigName}".options]],''}
+            					--EMBED${''expr = [[(builtins.getFlake "${configDir}").homeConfigurations."${homeConfigName}".options]],''}
             				},
             			},
             		},
@@ -641,7 +642,7 @@ let
       {
         order = 1001;
         config =
-          removePlaceholders
+          useEmbeds
             # lua
             ''
               local lsp_group = vim.api.nvim_create_augroup("lsp", { clear = false })
@@ -654,13 +655,13 @@ let
               	vim.lsp.config(server, config)
               	vim.lsp.enable(server)
               end
-              --REMOVE${ifSupported "just" ''config_and_enable("just", {})''}
-              --REMOVE${ifSupported "python" ''config_and_enable("basedpyright", {})''}
-              --REMOVE${ifSupported "go" ''config_and_enable("gopls", {})''}
-              --REMOVE${ifSupported "toml" ''config_and_enable("tombi", {})''}
-              --REMOVE${ifSupported "roc" ''config_and_enable("roc_ls", {})''}
-              --REMOVE${ifSupported "nix" "${nixdConfig}"}
-              --REMOVE${ifSupported "lua" "${lua_lsConfig}"}
+              --EMBED${ifSupported "just" ''config_and_enable("just", {})''}
+              --EMBED${ifSupported "python" ''config_and_enable("basedpyright", {})''}
+              --EMBED${ifSupported "go" ''config_and_enable("gopls", {})''}
+              --EMBED${ifSupported "toml" ''config_and_enable("tombi", {})''}
+              --EMBED${ifSupported "roc" ''config_and_enable("roc_ls", {})''}
+              --EMBED${ifSupported "nix" "${nixdConfig}"}
+              --EMBED${ifSupported "lua" "${lua_lsConfig}"}
             '';
       };
     nvim-surround.config = appendNewline ''require("nvim-surround").setup({})'';
@@ -671,12 +672,12 @@ let
           # TODO: find way to use this table directly without breaking inbedded Lua formatting
           langsLuaTable = "{ ${lib.concatMapStringsSep ", " (s: "'${s}'") extraData.supportedLangs} }";
         in
-        removePlaceholders
+        useEmbeds
           # lua
           ''
             vim.api.nvim_create_autocmd("FileType", {
             	group = vim.api.nvim_create_augroup("treesitter", { clear = false }),
-            	--REMOVE${"pattern = ${langsLuaTable},"}
+            	--EMBED${"pattern = ${langsLuaTable},"}
             	-- pattern = [[${lib.concatStringsSep "," extraData.supportedLangs}]],
             	callback = function()
             		vim.treesitter.start()
