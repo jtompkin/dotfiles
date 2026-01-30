@@ -24,9 +24,7 @@ let
           		["<C-e>"] = { "hide", "fallback" },
           		["<C-S-e>"] = { "cancel", "fallback" },
           		["<C-]>"] = {
-          			function(cmp)
-          				cmp.show({ providers = { "snippets" } })
-          			end,
+          			function(cmp) cmp.show({ providers = { "snippets" } }) end,
           			"fallback",
           		},
           		["<C-S-Space>"] = {
@@ -66,15 +64,9 @@ let
     cellular-automaton-nvim = {
       config = # lua
         ''
-          vim.keymap.set("n", "<leader>fml", function()
-          	vim.cmd.CellularAutomaton("make_it_rain")
-          end, { desc = "Make it rain!" })
-          vim.keymap.set("n", "<leader>fmg", function()
-          	vim.cmd.CellularAutomaton("game_of_life")
-          end, { desc = "Game of life!" })
-          vim.keymap.set("n", "<leader>fms", function()
-          	vim.cmd.CellularAutomaton("scramble")
-          end, { desc = "Scramble!" })
+          vim.keymap.set("n", "<leader>fml", function() vim.cmd.CellularAutomaton("make_it_rain") end, { desc = "Make it rain!" })
+          vim.keymap.set("n", "<leader>fmg", function() vim.cmd.CellularAutomaton("game_of_life") end, { desc = "Game of life!" })
+          vim.keymap.set("n", "<leader>fms", function() vim.cmd.CellularAutomaton("scramble") end, { desc = "Scramble!" })
         '';
     };
     conform-nvim = {
@@ -85,6 +77,7 @@ let
             nvim-treesitter = cfg.plugins.nvim-treesitter.extraData;
           };
           isSupported = lang: lib.elem lang extraData.nvim-treesitter.supportedLangs;
+          ifSupported = lang: s: lib.optionalString (isSupported lang) s;
         in
         useEmbeds
           # lua
@@ -96,14 +89,14 @@ let
             		},
             	},
             	formatters_by_ft = {
-            		--EMBED${lib.optionalString (isSupported "go") ''go = { "gofmt" },''}
-            		--EMBED${lib.optionalString (isSupported "just") ''just = { "just", "injected" },''}
-            		--EMBED${lib.optionalString (isSupported "lua") ''lua = { "stylua" },''}
-            		--EMBED${lib.optionalString (isSupported "markdown") ''markdown = { "injected", "trim_whitespace" },''}
-            		--EMBED${lib.optionalString (isSupported "nix") ''nix = { "nixfmt", "injected" },''}
-            		--EMBED${lib.optionalString (isSupported "python") ''python = { "ruff_format", "black", stop_after_first = true },''}
-            		--EMBED${lib.optionalString (isSupported "roc") ''roc = { "roc" },''}
-            		--EMBED${lib.optionalString (isSupported "toml") ''toml = { "tombi" },''}
+            		--EMBED${ifSupported "go" ''go = { "gofmt" },''}
+            		--EMBED${ifSupported "just" ''just = { "just", "injected" },''}
+            		--EMBED${ifSupported "lua" ''lua = { "stylua" },''}
+            		--EMBED${ifSupported "markdown" ''markdown = { "injected", "trim_whitespace" },''}
+            		--EMBED${ifSupported "nix" ''nix = { "nixfmt", "injected" },''}
+            		--EMBED${ifSupported "python" ''python = { "ruff_format", "black", stop_after_first = true },''}
+            		--EMBED${ifSupported "roc" ''roc = { "roc" },''}
+            		--EMBED${ifSupported "toml" ''toml = { "tombi" },''}
             		["_"] = { "trim_whitespace" },
             	},
             	default_format_opts = {
@@ -124,11 +117,7 @@ let
             		if not err then
             			local mode = vim.api.nvim_get_mode().mode
             			if vim.startswith(string.lower(mode), "v") then
-            				vim.api.nvim_feedkeys(
-            					vim.api.nvim_replace_termcodes("<Esc>", true, false, true),
-            					"n",
-            					true
-            				)
+            				vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
             			end
             		end
             	end)
@@ -142,30 +131,10 @@ let
           local fzf = require("fzf-lua")
           vim.keymap.set("n", "<leader>pf", fzf.files, { desc = "Show files using fzf." })
           vim.keymap.set("n", "<leader>ps", fzf.grep, { desc = "Grep in files using fzf." })
-          vim.keymap.set(
-          	"n",
-          	"<leader>pp",
-          	fzf.grep_project,
-          	{ desc = "Grep project using fzf." }
-          )
-          vim.keymap.set(
-          	"n",
-          	"<leader>pw",
-          	fzf.grep_cword,
-          	{ desc = "Grep word under cursor using fzf." }
-          )
-          vim.keymap.set(
-          	"n",
-          	"<leader>pW",
-          	fzf.grep_cWORD,
-          	{ desc = "Grep WORD under cursor using fzf." }
-          )
-          vim.keymap.set(
-          	"v",
-          	"pv",
-          	fzf.grep_visual,
-          	{ desc = "Grep visual selection using fzf." }
-          )
+          vim.keymap.set("n", "<leader>pp", fzf.grep_project, { desc = "Grep project using fzf." })
+          vim.keymap.set("n", "<leader>pw", fzf.grep_cword, { desc = "Grep word under cursor using fzf." })
+          vim.keymap.set("n", "<leader>pW", fzf.grep_cWORD, { desc = "Grep WORD under cursor using fzf." })
+          vim.keymap.set("v", "pv", fzf.grep_visual, { desc = "Grep visual selection using fzf." })
         '';
     };
     harpoon2 = {
@@ -173,45 +142,24 @@ let
         ''
           local harpoon = require("harpoon")
           harpoon:setup()
-          vim.keymap.set("n", "<leader>ha", function()
-          	harpoon:list():add()
-          end, { desc = "Add current file to harpoon" })
-          vim.keymap.set("n", "<leader>hd", function()
-          	harpoon:list():remove()
-          end, { desc = "Remove file from harpoon." })
-          vim.keymap.set("n", "<leader>hh", function()
-          	harpoon.ui:toggle_quick_menu(harpoon:list())
-          end, { desc = "Show harpoon." })
-          vim.keymap.set("n", "<leader>a", function()
-          	harpoon:list():select(1)
-          end)
-          vim.keymap.set("n", "<leader>s", function()
-          	harpoon:list():select(2)
-          end)
-          vim.keymap.set("n", "<leader>q", function()
-          	harpoon:list():select(3)
-          end)
-          vim.keymap.set("n", "<leader>w", function()
-          	harpoon:list():select(4)
-          end)
-          vim.keymap.set("n", "<leader>5", function()
-          	harpoon:list():select(5)
-          end)
-          vim.keymap.set("n", "<leader>6", function()
-          	harpoon:list():select(6)
-          end)
-          vim.keymap.set("n", "<leader>7", function()
-          	harpoon:list():select(7)
-          end)
-          vim.keymap.set("n", "<leader>8", function()
-          	harpoon:list():select(8)
-          end)
-          vim.keymap.set("n", "<leader>9", function()
-          	harpoon:list():select(9)
-          end)
-          vim.keymap.set("n", "<leader>0", function()
-          	harpoon:list():select(10)
-          end)
+          vim.keymap.set("n", "<leader>ha", function() harpoon:list():add() end, { desc = "Add current file to harpoon" })
+          vim.keymap.set("n", "<leader>hd", function() harpoon:list():remove() end, { desc = "Remove file from harpoon." })
+          vim.keymap.set(
+          	"n",
+          	"<leader>hh",
+          	function() harpoon.ui:toggle_quick_menu(harpoon:list()) end,
+          	{ desc = "Show harpoon." }
+          )
+          vim.keymap.set("n", "<leader>a", function() harpoon:list():select(1) end)
+          vim.keymap.set("n", "<leader>s", function() harpoon:list():select(2) end)
+          vim.keymap.set("n", "<leader>q", function() harpoon:list():select(3) end)
+          vim.keymap.set("n", "<leader>w", function() harpoon:list():select(4) end)
+          vim.keymap.set("n", "<leader>5", function() harpoon:list():select(5) end)
+          vim.keymap.set("n", "<leader>6", function() harpoon:list():select(6) end)
+          vim.keymap.set("n", "<leader>7", function() harpoon:list():select(7) end)
+          vim.keymap.set("n", "<leader>8", function() harpoon:list():select(8) end)
+          vim.keymap.set("n", "<leader>9", function() harpoon:list():select(9) end)
+          vim.keymap.set("n", "<leader>0", function() harpoon:list():select(10) end)
         '';
     };
     lualine-nvim = {
@@ -296,9 +244,7 @@ let
           	MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
           	MiniFiles.reveal_cwd()
           end, { desc = "Open file explorer to current file" })
-          local set_mark = function(id, path, desc)
-          	MiniFiles.set_bookmark(id, path, { desc = desc })
-          end
+          local set_mark = function(id, path, desc) MiniFiles.set_bookmark(id, path, { desc = desc }) end
           local minifiles_group = vim.api.nvim_create_augroup("minifiles", {})
           vim.api.nvim_create_autocmd("user", {
           	group = minifiles_group,
@@ -307,14 +253,15 @@ let
           		local b = args.data.buf_id
           		vim.keymap.set("n", "gy", function()
           			local path = (MiniFiles.get_fs_entry() or {}).path
-          			if path == nil then
-          				return vim.notify("Cursor is not on valid entry")
-          			end
+          			if path == nil then return vim.notify("Cursor is not on valid entry") end
           			vim.fn.setreg(vim.v.register, path)
           		end, { buffer = b, desc = "Yank path" })
-          		vim.keymap.set("n", "gX", function()
-          			vim.ui.open(MiniFiles.get_fs_entry().path)
-          		end, { buffer = b, desc = "Open with default OS handler" })
+          		vim.keymap.set(
+          			"n",
+          			"gX",
+          			function() vim.ui.open(MiniFiles.get_fs_entry().path) end,
+          			{ buffer = b, desc = "Open with default OS handler" }
+          		)
           	end,
           })
         '';
@@ -335,39 +282,36 @@ let
           	},
           })
           vim.keymap.set("n", "<leader>pf", MiniPick.builtin.files, { desc = "Pick from files" })
+          vim.keymap.set("n", "<leader>pg", MiniPick.builtin.grep_live, { desc = "Pick from grep pattern in files" })
           vim.keymap.set(
           	"n",
-          	"<leader>pg",
-          	MiniPick.builtin.grep_live,
-          	{ desc = "Pick from grep pattern in files" }
+          	"<leader>pw",
+          	function() MiniPick.builtin.grep({ pattern = vim.fn.expand("<cword>") }) end,
+          	{ desc = "Pick from grep cword in files" }
           )
-          vim.keymap.set("n", "<leader>pw", function()
-          	MiniPick.builtin.grep({ pattern = vim.fn.expand("<cword>") })
-          end, { desc = "Pick from grep cword in files" })
-          vim.keymap.set("n", "<leader>pW", function()
-          	MiniPick.builtin.grep({ pattern = vim.fn.expand("<cWORD>") })
-          end, { desc = "Pick from grep cWORD in files" })
+          vim.keymap.set(
+          	"n",
+          	"<leader>pW",
+          	function() MiniPick.builtin.grep({ pattern = vim.fn.expand("<cWORD>") }) end,
+          	{ desc = "Pick from grep cWORD in files" }
+          )
           vim.keymap.set("n", "<leader>ph", MiniPick.builtin.help, { desc = "Pick from help" })
-          vim.keymap.set(
-          	"n",
-          	"<leader>pr",
-          	MiniPick.builtin.resume,
-          	{ desc = "Resume last picker" }
-          )
+          vim.keymap.set("n", "<leader>pr", MiniPick.builtin.resume, { desc = "Resume last picker" })
         '';
     };
     mini-sessions = {
       config = # lua
         ''
           require("mini.sessions").setup({})
-          vim.keymap.set("n", "<leader>sw", function()
-          	MiniSessions.write(MiniSessions.config.file)
-          end, { desc = "Write local session" })
+          vim.keymap.set(
+          	"n",
+          	"<leader>sw",
+          	function() MiniSessions.write(MiniSessions.config.file) end,
+          	{ desc = "Write local session" }
+          )
           vim.keymap.set("n", "<leader>sn", function()
           	local session = vim.fn.input("Session name: ")
-          	if session ~= "" then
-          		MiniSessions.write(session)
-          	end
+          	if session ~= "" then MiniSessions.write(session) end
           end, { desc = "Write new session" })
           vim.keymap.set("n", "<leader>sr", MiniSessions.read, { desc = "Read default session" })
           vim.keymap.set("n", "<leader>ps", MiniSessions.select, { desc = "Pick sessions" })
@@ -456,16 +400,12 @@ let
       config = # lua
         ''
           require("nightfox").setup({
-          	specs = {
-          		all = {
-          			syntax = {
-          				func = "magenta",
-          				keyword = "red",
-          				conditional = "red",
-          				builtin0 = "pink",
-          			},
-          		},
-          	},
+          	specs = { all = { syntax = {
+          		func = "magenta",
+          		keyword = "red",
+          		conditional = "red",
+          		builtin0 = "pink",
+          	} } },
           	groups = {
           		all = {
           			["@variable.parameter"] = { link = "Variable" },
@@ -473,9 +413,7 @@ let
           			Special = { link = "@keyword" },
           		},
           	},
-          	modules = {
-          		neogit = true,
-          	},
+          	modules = { neogit = true },
           })
           vim.cmd.colorscheme("carbonfox")
           vim.cmd.highlight("Normal guibg=none")
@@ -507,8 +445,7 @@ let
           	-- end,
           	snippet = {
           		expand = function(args)
-          			local insert = mini_snippets.config.expand.insert
-          				or mini_snippets.default_insert
+          			local insert = mini_snippets.config.expand.insert or mini_snippets.default_insert
           			insert({ body = args.body })
           			cmp.resubscribe({ "TextChangedI", "TextChangedP" })
           			require("cmp.config").set_onetime({ sources = {} })
@@ -607,31 +544,27 @@ let
             			local path = client.workspace_folders[1].name
             			if
             				path ~= vim.fn.stdpath("config")
-            				and (
-            					vim.uv.fs_stat(path .. "/.luarc.json")
-            					or vim.uv.fs_stat(path .. "/.luarc.jsonc")
-            				)
+            				and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
             			then
             				return
             			end
             		end
-            		client.config.settings.Lua =
-            			vim.tbl_deep_extend("force", client.config.settings.Lua, {
-            				runtime = {
-            					version = "LuaJIT",
-            					path = {
-            						"lua/?.lua",
-            						"lua/?/init.lua",
-            					},
+            		client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
+            			runtime = {
+            				version = "LuaJIT",
+            				path = {
+            					"lua/?.lua",
+            					"lua/?/init.lua",
             				},
-            				workspace = {
-            					checkThirdParty = false,
-            					ignoreDir = { ".direnv" },
-            					library = {
-            						vim.env.VIMRUNTIME,
-            					},
+            			},
+            			workspace = {
+            				checkThirdParty = false,
+            				ignoreDir = { ".direnv" },
+            				library = {
+            					vim.env.VIMRUNTIME,
             				},
-            			})
+            			},
+            		})
             	end,
             	settings = {
             		Lua = {},
@@ -693,24 +626,20 @@ let
       config = # lua
         ''
           local render_markdown = require("render-markdown")
-          render_markdown.setup({
-          	latex = { enabled = false },
-          })
-          vim.keymap.set(
-          	"n",
-          	"<leader>mp",
-          	render_markdown.preview,
-          	{ desc = "Render markdown preview" }
-          )
+          render_markdown.setup({ latex = { enabled = false } })
+          vim.keymap.set("n", "<leader>mp", render_markdown.preview, { desc = "Render markdown preview" })
         '';
     };
     which-key-nvim = {
       config = # lua
         ''
           local which_key = require("which-key")
-          vim.keymap.set("n", "<leader>?", function()
-          	which_key.show({ global = false })
-          end, { desc = "Buffer local keymaps (which-key)" })
+          vim.keymap.set(
+          	"n",
+          	"<leader>?",
+          	function() which_key.show({ global = false }) end,
+          	{ desc = "Buffer local keymaps (which-key)" }
+          )
         '';
     };
   };
