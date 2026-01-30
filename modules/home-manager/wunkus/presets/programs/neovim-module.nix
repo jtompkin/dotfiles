@@ -33,6 +33,16 @@ in
       default = config.wunkus.settings.flakeDir;
       description = "Path to flake directory with NixOS and Home Manager configurations for nixd completion options";
     };
+    nixosConfigName = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = "Name to use for generating Nixos option completion";
+    };
+    homeConfigName = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = "Name to use for generating Home Manager option completion";
+    };
     supportedLangs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ ];
@@ -47,7 +57,7 @@ in
       };
       plugins = lib.mkMerge [
         {
-          nvim-lspconfig.extraData = { inherit (cfg) nixConfigDir; };
+          nvim-lspconfig.extraData = { inherit (cfg) nixConfigDir nixosConfigName homeConfigName; };
           nvim-treesitter.extraData = { inherit (cfg) supportedLangs; };
         }
         (lib.mkIf (cfg.dist != "none") (enablePluginList [

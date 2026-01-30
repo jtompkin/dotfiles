@@ -79,8 +79,11 @@ let
     conform-nvim = {
       config =
         let
-          inherit (cfg.plugins.nvim-treesitter) extraData;
-          isSupported = lang: lib.elem lang extraData.supportedLangs;
+          # extraData = { inherit (cfg.plugins.nvim-treesitter) extraData; };
+          extraData = {
+            nvim-treesitter = cfg.plugins.nvim-treesitter.extraData;
+          };
+          isSupported = lang: lib.elem lang extraData.nvim-treesitter.supportedLangs;
         in
         removePlaceholders
           # lua
@@ -555,145 +558,100 @@ let
     nvim-lspconfig =
       let
         # Put these complex expressions in variables so injected Lua formatting works
-        inherit (cfg.plugins.nvim-lspconfig) extraData;
+        # inherit (cfg.plugins.nvim-lspconfig) extraData;
+        extraData = cfg.plugins.nvim-lspconfig.extraData // {
+          nvim-treesitter = cfg.plugins.nvim-treesitter.extraData;
+        };
+        isSupported = lang: lib.elem lang extraData.nvim-treeistter.supportedLangs;
         configDir =
           if extraData.nixConfigDir != null then extraData.nixConfigDir else "github:jtompkin/dotfiles";
-        nixosExpr = ''(builtins.getFlake ("${configDir}")).nixosConfigurations.completion.options'';
-        homeManagerExpr = ''(builtins.getFlake ("${configDir}")).homeConfigurations."none@completion".options'';
-        homeConfigNames = lib.concatStringsSep " " (
-          lib.attrNames config.lib.dotfiles.const.self.homeConfigurations
-        );
-        nixosConfigNames = lib.concatStringsSep " " (
-          lib.attrNames config.lib.dotfiles.const.self.nixosConfigurations
-        );
+        nixosConfigName =
+          if extraData.nixConfigDir != null then extraData.nixosConfigName else "completion";
+        homeConfigName =
+          if extraData.homeConfigName != null then
+            extraData.homeConfigName
+          else if extraData.nixosConfigName == null then
+            "none@completion"
+          else
+            "${config.wunkus.settings.username}@${nixosConfigName}";
       in
       {
         order = 1001;
-        config = # lua
-          ''
-            local lsp_group = vim.api.nvim_create_augroup("lsp", { clear = false })
-            vim.api.nvim_create_autocmd("FileType", {
-            	group = lsp_group,
-            	pattern = { "python" },
-            	command = "set fo-=t",
-            })
-            -- These mappings are an affront to God but I love them
-            vim.api.nvim_create_autocmd("FileType", {
-            	group = lsp_group,
-            	pattern = { "nix" },
-            	callback = function()
-            		vim.keymap.set("n", "<leader>nsn", function()
-            			vim.ui.select(vim.split("${nixosConfigNames}", " "), {
-            				prompt = "Switch NixOS config",
-            			}, function(choice)
-            				if choice ~= nil then
-            					vim.cmd(
-            						[[!nixos-rebuild --flake '${configDir}\#]]
-            							.. choice
-            							.. "' --sudo switch"
-            					)
-            				end
-            			end)
-            		end, { desc = "Switch NixOS configuration" })
-            		vim.keymap.set("n", "<leader>nsh", function()
-            			vim.ui.select(vim.split("${homeConfigNames}", " "), {
-            				prompt = "Switch home-manager config",
-            			}, function(choice)
-            				if choice == nil then
-            					return
-            				end
-            				vim.notify(
-            					string.format("Switching to new home-manager config: %s...", choice),
-            					vim.log.levels.INFO
-            				)
-            				vim.system({
-            					"home-manager",
-            					"--flake",
-            					"${configDir}#" .. choice,
-            					"switch",
-            				}, { text = true }, function(obj)
-            					if obj.code == 0 then
-            						vim.notify(
-            							"Switched to new home-manager configuration: " .. choice,
-            							vim.log.levels.INFO
-            						)
-            					else
-            						vim.notify(
-            							string.format(
-            								"Could not switch to new home-manager config: %s\n%s",
-            								choice,
-            								obj.stderr
-            							),
-            							vim.log.levels.ERROR
-            						)
-            					end
-            				end)
-            			end)
-            		end, { desc = "Switch home-manager configuration" })
-            	end,
-            })
-            local function config_and_enable(server, config)
-            	vim.lsp.config(server, config)
-            	vim.lsp.enable(server)
-            end
-            config_and_enable("just", {})
-            config_and_enable("basedpyright", {})
-            config_and_enable("gopls", {})
-            config_and_enable("tombi", {})
-            config_and_enable("roc_ls", {})
-            config_and_enable("nixd", {
-            	cmd = { [[${lib.getExe pkgs.nixd}]] },
-            	settings = {
-            		nixd = {
-            			options = {
-            				nixos = {
-            					expr = [[${nixosExpr}]],
-            				},
-            				home_manager = {
-            					expr = [[${homeManagerExpr}]],
-            				},
-            			},
-            		},
-            	},
-            })
-            -- From: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#lua_ls
-            config_and_enable("lua_ls", {
-            	on_init = function(client)
-            		if client.workspace_folders then
-            			local path = client.workspace_folders[1].name
-            			if
-            				path ~= vim.fn.stdpath("config")
-            				and (
-            					vim.uv.fs_stat(path .. "/.luarc.json")
-            					or vim.uv.fs_stat(path .. "/.luarc.jsonc")
-            				)
-            			then
-            				return
-            			end
-            		end
-            		client.config.settings.Lua =
-            			vim.tbl_deep_extend("force", client.config.settings.Lua, {
-            				runtime = {
-            					version = "LuaJIT",
-            					path = {
-            						"lua/?.lua",
-            						"lua/?/init.lua",
-            					},
-            				},
-            				workspace = {
-            					checkThirdParty = false,
-            					ignoreDir = { ".direnv" },
-            					library = {
-            						vim.env.VIMRUNTIME,
-            					},
-            				},
-            			})
-            	end,
-            	settings = {
-            		Lua = {},
-            	},
-            })
-          '';
+        config =
+          removePlaceholders
+            # lua
+            ''
+              local lsp_group = vim.api.nvim_create_augroup("lsp", { clear = false })
+              vim.api.nvim_create_autocmd("FileType", {
+              	group = lsp_group,
+              	pattern = { "python" },
+              	command = "set fo-=t",
+              })
+              local function config_and_enable(server, config)
+              	vim.lsp.config(server, config)
+              	vim.lsp.enable(server)
+              end
+              config_and_enable("just", {})
+              config_and_enable("basedpyright", {})
+              config_and_enable("gopls", {})
+              config_and_enable("tombi", {})
+              config_and_enable("roc_ls", {})
+              config_and_enable("nixd", {
+              	cmd = { [[${lib.getExe pkgs.nixd}]] },
+              	settings = {
+              		nixd = {
+              			nixpkgs = {
+              				--REMOVE${''expr = [[import (builtins.getFlake "${configDir}").inputs.nixpkgs {}]],''}
+              			},
+              			options = {
+              				nixos = {
+              					--REMOVE${''expr = [[(builtins.getFlake "${configDir}").nixosConfigurations."${nixosConfigName}".options]],''}
+              				},
+              				home_manager = {
+              					--REMOVE${''expr = [[(builtins.getFlake "${configDir}").homeConfigurations."${homeConfigName}".options]],''}
+              				},
+              			},
+              		},
+              	},
+              })
+              -- From: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#lua_ls
+              config_and_enable("lua_ls", {
+              	on_init = function(client)
+              		if client.workspace_folders then
+              			local path = client.workspace_folders[1].name
+              			if
+              				path ~= vim.fn.stdpath("config")
+              				and (
+              					vim.uv.fs_stat(path .. "/.luarc.json")
+              					or vim.uv.fs_stat(path .. "/.luarc.jsonc")
+              				)
+              			then
+              				return
+              			end
+              		end
+              		client.config.settings.Lua =
+              			vim.tbl_deep_extend("force", client.config.settings.Lua, {
+              				runtime = {
+              					version = "LuaJIT",
+              					path = {
+              						"lua/?.lua",
+              						"lua/?/init.lua",
+              					},
+              				},
+              				workspace = {
+              					checkThirdParty = false,
+              					ignoreDir = { ".direnv" },
+              					library = {
+              						vim.env.VIMRUNTIME,
+              					},
+              				},
+              			})
+              	end,
+              	settings = {
+              		Lua = {},
+              	},
+              })
+            '';
       };
     nvim-surround.config = appendNewline ''require("nvim-surround").setup({})'';
     nvim-treesitter = {

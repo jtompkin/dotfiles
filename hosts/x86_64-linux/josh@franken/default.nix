@@ -14,6 +14,7 @@
         zshDiy.enable = true;
         neovim = {
           dist = "mini";
+          nixosConfigName = "franken";
           supportedLangs = [
             "go"
             "lua"
