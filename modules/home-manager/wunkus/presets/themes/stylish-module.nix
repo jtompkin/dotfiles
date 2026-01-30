@@ -39,8 +39,9 @@ in
         size = mkDefault 24;
       };
       polarity = "dark";
-      targets.neovim.enable = !config.wunkus.presets.programs.neovim.enable;
+      targets = lib.genAttrs [ "neovide" "neovim" "nixvim" "nvf" "vim" ] (target: {
+        enable = !config.wunkus.presets.programs.neovim.enable;
+      });
     };
-    home.file.".face".source = ./data/stylish/burger_king_cropped.png;
   };
 }

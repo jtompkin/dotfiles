@@ -14,6 +14,14 @@
         zshDiy.enable = true;
         neovim = {
           dist = "mini";
+          supportedLangs = [
+            "go"
+            "lua"
+            "markdown"
+            "nix"
+            "python"
+            "roc"
+          ];
         };
         kitty.enable = true;
         niri = {
