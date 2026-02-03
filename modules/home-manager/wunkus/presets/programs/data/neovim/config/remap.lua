@@ -16,3 +16,6 @@ vim.keymap.set(
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "Yank into clipboard." })
 vim.keymap.set("n", "<leader>Y", [["+Y]], { desc = "Yank into clipboard." })
 vim.keymap.set("n", "<leader>c", ":!", { desc = "Begin shell command input." })
+
+vim.keymap.set("n", "<LeftDrag>", "<LeftMouse>", { desc = "Disable mouse drag." })
+vim.keymap.set("n", "<2-LeftMouse>", "<Nop>", { desc = "Disable mouse double click." })
