@@ -22,10 +22,9 @@ let
           		["<C-l>"] = { "snippet_forward" },
           		["<C-h>"] = { "snippet_backward" },
           		["<C-e>"] = { "hide", "fallback" },
-          		["<C-S-e>"] = { "cancel", "fallback" },
-          		["<C-]>"] = {
+          		["<C-w>"] = { "cancel", "fallback" },
+          		["<C-t>"] = {
           			function(cmp) cmp.show({ providers = { "snippets" } }) end,
-          			"fallback",
           		},
           		["<C-S-Space>"] = {
           			"show",
