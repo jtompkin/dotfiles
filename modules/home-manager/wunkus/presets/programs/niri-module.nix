@@ -12,6 +12,7 @@ in
   options.wunkus.presets.programs.niri = {
     enable = lib.mkEnableOption "Niri preset config";
     noctalia.enable = lib.mkEnableOption "Noctalia-shell for Niri";
+    syncClipboard = lib.mkEnableOption "Sync clipboards across all Wayland instances. Useful in WSL";
     defaultApps = lib.mkOption {
       type = lib.types.attrsOf (lib.types.submodule config.lib.dotfiles.types.defaultApp);
       default = { };
@@ -244,6 +245,7 @@ in
             };
           };
         };
+        mornix.services.clipboard-sync.enable = mkDefault cfg.syncClipboard;
         home.packages = [ pkgs.kdePackages.ark ];
       }
       (lib.mkIf cfg.noctalia.enable {

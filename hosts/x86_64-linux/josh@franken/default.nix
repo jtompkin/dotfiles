@@ -31,6 +31,7 @@
         niri = {
           enable = true;
           noctalia.enable = true;
+          syncClipboard = true;
           defaultApps = {
             terminal.name = "kitty";
           };

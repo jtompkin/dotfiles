@@ -410,11 +410,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1768421846,
-        "narHash": "sha256-8WmhjHCCECeFWCKfzf+uoxA/Hcv8LdDgkkWUcbxh4WA=",
+        "lastModified": 1770084007,
+        "narHash": "sha256-WpzIZ3zf5yKVKKwWyu4O2MZta4Y79JoY1ZRneLtApgU=",
         "owner": "jtompkin",
         "repo": "mornix",
-        "rev": "60d30fa81f92907ea0ea1dc030717ba41bd4be6c",
+        "rev": "873195e28d5f648215f7cd912adf58ffaf388742",
         "type": "github"
       },
       "original": {
