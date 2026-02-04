@@ -486,8 +486,6 @@ let
     };
     nvim-lspconfig =
       let
-        # Put these complex expressions in variables so injected Lua formatting works
-        # inherit (cfg.plugins.nvim-lspconfig) extraData;
         inherit (cfg.plugins.nvim-lspconfig) extraData;
         isSupported = lang: lib.elem lang extraData.supportedLangs;
         ifSupported = lang: s: lib.optionalString (isSupported lang) s;
@@ -505,6 +503,9 @@ let
         nixdConfig = # lua
           ''
             config_and_enable("nixd", {
+            	on_attach = function(client, bufnr)
+            		if client.server_capabilities.inlayHintProvider then vim.lsp.inlay_hint.enable(true, { bufnr = bufnr }) end
+            	end,
             	settings = {
             		nixd = {
             			nixpkgs = {
