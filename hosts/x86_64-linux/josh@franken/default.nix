@@ -15,17 +15,6 @@
         neovim = {
           dist = "mini";
           nixosConfigName = "franken";
-          supportedLangs = [
-            "go"
-            "just"
-            "lua"
-            "markdown"
-            "nix"
-            "python"
-            "roc"
-            "toml"
-          ];
-          installSupportedLangs = true;
         };
         kitty.enable = true;
         niri = {

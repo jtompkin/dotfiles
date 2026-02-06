@@ -72,8 +72,7 @@ let
       config =
         let
           inherit (cfg.plugins.conform-nvim) extraData;
-          isSupported = lang: lib.elem lang extraData.supportedLangs;
-          ifSupported = lang: s: lib.optionalString (isSupported lang) s;
+          ifSupported = lang: s: lib.optionalString extraData.supportedLangs.${lang}.enable s;
         in
         useEmbeds
           # lua
@@ -487,8 +486,7 @@ let
     nvim-lspconfig =
       let
         inherit (cfg.plugins.nvim-lspconfig) extraData;
-        isSupported = lang: lib.elem lang extraData.supportedLangs;
-        ifSupported = lang: s: lib.optionalString (isSupported lang) s;
+        ifSupported = lang: s: lib.optionalString extraData.supportedLangs.${lang}.enable s;
         configDir =
           if extraData.nixConfigDir != null then extraData.nixConfigDir else "github:jtompkin/dotfiles";
         nixosConfigName =
@@ -505,6 +503,7 @@ let
             config_and_enable("nixd", {
             	on_attach = function(client, bufnr)
             		if client.server_capabilities.inlayHintProvider then vim.lsp.inlay_hint.enable(true, { bufnr = bufnr }) end
+            		vim.keymap.set("i", "<LocalLeader>{", "{<CR>};<C-O>O", { buffer = bufnr })
             	end,
             	settings = {
             		nixd = {
@@ -593,7 +592,11 @@ let
           inherit (cfg.plugins.nvim-treesitter) extraData;
           # Remove just because nvim-treesitter is worse than builtin
           langsLuaTable = "{ ${
-            lib.concatMapStringsSep ", " (s: "'${s}'") (lib.remove "just" extraData.supportedLangs)
+            lib.concatMapStringsSep ", " (s: "'${s}'") (
+              builtins.attrNames (
+                lib.filterAttrs (lang: conf: conf.enable) (removeAttrs extraData.supportedLangs [ "just" ])
+              )
+            )
           } }";
         in
         useEmbeds

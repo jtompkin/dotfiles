@@ -9,10 +9,9 @@ let
   cfg = config.wunkus.presets.programs.neovim;
   enablePluginList =
     pluginList:
-    lib.listToAttrs (
-      lib.map (plugin: lib.nameValuePair plugin { enable = lib.mkDefault true; }) pluginList
-    );
-  isSupported = lang: lib.elem lang cfg.supportedLangs;
+    lib.genAttrs pluginList (plugin: {
+      enable = lib.mkDefault true;
+    });
 in
 {
   imports = [ ./neovim/plugins ];
@@ -44,12 +43,39 @@ in
       default = null;
       description = "Name to use for generating Home Manager option completion";
     };
-    supportedLangs = lib.mkOption {
+    availableLangs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
-      description = "List of filetypes to enable support for. Used by nvim-treesitter, conform, nvim-lspconfig";
+      default = [
+        "go"
+        "just"
+        "lua"
+        "markdown"
+        "nix"
+        "python"
+        "roc"
+        "toml"
+      ];
+      readOnly = true;
+      internal = true;
     };
-    installSupportedLangs = lib.mkEnableOption "installing editor tools for supportedLangs";
+    supportedLangs = lib.mkOption {
+      type = lib.types.submodule {
+        options = lib.genAttrs cfg.availableLangs (lang: {
+          enable = lib.mkOption {
+            type = lib.types.bool;
+            default = true;
+            description = "Whether to enable ${lang} Neovim support";
+          };
+          install = lib.mkOption {
+            type = lib.types.bool;
+            default = true;
+            description = "Whether to install ${lang} editor tools";
+          };
+        });
+      };
+      default = { };
+      description = "Configuration for languages to support in Neovim";
+    };
   };
   config = lib.mkIf cfg.enable {
     wunkus.presets.programs.neovim.plugins = {
@@ -58,6 +84,7 @@ in
         nvim-treesitter = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
       };
       plugins = lib.mkMerge [
+        # Give extraData to plugins unconditionally
         (builtins.mapAttrs (plugin: extraData: { inherit extraData; }) {
           nvim-lspconfig = {
             inherit (cfg)
@@ -67,8 +94,12 @@ in
               supportedLangs
               ;
           };
-          nvim-treesitter = { inherit (cfg) supportedLangs; };
-          conform-nvim = { inherit (cfg) supportedLangs; };
+          nvim-treesitter = {
+            inherit (cfg) supportedLangs;
+          };
+          conform-nvim = {
+            inherit (cfg) supportedLangs;
+          };
         })
         (lib.mkIf (cfg.dist != "none") (enablePluginList [
           "cellular-automaton-nvim"
@@ -127,34 +158,33 @@ in
     xdg = {
       configFile.stylua.source = mkDefault ./data/neovim/stylua;
     };
-    home.packages = lib.mkIf cfg.installSupportedLangs (
+    home.packages =
       [ ]
-      ++ lib.optionals (isSupported "go") [
+      ++ lib.optionals (cfg.supportedLangs.go.install) [
         pkgs.gopls
         pkgs.go
       ]
-      ++ lib.optionals (isSupported "just") [
+      ++ lib.optionals (cfg.supportedLangs.just.install) [
         pkgs.just
         pkgs.just-lsp
       ]
-      ++ lib.optionals (isSupported "lua") [
+      ++ lib.optionals (cfg.supportedLangs.lua.install) [
         pkgs.lua-language-server
         pkgs.stylua
       ]
-      ++ lib.optionals (isSupported "nix") [
+      ++ lib.optionals (cfg.supportedLangs.nix.install) [
         pkgs.nixd
         pkgs.nixfmt
       ]
-      ++ lib.optionals (isSupported "python") [
+      ++ lib.optionals (cfg.supportedLangs.python.install) [
         pkgs.basedpyright
         pkgs.ruff
       ]
-      ++ lib.optionals (isSupported "roc") [
+      ++ lib.optionals (cfg.supportedLangs.roc.install) [
         pkgs.roc
       ]
-      ++ lib.optionals (isSupported "toml") [
+      ++ lib.optionals (cfg.supportedLangs.toml.install) [
         pkgs.tombi
-      ]
-    );
+      ];
   };
 }
