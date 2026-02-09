@@ -225,6 +225,47 @@ let
         '';
     };
     mini-diff.config = appendNewline ''require("mini.diff").setup({})'';
+    mini-extra.config = # lua
+      ''
+        require("mini.extra").setup({})
+        vim.keymap.set("n", "<leader>pc", MiniExtra.pickers.commands, { desc = "Pick from commands" })
+        vim.keymap.set("n", "<leader>pH", MiniExtra.pickers.history, { desc = "Pick from history" })
+        vim.keymap.set("n", "<leader>pk", MiniExtra.pickers.keymaps, { desc = "Pick from keymaps" })
+        vim.keymap.set(
+        	"n",
+        	"<leader>pj",
+        	function() MiniExtra.pickers.list({ scope = "jump" }) end,
+        	{ desc = "Pick from jumplist" }
+        )
+        vim.keymap.set(
+        	"n",
+        	"<leader>plw",
+        	function() MiniExtra.pickers.lsp({ scope = "workspace_symbol_live" }) end,
+        	{ desc = "Pick from workspace symbols" }
+        )
+        vim.keymap.set(
+        	"n",
+        	"<leader>pld",
+        	function() MiniExtra.pickers.lsp({ scope = "document_symbol" }) end,
+        	{ desc = "Pick from document symbols" }
+        )
+        vim.api.nvim_create_user_command("PickLsp", function(opts) MiniExtra.pickers.lsp({ scope = opts.fargs[1] }) end, {
+        	nargs = 1,
+        	complete = function()
+        		return {
+        			"declaration",
+        			"definition",
+        			"document_symbol",
+        			"implementation",
+        			"references",
+        			"type_definition",
+        			"workspace_symbol",
+        			"workspace_symbol_live",
+        		}
+        	end,
+        	desc = "Pick from given lsp scope",
+        })
+      '';
     mini-files = {
       config = # lua
         ''
@@ -503,7 +544,7 @@ let
             config_and_enable("nixd", {
             	on_attach = function(client, bufnr)
             		if client.server_capabilities.inlayHintProvider then vim.lsp.inlay_hint.enable(true, { bufnr = bufnr }) end
-            		vim.keymap.set("i", "<LocalLeader>{", "{<CR>};<C-O>O", { buffer = bufnr })
+            		vim.keymap.set("i", "<LocalLeader><C-]>", "{<CR>};<C-O>O", { buffer = bufnr })
             	end,
             	settings = {
             		nixd = {
@@ -522,8 +563,7 @@ let
             	},
             })
           '';
-        lua_lsConfig =
-          # lua
+        lua_lsConfig = # lua
           ''
             -- From: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#lua_ls
             config_and_enable("lua_ls", {

@@ -50,10 +50,6 @@ autocmd("LspAttach", {
 			vim.lsp.buf.definition()
 		end, opts({ desc = "Go to definition." }))
 
-		vim.keymap.set("n", "K", function()
-			vim.lsp.buf.hover()
-		end, opts({ desc = "Show hover info." }))
-
 		vim.keymap.set("n", "<leader>vws", function()
 			vim.lsp.buf.workspace_symbol()
 		end, opts({ desc = "Search workspace symbols." }))
@@ -73,10 +69,6 @@ autocmd("LspAttach", {
 		vim.keymap.set("n", "<leader>vrn", function()
 			vim.lsp.buf.rename()
 		end, opts({ desc = "Rename object in scope." }))
-
-		vim.keymap.set({ "n", "i" }, "<C-g>", function()
-			vim.lsp.buf.signature_help()
-		end, opts({ desc = "Show signature help." }))
 
 		vim.keymap.set("n", "[d", function()
 			vim.diagnostic.jump({ count = -1, float = true })

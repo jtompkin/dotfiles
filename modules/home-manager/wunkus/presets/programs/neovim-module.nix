@@ -118,6 +118,7 @@ in
           "mini-clue"
           "mini-pick"
           "mini-diff"
+          "mini-extra"
           "mini-files"
           "mini-git"
           "mini-sessions"
