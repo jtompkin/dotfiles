@@ -158,6 +158,12 @@ in
     };
     xdg = {
       configFile.stylua.source = mkDefault ./data/neovim/stylua;
+      configFile."tombi/config.toml" = {
+        text = ''
+          toml-version = "v1.1.0"
+        '';
+        enable = cfg.supportedLangs.toml.enable;
+      };
     };
     home.packages =
       [ ]

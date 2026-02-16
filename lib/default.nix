@@ -81,6 +81,7 @@ rec {
       inherit specialArgs;
       modules = [
         inputs.agenix.nixosModules.default
+        inputs.mornix.nixosModules.default
         inputs.disko.nixosModules.disko
         inputs.home-manager.nixosModules.home-manager
         inputs.impermanence.nixosModules.impermanence
