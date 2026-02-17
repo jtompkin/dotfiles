@@ -12,7 +12,7 @@
     presets = {
       programs = {
         meantToFly.enable = true;
-        zim.enable = true;
+        zshDiy.enable = true;
         neovim.dist = "mini";
       };
     };

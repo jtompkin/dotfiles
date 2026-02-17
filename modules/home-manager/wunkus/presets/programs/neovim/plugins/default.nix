@@ -497,7 +497,7 @@ let
         configDir =
           if extraData.nixConfigDir != null then extraData.nixConfigDir else "github:jtompkin/dotfiles";
         nixosConfigName =
-          if extraData.nixConfigDir != null then extraData.nixosConfigName else "completion";
+          if extraData.nixosConfigName != null then extraData.nixosConfigName else "completion";
         homeConfigName =
           if extraData.homeConfigName != null then
             extraData.homeConfigName
