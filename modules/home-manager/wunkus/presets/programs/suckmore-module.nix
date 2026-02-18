@@ -533,7 +533,10 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
-    home.packages = [ cfg.finalPackage ];
+    home.packages = [
+      cfg.finalPackage
+      pkgs.nerd-fonts.iosevka
+    ];
     xdg.desktopEntries = {
       st = {
         name = "st";
