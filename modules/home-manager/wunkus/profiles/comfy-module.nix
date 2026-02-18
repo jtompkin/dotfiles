@@ -20,6 +20,13 @@ in
         tmux.minimal = false;
         neovim.enable = mkDefault true;
         shellExtras.enable = mkDefault true;
+        sequoia = {
+          enable = mkDefault true;
+          config = {
+            encrypt.profile = "rfc9580";
+            key.generate.profile = "rfc9580";
+          };
+        };
         git.enable = mkDefault true;
       };
       services = {

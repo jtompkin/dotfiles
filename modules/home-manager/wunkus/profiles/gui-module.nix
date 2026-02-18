@@ -22,6 +22,7 @@ in
       config.nix.package
     ];
     wunkus.presets.programs.kitty.enable = mkDefault true;
+    wunkus.presets.programs.suckmore.enable = mkDefault true;
     programs = {
       mpv.enable = mkDefault true;
       # zsh.shellAliases = {
