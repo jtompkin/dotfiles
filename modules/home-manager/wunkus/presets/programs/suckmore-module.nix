@@ -13,6 +13,7 @@ in
     package = lib.mkPackageOption pkgs "st" { };
     font = lib.mkOption {
       type = lib.hm.types.fontType;
+      description = "Font to use for st";
       default = {
         package = pkgs.nerd-fonts.iosevka;
         name = "Iosevka Nerd Font";
@@ -21,6 +22,7 @@ in
     };
     finalPackage = lib.mkOption {
       type = lib.types.package;
+      description = "st package with patches and config.h applied";
       default = cfg.package.override {
         config.st = {
           extraLibs = [ pkgs.harfbuzz ];
