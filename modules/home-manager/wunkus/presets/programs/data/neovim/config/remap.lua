@@ -6,16 +6,9 @@ vim.keymap.set(
 	{ silent = true, desc = "Toggle search highlighting." }
 )
 
-vim.keymap.set(
-	"n",
-	"<leader>x",
-	"<cmd>!chmod +x %<CR>",
-	{ silent = true, desc = "Add execute permissions to current buffer." }
-)
-
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "Yank into clipboard." })
 vim.keymap.set("n", "<leader>Y", [["+Y]], { desc = "Yank into clipboard." })
-vim.keymap.set("n", "<leader>c", ":!", { desc = "Begin shell command input." })
 
 vim.keymap.set("n", "<LeftDrag>", "<LeftMouse>", { desc = "Disable mouse drag." })
 vim.keymap.set("n", "<2-LeftMouse>", "<Nop>", { desc = "Disable mouse double click." })
+vim.keymap.set("n", "<3-LeftMouse>", "<Nop>", { desc = "Disable mouse triple click." })
