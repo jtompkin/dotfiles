@@ -21,6 +21,7 @@ in
       xclip
       config.nix.package
     ];
+    xdg.enable = mkDefault true;
     wunkus.presets.programs.kitty.enable = mkDefault true;
     wunkus.presets.programs.suckmore.enable = mkDefault true;
     programs = {

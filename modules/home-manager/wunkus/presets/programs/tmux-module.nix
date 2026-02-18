@@ -27,14 +27,9 @@ in
         bind-key C-t set status
         set-option -a terminal-features 'xterm-256color:RGB'
       ''
-      +
-        lib.optionalString (!(config.wunkus.presets.themes.stylish.enable || cfg.minimal))
-          "source ${
-            pkgs.fetchurl {
-              url = "https://raw.githubusercontent.com/EdenEast/nightfox.nvim/ba47d4b4c5ec308718641ba7402c143836f35aa9/extra/carbonfox/carbonfox.tmux";
-              hash = "sha256-7YL/qr5JcuH+pe8XZkOePussokdfTe+hpQPxQATzEd0=";
-            }
-          }\n";
+      + lib.optionalString (
+        !(config.wunkus.presets.themes.stylish.enable || cfg.minimal)
+      ) "source ${./data/tmux/base16-carbonfox.tmux}";
       sensibleOnTop = lib.mkIf (!cfg.minimal) (mkDefault true);
       plugins = lib.mkIf (!cfg.minimal) [
         pkgs.tmuxPlugins.pain-control
