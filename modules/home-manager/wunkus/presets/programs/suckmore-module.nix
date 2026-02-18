@@ -11,13 +11,13 @@ in
   options.wunkus.presets.programs.suckmore = {
     enable = lib.mkEnableOption "custom st configuration";
     package = lib.mkPackageOption pkgs "st" { };
-    fontFamily = lib.mkOption {
-      type = lib.types.str;
-      default = "Iosevka Nerd Font";
-    };
-    fontPixelSize = lib.mkOption {
-      type = lib.types.int;
-      default = 20;
+    font = lib.mkOption {
+      type = lib.hm.types.fontType;
+      default = {
+        package = pkgs.nerd-fonts.iosevka;
+        name = "Iosevka Nerd Font";
+        size = 20;
+      };
     };
     finalPackage = lib.mkOption {
       type = lib.types.package;
@@ -47,7 +47,7 @@ in
                *
                * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
                */
-              static char *font = "${cfg.fontFamily}:pixelsize=${toString cfg.fontPixelSize}:antialias=true:autohint=true";
+              static char *font = "${cfg.font.name}:pixelsize=${toString cfg.font.size}:antialias=true:autohint=true";
               static int borderpx = 2;
 
               /*
@@ -535,7 +535,7 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = [
       cfg.finalPackage
-      pkgs.nerd-fonts.iosevka
+      cfg.font.package
     ];
     xdg.desktopEntries = {
       st = {
