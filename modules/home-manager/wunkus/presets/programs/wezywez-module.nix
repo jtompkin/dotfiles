@@ -7,7 +7,7 @@
 let
   inherit (lib) mkDefault;
   cfg = config.wunkus.presets.programs.wezywez;
-  keybindType = (
+  keybindType =
     { config, ... }:
     {
       options = {
@@ -44,20 +44,24 @@ let
           internal = true;
           default = {
             inherit (config) key;
-            mods = builtins.concatStringsSep "|" config.mods;
+            mods = lib.mkIf (config.mods != [ ]) (builtins.concatStringsSep "|" config.mods);
             action = lib.mkLuaInline (
               if config.rawAction then config.action else "wezterm.action." + config.action
             );
           };
         };
       };
-    }
-  );
+    };
 in
 {
   options.wunkus.presets.programs.wezywez = {
     enable = lib.mkEnableOption "Wezterm configuration";
     enableDefaultBinds = lib.mkEnableOption "default key bindings defined by Wezterm";
+    enableTmuxBinds = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Whether to enable tmux-like bindings";
+    };
     keybinds = lib.mkOption {
       type = lib.types.listOf (lib.types.submodule keybindType);
       default = [ ];
@@ -79,7 +83,7 @@ in
     home.packages = lib.mkIf (!config.wunkus.presets.themes.stylish.enable) [ cfg.font.package ];
     wunkus.presets.programs.wezywez.keybinds = [
       {
-        key = "p";
+        key = "P";
         mods = [
           "CTRL"
           "SHIFT"
@@ -87,41 +91,34 @@ in
         action = "ActivateCommandPalette";
       }
       {
-        key = "Enter";
-        mods = [
-          "ALT"
-          "SHIFT"
-        ];
-        action = "ToggleFullScreen";
-      }
-      {
-        key = "B";
+        key = "L";
         mods = [
           "CTRL"
           "SHIFT"
         ];
-        action = # lua
-          ''ActivateKeyTable({ name = "tmux" })'';
+        action = "ShowDebugOverlay";
       }
-    ];
-    wunkus.presets.programs.wezywez.keyTables = {
-      tmux = [
-        {
-          key = "c";
-          action = ''SpawnTab("CurrentPaneDomain")'';
-        }
+    ]
+    ++ lib.optional cfg.enableTmuxBinds {
+      key = "B";
+      mods = [
+        "CTRL"
+        "SHIFT"
       ];
+      action = "ActivateKeyTable{name = 'tmux'}";
     };
+    wunkus.presets.programs.wezywez.keyTables = lib.mkIf cfg.enableTmuxBinds (
+      import ./wezywez/tmux-tables.nix lib
+    );
     programs.wezterm = {
       enable = mkDefault true;
       extraConfig =
         lib.optionalString (!config.wunkus.presets.themes.stylish.enable) ''
-          local wezterm = require("wezterm")
+          local wezterm = require"wezterm"
           local config = wezterm.config_builder()
           config.color_scheme = "carbonfox"
-          config.font = wezterm.font_with_fallback({ "${cfg.font.name}", "Noto Color Emoji" })
-          config.window_frame =
-          	{ font = wezterm.font({ family = "${cfg.font.name}", weight = "Bold" }) }
+          config.font = wezterm.font_with_fallback{ "${cfg.font.name}", "Noto Color Emoji" }
+          config.window_frame = { font = wezterm.font{ family = "${cfg.font.name}", weight = "Bold" } }
           config.font_size = ${toString cfg.font.size}
         ''
         + ''
