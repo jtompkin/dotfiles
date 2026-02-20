@@ -11,6 +11,7 @@
     presets = {
       programs = {
         meantToFly.enable = true;
+        wezywez.enable = true;
         zshDiy.enable = true;
         neovim = {
           dist = "mini";
