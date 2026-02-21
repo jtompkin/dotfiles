@@ -23,7 +23,6 @@
     zsh = {
       enable = true;
       shellAliases = {
-        hm = "home-manager";
         cat = "bat --paging=never";
         ls = "ls --color=tty --group-directories-first";
         l = "ls -lAhpv";

@@ -11,11 +11,11 @@ let
   # TODO: remove once updated in nixpkgs
   zsh-completions-git = pkgs.zsh-completions.overrideAttrs (
     _: prevAttrs: {
-      version = "2025-12-27";
+      version = "2026-02-18";
       src = pkgs.fetchFromGitHub {
         inherit (prevAttrs.src) owner repo;
-        rev = "2733ff9818686886352f581620d1ee3b9c8c8072";
-        hash = "sha256-Bn+x/NS3N4wxP6mYa+jDAxAthaFck8eUndJb4QgnlG0=";
+        rev = "4c84ebad534bdac3d2061db69082960c50856538";
+        hash = "sha256-gSvuBYxe+L6ZdAViz4xyTkCGBKH1872bFdvBEAQYZKQ=";
       };
     }
   );
@@ -23,6 +23,11 @@ in
 {
   options.wunkus.presets.programs.zshDiy = {
     enable = lib.mkEnableOption "zsh DIY plugin management";
+    termtitle = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = "Set a custom terminal title";
+    };
   };
   config = lib.mkIf cfg.enable {
     wunkus.presets.programs.zim.enable = lib.mkForce false;
@@ -41,6 +46,7 @@ in
           searchUpKey = [ "^K" ];
           searchDownKey = [ "^J" ];
         };
+        setOptions = [ "NO_CLOBBER" ];
         enableCompletion = false;
         autosuggestion.enable = mkDefault true;
         syntaxHighlighting.enable = mkDefault true;
@@ -83,19 +89,16 @@ in
             }
           ];
           globalAbbreviations = {
-            H = "--help 2>&1 | bat --language=help --style=plain";
+            "--H" = "--help 2>&1 | bat --language=help --style=plain";
           };
         };
         initContent = lib.mkMerge [
-          (lib.mkBefore ''
-            fpath+=(
-              "${pkgs.just}/share/zsh/site-functions"
-              "${pkgs.uv}/share/zsh/site-functions"
-            )
-          '')
           (lib.mkIf config.programs.zsh.historySubstringSearch.enable ''
             bindkey -M vicmd 'k' history-substring-search-up
             bindkey -M vicmd 'j' history-substring-search-down
+          '')
+          (lib.mkIf (cfg.termtitle != null) ''
+            zstyle ':zim:termtitle' format '${cfg.termtitle}'
           '')
           ''
             bindkey '^L' vi-forward-char
@@ -105,22 +108,19 @@ in
           [
             {
               name = "zsh-vi-mode";
-              src = pkgs.zsh-vi-mode;
-              file = "share/zsh-vi-mode/zsh-vi-mode.plugin.zsh";
+              src = "${pkgs.zsh-vi-mode}/share/zsh-vi-mode";
             }
             {
-              name = "zimfw-environment";
-              src = zshPlugins.zimfw-environment.package;
+              name = "zsh-completions";
+              src = "${zsh-completions-git}/share/zsh/site-functions";
             }
+          ]
+          (lib.mkIf (cfg.termtitle != null) [
             {
               name = "zimfw-termtitle";
               src = zshPlugins.zimfw-termtitle.package;
             }
-            {
-              name = "zsh-completions";
-              src = zsh-completions-git;
-            }
-          ]
+          ])
           (lib.mkAfter [
             {
               name = "zimfw-completion";
