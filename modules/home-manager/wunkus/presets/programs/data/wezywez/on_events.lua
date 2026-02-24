@@ -1,4 +1,3 @@
--- Must require("wezterm") before loading this file
 wezterm.on("update-status", function(window)
 	window:set_right_status(wezterm.format({
 		{ Text = " Key Table: " .. (window:active_key_table() or "default") .. " " },

@@ -47,7 +47,8 @@ in
           searchDownKey = [ "^J" ];
         };
         setOptions = [ "NO_CLOBBER" ];
-        enableCompletion = false;
+        # Home-manager ZSH plugin module sets this with mkDefault
+        enableCompletion = lib.mkOverride 999 false;
         autosuggestion.enable = mkDefault true;
         syntaxHighlighting.enable = mkDefault true;
         zsh-abbr = {
@@ -86,6 +87,7 @@ in
               "nix s" = "nix shell";
               "nix r" = "nix repl";
               "nix d" = "nix develop";
+              "nix e" = "nix edit";
             }
           ];
           globalAbbreviations = {
@@ -110,6 +112,8 @@ in
               name = "zsh-vi-mode";
               src = "${pkgs.zsh-vi-mode}/share/zsh-vi-mode";
             }
+          ]
+          [
             {
               name = "zsh-completions";
               src = "${zsh-completions-git}/share/zsh/site-functions";

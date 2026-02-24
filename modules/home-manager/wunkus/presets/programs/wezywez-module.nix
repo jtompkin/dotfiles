@@ -7,6 +7,7 @@
 let
   inherit (lib) mkDefault;
   cfg = config.wunkus.presets.programs.wezywez;
+  cfgStylish = config.wunkus.presets.themes.stylish;
   keybindType =
     { config, ... }:
     {
@@ -44,9 +45,14 @@ let
           internal = true;
           default = {
             inherit (config) key;
-            mods = lib.mkIf (config.mods != [ ]) (builtins.concatStringsSep "|" config.mods);
+            mods = lib.mkIf (config.mods != [ ]) (
+              builtins.concatStringsSep "|" (lib.uniqueStrings config.mods)
+            );
             action = lib.mkLuaInline (
-              if config.rawAction then config.action else "wezterm.action." + config.action
+              if config.rawAction then
+                config.action
+              else
+                builtins.replaceStrings [ "_A." ] [ "wezterm.action." ] ("wezterm.action." + config.action)
             );
           };
         };
@@ -70,6 +76,13 @@ in
       type = lib.types.attrsOf (lib.types.listOf (lib.types.submodule keybindType));
       default = { };
     };
+    colorScheme = lib.mkOption {
+      type = lib.types.str;
+      default = "carbonfox";
+      description = "The color scheme to be used.\nSee: https://wezterm.org/colorschemes/index.html";
+    };
+    enableAudibleBell = lib.mkEnableOption "the audible bell on startup";
+    enableTabBar = lib.mkEnableOption "the tab bar on startup";
     font = lib.mkOption {
       type = lib.hm.types.fontType;
       default = {
@@ -80,51 +93,60 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
-    home.packages = lib.mkIf (!config.wunkus.presets.themes.stylish.enable) [ cfg.font.package ];
-    wunkus.presets.programs.wezywez.keybinds = [
+    home.packages = lib.mkIf (!cfgStylish.enable) [ cfg.font.package ];
+    wunkus.presets.programs.wezywez = lib.mkMerge [
       {
-        key = "P";
-        mods = [
-          "CTRL"
-          "SHIFT"
+        keybinds = [
+          {
+            key = "P";
+            mods = [
+              "CTRL"
+              "SHIFT"
+            ];
+            action = "ActivateCommandPalette";
+          }
+          {
+            key = "L";
+            mods = [
+              "CTRL"
+              "SHIFT"
+            ];
+            action = "ShowDebugOverlay";
+          }
         ];
-        action = "ActivateCommandPalette";
       }
-      {
-        key = "L";
-        mods = [
-          "CTRL"
-          "SHIFT"
-        ];
-        action = "ShowDebugOverlay";
-      }
-    ]
-    ++ lib.optional cfg.enableTmuxBinds {
-      key = "B";
-      mods = [
-        "CTRL"
-        "SHIFT"
-      ];
-      action = "ActivateKeyTable{name = 'tmux'}";
-    };
-    wunkus.presets.programs.wezywez.keyTables = lib.mkIf cfg.enableTmuxBinds (
-      import ./wezywez/tmux-tables.nix lib
-    );
+      (lib.mkIf cfg.enableTmuxBinds {
+        keybinds = lib.singleton {
+          key = "B";
+          mods = [
+            "CTRL"
+            "SHIFT"
+          ];
+          action = "ActivateKeyTable{name = 'tmux'}";
+        };
+        keyTables = import ./wezywez/tmux-tables.nix lib;
+      })
+    ];
     programs.wezterm = {
       enable = mkDefault true;
-      extraConfig =
-        lib.optionalString (!config.wunkus.presets.themes.stylish.enable) ''
-          local wezterm = require"wezterm"
-          local config = wezterm.config_builder()
-          config.color_scheme = "carbonfox"
-          config.font = wezterm.font_with_fallback{ "${cfg.font.name}", "Noto Color Emoji" }
-          config.window_frame = { font = wezterm.font{ family = "${cfg.font.name}", weight = "Bold" } }
-          config.font_size = ${toString cfg.font.size}
+      extraConfig = lib.mkMerge [
+        (lib.mkIf (!cfgStylish.enable) (
+          lib.mkMerge [
+            (lib.mkBefore ''
+              local wezterm = require"wezterm"
+              local config = wezterm.config_builder()
+              config.color_scheme = "${cfg.colorScheme}"
+              config.font = wezterm.font_with_fallback{ "${cfg.font.name}", "Noto Color Emoji" }
+              config.window_frame = { font = wezterm.font{ family = "${cfg.font.name}", weight = "Bold" } }
+              config.font_size = ${toString cfg.font.size}
+            '')
+            (lib.mkAfter "return config\n")
+          ]
+        ))
         ''
-        + ''
-          config.audible_bell = "Disabled"
+          config.audible_bell = "${if cfg.enableAudibleBell then "SystemBeep" else "Disabled"}"
           config.command_palette_font_size = config.font_size
-          config.enable_tab_bar = false
+          config.enable_tab_bar = ${if cfg.enableTabBar then "true" else "false"}
           config.disable_default_key_bindings = ${if cfg.enableDefaultBinds then "false" else "true"}
           config.keys = ${lib.generators.toLua { } (map (bind: bind.finalBind) cfg.keybinds)}
           config.key_tables = ${
@@ -132,11 +154,11 @@ in
               builtins.mapAttrs (table: binds: map (bind: bind.finalBind) binds) cfg.keyTables
             )
           }
+          ${lib.concatMapStrings (
+            f: "-- START: ${baseNameOf f}\n" + lib.readFile f + "-- END: ${baseNameOf f}\n"
+          ) (config.lib.dotfiles.listLuaFiles ./data/wezywez)}
         ''
-        + lib.concatMapStrings (
-          f: "-- START: ${baseNameOf f}\n" + lib.readFile f + "-- END: ${baseNameOf f}\n"
-        ) (config.lib.dotfiles.listLuaFiles ./data/wezywez)
-        + lib.optionalString (!config.wunkus.presets.themes.stylish.enable) "return config\n";
+      ];
     };
   };
 }

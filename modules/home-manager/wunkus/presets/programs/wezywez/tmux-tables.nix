@@ -79,7 +79,7 @@ lib: {
         "CTRL"
         "SHIFT"
       ];
-      action = "Multiple{wezterm.action.SendKey{key = 'B', mods = 'CTRL|SHIFT'}, wezterm.action.PopKeyTable}";
+      action = "Multiple{_A.SendKey{key = 'B', mods = 'CTRL|SHIFT'}, _A.PopKeyTable}";
     }
   ]
   ++ map (num: {
