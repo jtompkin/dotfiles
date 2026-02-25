@@ -23,6 +23,7 @@ in
     ];
     xdg.enable = mkDefault true;
     wunkus.presets.programs.suckmore.enable = mkDefault true;
+    wunkus.presets.programs.wezywez.enable = mkDefault true;
     programs = {
       mpv.enable = mkDefault true;
     };

@@ -88,7 +88,7 @@ in
       default = {
         package = pkgs.nerd-fonts.iosevka;
         name = "Iosevka Nerd Font";
-        size = 20;
+        size = 16;
       };
     };
   };
@@ -113,6 +113,14 @@ in
             ];
             action = "ShowDebugOverlay";
           }
+          {
+            key = "F";
+            mods = [
+              "CTRL"
+              "SHIFT"
+            ];
+            action = "ToggleFullScreen";
+          }
         ];
       }
       (lib.mkIf cfg.enableTmuxBinds {
@@ -133,7 +141,6 @@ in
         (lib.mkIf (!cfgStylish.enable) (
           lib.mkMerge [
             (lib.mkBefore ''
-              local wezterm = require"wezterm"
               local config = wezterm.config_builder()
               config.color_scheme = "${cfg.colorScheme}"
               config.font = wezterm.font_with_fallback{ "${cfg.font.name}", "Noto Color Emoji" }
