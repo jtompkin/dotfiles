@@ -37,9 +37,9 @@ in
           "wheel"
           "networkmanager"
         ];
-        hashedPasswordFile =
-          lib.mkIf cfg.passwords.enable
-            config.age.secrets.${cfg.passwords.secretName}.path;
+        hashedPasswordFile = lib.mkIf cfg.passwords.enable (
+          mkDefault config.age.secrets.${cfg.passwords.secretName}.path
+        );
       };
     };
   };

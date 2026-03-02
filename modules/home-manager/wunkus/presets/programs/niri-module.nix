@@ -100,7 +100,7 @@ in
                       "ipc"
                       "call"
                     ]
-                    ++ (if builtins.isList command then command else lib.splitString " " command);
+                    ++ lib.splitString " " command;
                 in
                 {
                   "Mod+Shift+Slash".action.show-hotkey-overlay = [ ];

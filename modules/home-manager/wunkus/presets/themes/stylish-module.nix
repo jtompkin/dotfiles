@@ -16,7 +16,11 @@ in
     stylix = {
       enable = mkDefault true;
       base16Scheme = mkDefault "${pkgs.vimPlugins.nightfox-nvim}/extra/carbonfox/base16.yaml";
-      image = ./data/stylish/kurzgesagt_galaxy_01.png;
+      image = pkgs.fetchurl {
+        name = "mountain_peak_nighttime.jpg";
+        url = "https://unsplash.com/photos/a0TJ3hy-UD8/download?force=true&w=2400";
+        hash = "sha256-F3/wWrIGnSPARNaQ0nB6y+TgvTlW+Dh6KH1ak5BuBe8=";
+      };
       fonts = {
         monospace = {
           name = mkDefault "Iosevka Nerd Font";
