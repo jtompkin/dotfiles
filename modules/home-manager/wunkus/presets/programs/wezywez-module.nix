@@ -95,7 +95,7 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = lib.mkIf (!cfgStylish.enable) [ cfg.font.package ];
     wunkus.presets.programs.wezywez = lib.mkMerge [
-      {
+      (lib.mkIf (!cfg.enableDefaultBinds) {
         keybinds = [
           {
             key = "P";
@@ -138,7 +138,7 @@ in
             action = "PasteFrom'Clipboard'";
           }
         ];
-      }
+      })
       (lib.mkIf cfg.enableTmuxBinds {
         keybinds = lib.singleton {
           key = "B";
