@@ -121,6 +121,22 @@ in
             ];
             action = "ToggleFullScreen";
           }
+          {
+            key = "C";
+            mods = [
+              "CTRL"
+              "SHIFT"
+            ];
+            action = "CopyTo'Clipboard'";
+          }
+          {
+            key = "V";
+            mods = [
+              "CTRL"
+              "SHIFT"
+            ];
+            action = "PasteFrom'Clipboard'";
+          }
         ];
       }
       (lib.mkIf cfg.enableTmuxBinds {
