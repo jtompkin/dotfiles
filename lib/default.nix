@@ -176,6 +176,7 @@ rec {
         appTypeToApps = {
           terminal = [
             "kitty"
+            "wezterm"
             "alacritty"
             "foot"
           ];

@@ -62,6 +62,14 @@ lib: {
       action = "ShowLauncher";
     }
     {
+      key = "[";
+      action = "ActivateCopyMode";
+    }
+    {
+      key = " ";
+      action = "QuickSelect";
+    }
+    {
       key = "r";
       action = "ActivateKeyTable{name = 'tmux_repeat', one_shot = false}";
     }
@@ -79,7 +87,7 @@ lib: {
         "CTRL"
         "SHIFT"
       ];
-      action = "Multiple{_A.SendKey{key = 'B', mods = 'CTRL|SHIFT'}, _A.PopKeyTable}";
+      action = "Multiple{wezterm.action.SendKey{key = 'B', mods = 'CTRL|SHIFT'}, wezterm.action.PopKeyTable}";
     }
   ]
   ++ map (num: {

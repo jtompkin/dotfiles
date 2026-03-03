@@ -49,10 +49,7 @@ let
               builtins.concatStringsSep "|" (lib.uniqueStrings config.mods)
             );
             action = lib.mkLuaInline (
-              if config.rawAction then
-                config.action
-              else
-                builtins.replaceStrings [ "_A." ] [ "wezterm.action." ] ("wezterm.action." + config.action)
+              if config.rawAction then config.action else "wezterm.action." + config.action
             );
           };
         };

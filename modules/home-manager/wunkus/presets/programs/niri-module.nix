@@ -32,6 +32,7 @@ in
                 alacritty = config.programs.alacritty.package;
                 foot = config.programs.foot.package;
                 kitty = config.programs.kitty.package;
+                wezterm = config.programs.wezterm.package;
               }
               .${cfg.defaultApps.terminal.name};
             fileManager.package =
