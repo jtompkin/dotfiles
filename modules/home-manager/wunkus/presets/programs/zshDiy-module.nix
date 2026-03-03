@@ -32,10 +32,8 @@ in
   config = lib.mkIf cfg.enable {
     wunkus.presets.programs.zim.enable = lib.mkForce false;
     home.sessionVariables = {
-      EZA_COLORS = "da=1;34:gm=1;34:Su=1;34";
       ZVM_LAZY_KEYBINDINGS = "false";
       ZVM_INIT_MODE = "sourcing";
-      ZVM_VI_SURROUND_BINDKEY = "s-prefix";
     };
     programs = {
       zsh = {
@@ -88,6 +86,9 @@ in
               "nix r" = "nix repl";
               "nix d" = "nix develop";
               "nix e" = "nix edit";
+              s = "sudo";
+              # https://github.com/olets/zsh-abbr/issues/84#issuecomment-3893784807
+              "sudo " = "sudo \\041\\041";
             }
           ];
           globalAbbreviations = {
@@ -112,8 +113,6 @@ in
               name = "zsh-vi-mode";
               src = "${pkgs.zsh-vi-mode}/share/zsh-vi-mode";
             }
-          ]
-          [
             {
               name = "zsh-completions";
               src = "${zsh-completions-git}/share/zsh/site-functions";
