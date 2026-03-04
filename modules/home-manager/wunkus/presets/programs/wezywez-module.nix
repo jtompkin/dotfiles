@@ -137,14 +137,16 @@ in
         ];
       })
       (lib.mkIf cfg.enableTmuxBinds {
-        keybinds = lib.singleton {
-          key = "B";
-          mods = [
-            "CTRL"
-            "SHIFT"
-          ];
-          action = "ActivateKeyTable{name = 'tmux'}";
-        };
+        keybinds = [
+          {
+            key = "B";
+            mods = [
+              "CTRL"
+              "SHIFT"
+            ];
+            action = "ActivateKeyTable{name = 'tmux'}";
+          }
+        ];
         keyTables = import ./wezywez/tmux-tables.nix lib;
       })
     ];
