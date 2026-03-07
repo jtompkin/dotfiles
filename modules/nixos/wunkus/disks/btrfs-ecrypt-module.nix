@@ -58,14 +58,14 @@ in
                 size = "100%";
                 content = {
                   type = "luks";
-                  name = "nixcrypt2";
+                  name = "nixcrypt";
                   extraOpenArgs = [ ];
                   settings = {
                     allowDiscards = true;
                   };
                   content = {
                     type = "lvm_pv";
-                    vg = "nixvg2";
+                    vg = "nixvg";
                   };
                 };
               };
@@ -74,7 +74,7 @@ in
         };
       };
       lvm_vg = {
-        nixvg2 = {
+        nixvg = {
           type = "lvm_vg";
           lvs = {
             nix = {

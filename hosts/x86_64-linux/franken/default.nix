@@ -17,12 +17,16 @@
       wsl.enable = true;
       desktop = {
         enable = true;
-        compositors = [ "niri" ];
+        compositors = [
+          "niri"
+        ];
       };
     };
   };
   programs.dconf.enable = true;
   users.mutableUsers = false;
+  # mornix.programs.neuswc.enable = true;
+  # mornix.programs.hevel.enable = true;
 
   environment = {
     pathsToLink = [ "/share/zsh" ];
