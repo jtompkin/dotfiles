@@ -24,6 +24,9 @@ in
       };
     };
     services.openssh.enable = true;
+    services.openssh.settings = {
+      PasswordAuthentication = false;
+    };
     networking.networkmanager.enable = mkDefault true;
     i18n.defaultLocale = "en_US.UTF-8";
   };

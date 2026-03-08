@@ -30,10 +30,13 @@ in
             cp ${
               pkgs.fetchurl {
                 url = "https://st.suckless.org/st.svg";
-                hash = "sha256-2O/kJcgHUIeoujgkS7PSp7eCQe9S5fdlO6MLTyp/LT0=";
+                hash = "sha256-lN3aFEDxhkzooDAsyg13qDg+fukVRnSeonJTyBmnO5E=";
+                downloadToTemp = true;
+                postFetch = ''
+                  sed 's/fill=".*"/fill="#1177aa"/' $downloadedFile > $out
+                '';
               }
-            } "$out/share/icons/hicolor/scalable/apps/st.svg"
-            sed -i 's/fill="#222"/fill="#1177aa"/' "$out/share/icons/hicolor/scalable/apps/st.svg"
+            } $out/share/icons/hicolor/scalable/apps/st.svg
           '';
         })).override
           {

@@ -9,10 +9,10 @@
     profiles = {
       minimal = {
         enable = true;
-        passwords = {
-          enable = true;
-          secretName = "password-01";
-        };
+      };
+      desktop = {
+        enable = true;
+        compositors = [ "shko" ];
       };
       vm.enable = true;
       ephemeral.enable = true;
@@ -28,10 +28,6 @@
 
   console.useXkbConfig = true;
   services.xserver.xkb.options = "caps:swapescape";
-
-  age = {
-    secrets.password-01.file = ../../../secrets/password-01.age;
-  };
 
   system.stateVersion = "25.05";
 }
