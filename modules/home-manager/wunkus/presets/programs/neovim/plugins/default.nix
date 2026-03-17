@@ -76,6 +76,7 @@ let
         ''
           require("conform").setup({
           	formatters_by_ft = {
+          		--EMBED${ifSupported "bash" ''bash = { "shfmt" },''}
           		--EMBED${ifSupported "go" ''go = { "gofmt" },''}
           		--EMBED${ifSupported "just" ''just = { "just", "injected" },''}
           		--EMBED${ifSupported "lua" ''lua = { "stylua" },''}
@@ -512,6 +513,16 @@ let
             "none@completion"
           else
             "${config.wunkus.settings.username}@${nixosConfigName}";
+        bashlsConfig = # lua
+          ''
+            config_and_enable("bashls", {
+            	settings = {
+            		bashIde = {
+            			shellcheckArguments = { "--enable=all" },
+            		},
+            	},
+            })
+          '';
         nixdConfig = # lua
           ''
             config_and_enable("nixd", {
@@ -592,13 +603,14 @@ let
               	vim.lsp.config(server, config)
               	vim.lsp.enable(server)
               end
-              --EMBED${ifSupported "just" ''config_and_enable("just", {})''}
-              --EMBED${ifSupported "python" pythonConfig}
+              --EMBED${ifSupported "bash" bashlsConfig}
               --EMBED${ifSupported "go" ''config_and_enable("gopls", {})''}
-              --EMBED${ifSupported "toml" ''config_and_enable("tombi", {})''}
-              --EMBED${ifSupported "roc" ''config_and_enable("roc_ls", {})''}
-              --EMBED${ifSupported "nix" nixdConfig}
+              --EMBED${ifSupported "just" ''config_and_enable("just", {})''}
               --EMBED${ifSupported "lua" lua_lsConfig}
+              --EMBED${ifSupported "nix" nixdConfig}
+              --EMBED${ifSupported "python" pythonConfig}
+              --EMBED${ifSupported "roc" ''config_and_enable("roc_ls", {})''}
+              --EMBED${ifSupported "toml" ''config_and_enable("tombi", {})''}
             '';
       };
     nvim-surround.config = appendNewline ''require("nvim-surround").setup({})'';

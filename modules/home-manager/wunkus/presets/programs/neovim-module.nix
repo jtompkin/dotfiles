@@ -46,6 +46,7 @@ in
     availableLangs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [
+        "bash"
         "go"
         "just"
         "lua"
@@ -167,31 +168,31 @@ in
     };
     home.packages =
       [ ]
-      ++ lib.optionals (cfg.supportedLangs.go.install) [
+      ++ lib.optionals cfg.supportedLangs.bash.install [
+        pkgs.bash-language-server
+        pkgs.shfmt
+      ]
+      ++ lib.optionals cfg.supportedLangs.go.install [
         pkgs.gopls
         pkgs.go
       ]
-      ++ lib.optionals (cfg.supportedLangs.just.install) [
+      ++ lib.optionals cfg.supportedLangs.just.install [
         pkgs.just
         pkgs.just-lsp
       ]
-      ++ lib.optionals (cfg.supportedLangs.lua.install) [
+      ++ lib.optionals cfg.supportedLangs.lua.install [
         pkgs.lua-language-server
         pkgs.stylua
       ]
-      ++ lib.optionals (cfg.supportedLangs.nix.install) [
+      ++ lib.optionals cfg.supportedLangs.nix.install [
         pkgs.nixd
         pkgs.nixfmt
       ]
-      ++ lib.optionals (cfg.supportedLangs.python.install) [
+      ++ lib.optionals cfg.supportedLangs.python.install [
         pkgs.basedpyright
         pkgs.ruff
       ]
-      ++ lib.optionals (cfg.supportedLangs.roc.install) [
-        pkgs.roc
-      ]
-      ++ lib.optionals (cfg.supportedLangs.toml.install) [
-        pkgs.tombi
-      ];
+      ++ lib.optionals cfg.supportedLangs.roc.install [ pkgs.roc ]
+      ++ lib.optionals cfg.supportedLangs.toml.install [ pkgs.tombi ];
   };
 }
