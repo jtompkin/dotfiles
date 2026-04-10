@@ -515,6 +515,13 @@ let
             "${config.wunkus.settings.username}@${nixosConfigName}";
         bashlsConfig = # lua
           ''
+            vim.filetype.add({
+            	filename = { configure = "configure_script" },
+            })
+            vim.api.nvim_create_autocmd({ "FileType" }, {
+            	pattern = "configure_script",
+            	callback = function(args) vim.treesitter.start(args.buf, "bash") end,
+            })
             config_and_enable("bashls", {
             	settings = {
             		bashIde = {

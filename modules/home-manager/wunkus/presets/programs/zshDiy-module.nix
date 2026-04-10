@@ -81,6 +81,7 @@ in
               "git w" = "git status";
               "git y" = "git switch";
               "git switch c" = "git switch --create";
+              "git l" = "git log";
               n = "nix";
               "nix s" = "nix shell";
               "nix r" = "nix repl";
