@@ -1,5 +1,6 @@
 {
   wunkus = {
+    legacy.enable = true;
     settings = {
       username = "josh";
       system = "x86_64-linux";
