@@ -339,6 +339,7 @@ let
         end, { desc = "Write new session" })
         vim.keymap.set("n", "<leader>sr", MiniSessions.read, { desc = "Read default session" })
         vim.keymap.set("n", "<leader>ps", MiniSessions.select, { desc = "Pick sessions" })
+        vim.keymap.set("n", "<leader>R", MiniSessions.restart, { desc = "Restart neovim" })
       '';
     mini-snippets = {
       dependencies = [ pkgs.vimPlugins.friendly-snippets ];
@@ -530,6 +531,20 @@ let
             	},
             })
           '';
+        emmylua_lsConfig = # lua
+          ''
+            config_and_enable("emmylua_ls", {
+            	settings = {
+            		emmylua = {
+            			runtime = {
+            				version = "LuaJIT",
+            				requirePattern = { "lua/?.lua", "lua/?/init.lua" },
+            			},
+            			workspace = { library = { vim.env.VIMRUNTIME } },
+            		},
+            	},
+            })
+          '';
         nixdConfig = # lua
           ''
             config_and_enable("nixd", {
@@ -551,42 +566,6 @@ let
             				},
             			},
             		},
-            	},
-            })
-          '';
-        lua_lsConfig = # lua
-          ''
-            -- From: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#lua_ls
-            config_and_enable("lua_ls", {
-            	on_init = function(client)
-            		if client.workspace_folders then
-            			local path = client.workspace_folders[1].name
-            			if
-            				path ~= vim.fn.stdpath("config")
-            				and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
-            			then
-            				return
-            			end
-            		end
-            		client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
-            			runtime = {
-            				version = "LuaJIT",
-            				path = {
-            					"lua/?.lua",
-            					"lua/?/init.lua",
-            				},
-            			},
-            			workspace = {
-            				checkThirdParty = false,
-            				ignoreDir = { ".direnv" },
-            				library = {
-            					vim.env.VIMRUNTIME,
-            				},
-            			},
-            		})
-            	end,
-            	settings = {
-            		Lua = {},
             	},
             })
           '';
@@ -613,7 +592,7 @@ let
               --EMBED${ifSupported "bash" bashlsConfig}
               --EMBED${ifSupported "go" ''config_and_enable("gopls", {})''}
               --EMBED${ifSupported "just" ''config_and_enable("just", {})''}
-              --EMBED${ifSupported "lua" lua_lsConfig}
+              --EMBED${ifSupported "lua" emmylua_lsConfig}
               --EMBED${ifSupported "nix" nixdConfig}
               --EMBED${ifSupported "python" pythonConfig}
               --EMBED${ifSupported "roc" ''config_and_enable("roc_ls", {})''}

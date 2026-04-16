@@ -181,7 +181,7 @@ in
         pkgs.just-lsp
       ]
       ++ lib.optionals cfg.supportedLangs.lua.install [
-        pkgs.lua-language-server
+        pkgs.emmylua-ls
         pkgs.stylua
       ]
       ++ lib.optionals cfg.supportedLangs.nix.install [
