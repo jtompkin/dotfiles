@@ -130,6 +130,7 @@ in
           "mini-pairs"
           "mini-statusline"
           "mini-surround"
+          # "mini-tabline"
         ]))
         (lib.mkIf (cfg.dist == "oldschool") (enablePluginList [
           "fzf-lua"
@@ -189,7 +190,7 @@ in
         pkgs.nixfmt
       ]
       ++ lib.optionals cfg.supportedLangs.python.install [
-        pkgs.basedpyright
+        pkgs.ty
         pkgs.ruff
       ]
       ++ lib.optionals cfg.supportedLangs.roc.install [ pkgs.roc ]

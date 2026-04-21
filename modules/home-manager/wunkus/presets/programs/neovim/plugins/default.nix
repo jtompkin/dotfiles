@@ -308,6 +308,7 @@ let
         	},
         })
         vim.keymap.set("n", "<leader>pf", MiniPick.builtin.files, { desc = "Pick from files" })
+        vim.keymap.set("n", "<leader>pb", MiniPick.builtin.buffers, { desc = "Pick from buffers" })
         vim.keymap.set("n", "<leader>pg", MiniPick.builtin.grep_live, { desc = "Pick from grep pattern in files" })
         vim.keymap.set(
         	"n",
@@ -383,6 +384,7 @@ let
         	},
         })
       '';
+    mini-tabline.config = appendNewline ''require("mini.tabline").setup()'';
     neogen.config = # lua
       ''
         local neogen = require("neogen")
@@ -575,7 +577,8 @@ let
             	pattern = { "python" },
             	command = "set fo-=t",
             })
-            config_and_enable("basedpyright", {})
+            config_and_enable("ty", {})
+            config_and_enable("ruff", {})
           '';
       in
       {

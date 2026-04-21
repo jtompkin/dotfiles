@@ -1,7 +1,14 @@
-vim.api.nvim_create_user_command("Zen", function()
-	if vim.o.laststatus > 0 then
-		vim.o.laststatus = 0
-	else
-		vim.o.laststatus = 2
+vim.api.nvim_create_user_command("Zen", function(opts)
+	local val = 0
+	if string.sub(opts.fargs[1] or "", 1, 1) == "d" then
+		val = 2
 	end
-end, { desc = "Toggle zen mode (No statusline)" })
+	vim.o.laststatus = val
+	vim.o.showtabline = val
+end, {
+	desc = "Enable/Disable zen mode (No status-lines)",
+	nargs = "?",
+	complete = function()
+		return { "disable" }
+	end,
+})
