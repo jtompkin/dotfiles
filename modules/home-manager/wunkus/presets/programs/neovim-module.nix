@@ -47,6 +47,7 @@ in
       type = lib.types.listOf lib.types.str;
       default = [
         "bash"
+        "c"
         "go"
         "just"
         "lua"
@@ -172,6 +173,10 @@ in
       ++ lib.optionals cfg.supportedLangs.bash.install [
         pkgs.bash-language-server
         pkgs.shfmt
+      ]
+      ++ lib.optionals cfg.supportedLangs.c.install [
+        pkgs.clang-tools
+        pkgs.bear
       ]
       ++ lib.optionals cfg.supportedLangs.go.install [
         pkgs.gopls

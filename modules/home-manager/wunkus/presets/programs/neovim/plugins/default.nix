@@ -77,6 +77,7 @@ let
           require("conform").setup({
           	formatters_by_ft = {
           		--EMBED${ifSupported "bash" ''bash = { "shfmt" },''}
+          		--EMBED${ifSupported "c" ''c = { "clang-format" },''}
           		--EMBED${ifSupported "go" ''go = { "gofmt" },''}
           		--EMBED${ifSupported "just" ''just = { "just", "injected" },''}
           		--EMBED${ifSupported "lua" ''lua = { "stylua" },''}
@@ -533,6 +534,23 @@ let
             	},
             })
           '';
+        clangdConfig = # lua
+          ''
+            config_and_enable("clangd", {
+            	cmd = { "clangd", "--query-driver=/nix/store/*/bin/g++", "--query-driver=/nix/store/*/bin/gcc" },
+            })
+            vim.g.c_syntax_for_h = true
+            vim.api.nvim_create_autocmd("FileType", {
+            	pattern = "c",
+            	callback = function()
+            		vim.opt_local.tabstop = 2
+            		vim.opt_local.softtabstop = 2
+            		vim.opt_local.shiftwidth = 2
+            		vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+            		vim.wo[0][0].foldmethod = "expr"
+            	end,
+            })
+          '';
         emmylua_lsConfig = # lua
           ''
             config_and_enable("emmylua_ls", {
@@ -593,6 +611,7 @@ let
               	vim.lsp.enable(server)
               end
               --EMBED${ifSupported "bash" bashlsConfig}
+              --EMBED${ifSupported "c" clangdConfig}
               --EMBED${ifSupported "go" ''config_and_enable("gopls", {})''}
               --EMBED${ifSupported "just" ''config_and_enable("just", {})''}
               --EMBED${ifSupported "lua" emmylua_lsConfig}

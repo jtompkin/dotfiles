@@ -1,3 +1,4 @@
+vim.keymap.set("n", "<leader><leader>", ":!", { desc = "Start shell command" })
 vim.keymap.set("n", "<leader>pv", vim.cmd.Explore, { desc = "Return to file exporer." })
 vim.keymap.set(
 	"n",
