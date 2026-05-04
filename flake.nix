@@ -125,7 +125,7 @@
       );
       devShells = lib.dotfiles.forAllSystems (
         system: pkgs: {
-          default = pkgs.mkShell {
+          default = pkgs.mkShellNoCC {
             name = "dotfiles";
             packages = [
               agenix.packages.${system}.default

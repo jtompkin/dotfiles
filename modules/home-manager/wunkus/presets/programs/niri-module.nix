@@ -86,6 +86,7 @@ in
             enable = mkDefault true;
             package = mkDefault pkgs.niri-patched;
             settings = {
+              spawn-at-startup = lib.mkIf cfg.noctalia.enable [ { command = [ "noctalia-shell" ]; } ];
               binds =
                 let
                   genNumberBinds =
@@ -270,7 +271,6 @@ in
             };
             general.avatarImage = ./data/niri/burger_king_cropped.png;
           };
-          systemd.enable = mkDefault true;
         };
       })
     ]

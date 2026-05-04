@@ -402,7 +402,7 @@ let
         vim.keymap.set("n", "<leader>nf", neogen.generate, { desc = "Generate docstring" })
       '';
     neogit = {
-      dependencies = [ pkgs.vimPlugins.diffview-nvim ];
+      dependencies = [ pkgs.vimPlugins.codediff-nvim ];
       config = # lua
         ''
           local neogit = require("neogit")
