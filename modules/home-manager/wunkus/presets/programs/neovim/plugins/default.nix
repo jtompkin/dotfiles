@@ -564,6 +564,24 @@ let
             		},
             	},
             })
+            vim.api.nvim_create_autocmd("FileType", {
+            	pattern = "lua",
+            	callback = function()
+            		vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+            		vim.wo[0][0].foldmethod = "expr"
+            	end,
+            })
+          '';
+        goplsConfig = # lua
+          ''
+            vim.api.nvim_create_autocmd("FileType", {
+            	pattern = "go",
+            	callback = function()
+            		vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+            		vim.wo[0][0].foldmethod = "expr"
+            	end,
+            })
+            config_and_enable("gopls", {})
           '';
         nixdConfig = # lua
           ''
@@ -612,7 +630,7 @@ let
               end
               --EMBED${ifSupported "bash" bashlsConfig}
               --EMBED${ifSupported "c" clangdConfig}
-              --EMBED${ifSupported "go" ''config_and_enable("gopls", {})''}
+              --EMBED${ifSupported "go" goplsConfig}
               --EMBED${ifSupported "just" ''config_and_enable("just", {})''}
               --EMBED${ifSupported "lua" emmylua_lsConfig}
               --EMBED${ifSupported "nix" nixdConfig}

@@ -19,7 +19,7 @@ in
         enable = mkDefault true;
         keyMode = mkDefault "vi";
         clock24 = mkDefault true;
-        terminal = "screen-256color";
+        terminal = "xterm-256color";
         escapeTime = 0;
         shell = lib.mkIf config.programs.zsh.enable (lib.getExe pkgs.zsh);
         extraConfig = lib.mkMerge [
