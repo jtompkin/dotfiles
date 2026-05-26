@@ -27,7 +27,8 @@ in
           ''
             set -g status-position top
             bind-key C-t set status
-            set-option -a terminal-features 'xterm-256color:RGB'
+            set -as terminal-features 'xterm*:hyperlinks'
+            # set-option -a terminal-features 'xterm-256color:RGB'
           ''
           (lib.mkIf (
             !(config.wunkus.presets.themes.stylish.enable || cfg.minimal)

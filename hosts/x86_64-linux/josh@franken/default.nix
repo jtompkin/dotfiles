@@ -12,21 +12,21 @@
     presets = {
       programs = {
         meantToFly.enable = true;
-        wezywez.enable = true;
+        # wezywez.enable = true;
         zshDiy.enable = true;
         neovim = {
           dist = "mini";
           nixosConfigName = "franken";
         };
-        kitty.enable = true;
-        niri = {
-          enable = true;
-          noctalia.enable = true;
-          syncClipboard = true;
-          defaultApps = {
-            terminal.name = "kitty";
-          };
-        };
+        # kitty.enable = true;
+        # niri = {
+        #   enable = true;
+        #   noctalia.enable = true;
+        #   syncClipboard = true;
+        #   defaultApps = {
+        #     terminal.name = "kitty";
+        #   };
+        # };
       };
       themes.stylish.enable = true;
     };

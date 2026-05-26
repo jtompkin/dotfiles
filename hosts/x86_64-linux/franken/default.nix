@@ -15,12 +15,12 @@
         };
       };
       wsl.enable = true;
-      desktop = {
-        enable = true;
-        compositors = [
-          "niri"
-        ];
-      };
+      # desktop = {
+      #   enable = true;
+      #   compositors = [
+      #     "niri"
+      #   ];
+      # };
     };
   };
   programs.dconf.enable = true;
