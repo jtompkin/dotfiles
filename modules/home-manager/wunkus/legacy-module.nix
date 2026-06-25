@@ -17,7 +17,6 @@ in
           withRuby = false;
           withPython3 = false;
         };
-        gtk.gtk4.theme = null;
       })
     ]
   );

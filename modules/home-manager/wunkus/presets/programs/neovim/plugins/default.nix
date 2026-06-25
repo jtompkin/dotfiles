@@ -625,7 +625,7 @@ let
               --EMBED${ifSupported "python" pythonConfig}
               --EMBED${ifSupported "roc" ''config_and_enable("roc_ls", {})''}
               --EMBED${ifSupported "toml" ''config_and_enable("tombi", {})''}
-              --EMBED${ifSupported "vlang" ''config_and_enable("v_analyzer", {})''}
+              --EMBED${ifSupported "v" ''config_and_enable("v_analyzer", {})''}
             '';
       };
     nvim-surround.config = appendNewline ''require("nvim-surround").setup({})'';

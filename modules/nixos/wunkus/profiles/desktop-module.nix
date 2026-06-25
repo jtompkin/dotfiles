@@ -51,7 +51,7 @@ in
       };
       niri = mkIf (lib.elem "niri" cfg.compositors) {
         enable = mkDefault true;
-        package = mkDefault pkgs.niri-patched;
+        package = mkDefault pkgs.niri-unstable;
       };
     };
     mornix.programs = lib.mkMerge [

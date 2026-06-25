@@ -84,7 +84,7 @@ in
         programs = {
           niri = {
             enable = mkDefault true;
-            package = mkDefault pkgs.niri-patched;
+            package = mkDefault pkgs.niri-unstable;
             settings = {
               spawn-at-startup = lib.mkIf cfg.noctalia.enable [ { command = [ "noctalia-shell" ]; } ];
               binds =
@@ -261,6 +261,7 @@ in
             package = null;
           };
         };
+        # TODO: once updated to v5, change to v5 config: https://docs.noctalia.dev/v5/
         programs.noctalia-shell = {
           enable = mkDefault true;
           settings = {
