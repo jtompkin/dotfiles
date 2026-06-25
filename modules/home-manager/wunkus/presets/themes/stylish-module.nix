@@ -17,7 +17,7 @@ in
         mountain-peak-nighttime = pkgs.fetchurl {
           name = "mountain_peak_nighttime.jpg";
           url = "https://unsplash.com/photos/a0TJ3hy-UD8/download?force=true";
-          hash = "sha256-IxglIxt/7FM21GE5ntX0j+CdjRKAW7S3uAkARS46q10=";
+          hash = "sha256-Ut+AqFYnxLjOFFpYpYcj/8oWjUCTYhlVIW6+HMN/bnk=";
         };
         space-shuttle-launch = pkgs.fetchurl {
           name = "space_shuttle_columbia_launch.jpg";
@@ -56,9 +56,13 @@ in
         size = mkDefault 24;
       };
       polarity = "dark";
-      targets = lib.genAttrs [ "neovide" "neovim" "nixvim" "nvf" "vim" ] (target: {
-        enable = !config.wunkus.presets.programs.neovim.enable;
-      });
+      targets =
+        lib.genAttrs [ "neovide" "neovim" "nixvim" "nvf" "vim" ] (target: {
+          enable = !config.wunkus.presets.programs.neovim.enable;
+        })
+        // {
+          niri.enable = false;
+        };
     };
   };
 }

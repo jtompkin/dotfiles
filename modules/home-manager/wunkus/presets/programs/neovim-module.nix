@@ -56,7 +56,7 @@ in
         "python"
         "roc"
         "toml"
-        "vlang"
+        "v"
       ];
       readOnly = true;
       internal = true;
@@ -200,7 +200,6 @@ in
         pkgs.ruff
       ]
       ++ lib.optionals cfg.supportedLangs.roc.install [ pkgs.roc ]
-      ++ lib.optionals cfg.supportedLangs.toml.install [ pkgs.tombi ]
-      ++ lib.optionals cfg.supportedLangs.vlang.install [ config.mornix.programs.vlang.package ];
+      ++ lib.optionals cfg.supportedLangs.toml.install [ pkgs.tombi ];
   };
 }

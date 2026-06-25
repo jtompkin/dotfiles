@@ -86,7 +86,7 @@ let
           		--EMBED${ifSupported "python" ''python = { "ruff_format", "black", stop_after_first = true },''}
           		--EMBED${ifSupported "roc" ''roc = { "roc" },''}
           		--EMBED${ifSupported "toml" ''toml = { "tombi" },''}
-          		--EMBED${ifSupported "vlang" ''v = { lsp_format = "prefer" },''}
+          		--EMBED${ifSupported "v" ''v = { lsp_format = "prefer" },''}
           		["_"] = { "trim_whitespace" },
           	},
           	default_format_opts = {
@@ -597,12 +597,6 @@ let
             config_and_enable("ty", {})
             config_and_enable("ruff", {})
           '';
-        vlangConfig = # lua
-          ''
-            config_and_enable("v_analyzer", {
-            	cmd = { vim.fs.normalize("~/.config/v-analyzer/bin/v-analyzer") },
-            })
-          '';
       in
       {
         # I think I do this to load after completion? Don't know if that matters
@@ -612,7 +606,7 @@ let
             # lua
             ''
               vim.api.nvim_create_autocmd({ "FileType" }, {
-              	pattern = { "go", "lua", "c", "nix", "v" },
+              	pattern = { "go", "lua", "c", "v" },
               	callback = function()
               		vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
               		vim.wo[0][0].foldmethod = "expr"
@@ -631,7 +625,7 @@ let
               --EMBED${ifSupported "python" pythonConfig}
               --EMBED${ifSupported "roc" ''config_and_enable("roc_ls", {})''}
               --EMBED${ifSupported "toml" ''config_and_enable("tombi", {})''}
-              --EMBED${ifSupported "vlang" vlangConfig}
+              --EMBED${ifSupported "vlang" ''config_and_enable("v_analyzer", {})''}
             '';
       };
     nvim-surround.config = appendNewline ''require("nvim-surround").setup({})'';

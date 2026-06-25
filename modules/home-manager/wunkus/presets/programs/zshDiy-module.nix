@@ -8,17 +8,6 @@ let
   inherit (lib) mkDefault;
   inherit (config.mornix.programs) zshPlugins;
   cfg = config.wunkus.presets.programs.zshDiy;
-  # TODO: remove once updated in nixpkgs
-  zsh-completions-git = pkgs.zsh-completions.overrideAttrs (
-    _: prevAttrs: {
-      version = "2026-04-28";
-      src = pkgs.fetchFromGitHub {
-        inherit (prevAttrs.src) owner repo;
-        rev = "d3578edb5f2728c2b3c8d82501ca81d3e0ab575e";
-        hash = "sha256-DxuMfSUiOocPZRVf2XNVcKoZLPac1gsvEoC6SXCObmM=";
-      };
-    }
-  );
 in
 {
   options.wunkus.presets.programs.zshDiy = {
@@ -116,7 +105,7 @@ in
             }
             {
               name = "zsh-completions";
-              src = "${zsh-completions-git}/share/zsh/site-functions";
+              src = "${pkgs.zsh-completions}/share/zsh/site-functions";
             }
           ]
           (lib.mkIf (cfg.termtitle != null) [
