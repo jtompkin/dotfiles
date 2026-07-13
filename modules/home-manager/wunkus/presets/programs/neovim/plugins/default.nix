@@ -594,8 +594,19 @@ let
             	pattern = { "python" },
             	command = "set fo-=t",
             })
-            config_and_enable("ty", {})
-            config_and_enable("ruff", {})
+            config_and_enable("basedpyright", {
+            	handlers = {
+            		["$/progress"] = function(err, result, ctx)
+            			-- Only notify once
+            			-- if not vim.g.basedpyright_notified then
+            			-- 	vim.lsp.handlers["$/progress"](err, result, ctx)
+            			-- 	vim.g.basedpyright_notified = true
+            			-- end
+            		end,
+            	},
+            })
+            -- config_and_enable("ty", {})
+            -- config_and_enable("ruff", {})
           '';
       in
       {

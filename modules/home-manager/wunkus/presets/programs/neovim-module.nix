@@ -196,8 +196,9 @@ in
         pkgs.nixfmt
       ]
       ++ lib.optionals cfg.supportedLangs.python.install [
-        pkgs.ty
-        pkgs.ruff
+        # pkgs.ty
+        # pkgs.ruff
+        pkgs.basedpyright
       ]
       ++ lib.optionals cfg.supportedLangs.roc.install [ pkgs.roc ]
       ++ lib.optionals cfg.supportedLangs.toml.install [ pkgs.tombi ];
