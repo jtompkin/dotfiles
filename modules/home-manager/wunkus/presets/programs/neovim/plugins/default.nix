@@ -686,7 +686,10 @@ let
   pluginConfigType = {
     options = {
       type = lib.mkOption {
-        type = lib.types.enum [ "lua" ];
+        type = lib.types.enum [
+          "lua"
+          "viml"
+        ];
         description = "Language used in config";
         default = "lua";
       };

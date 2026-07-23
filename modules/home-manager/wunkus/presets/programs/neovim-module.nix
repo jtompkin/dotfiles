@@ -49,6 +49,7 @@ in
         "bash"
         "c"
         "go"
+        "hare"
         "just"
         "lua"
         "markdown"
@@ -104,18 +105,34 @@ in
             inherit (cfg) supportedLangs;
           };
         })
-        (lib.mkIf (cfg.dist != "none") (enablePluginList [
-          "cellular-automaton-nvim"
-          "conform-nvim"
-          "neogit"
-          "nightfox-nvim"
-          "nvim-treesitter"
-          "nvim-treesitter-context"
-          "nvim-lspconfig"
-          "blink-cmp"
-          "render-markdown-nvim"
-          "markdown-preview-nvim"
-        ]))
+        (lib.mkIf (cfg.dist != "none") (
+          enablePluginList [
+            "cellular-automaton-nvim"
+            "conform-nvim"
+            "neogit"
+            "nightfox-nvim"
+            "nvim-treesitter"
+            "nvim-treesitter-context"
+            "nvim-lspconfig"
+            "blink-cmp"
+            "render-markdown-nvim"
+            "markdown-preview-nvim"
+          ]
+          // lib.optionalAttrs cfg.supportedLangs.hare.enable {
+            vim-haredoc = {
+              enable = mkDefault true;
+              config = {
+                type = "viml";
+                plugin = pkgs.fetchFromSourcehut {
+                  owner = "~torresjrjr";
+                  repo = "vim-haredoc";
+                  rev = "b931bd13c9ab7840006c94e45bf122a97090a214";
+                  hash = "sha256-twJVOXb/fUaQIwtwdg4tNu8MFISohhl4+nl78qg/FCY=";
+                };
+              };
+            };
+          }
+        ))
         (lib.mkIf (cfg.dist == "mini") (enablePluginList [
           "mini-ai"
           "mini-clue"
