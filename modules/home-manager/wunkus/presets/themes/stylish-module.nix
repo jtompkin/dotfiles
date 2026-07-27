@@ -33,6 +33,7 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
+    home.pointerCursor.enable = mkDefault true;
     stylix = {
       enable = mkDefault true;
       base16Scheme = mkDefault "${pkgs.vimPlugins.nightfox-nvim}/extra/carbonfox/base16.yaml";

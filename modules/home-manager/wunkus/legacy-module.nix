@@ -1,18 +1,20 @@
 { lib, config, ... }:
 let
   cfg = config.wunkus.legacy;
+  svIsEnabled = sv: cfg.${sv}.enable;
 in
 {
   options.wunkus.legacy = {
     enable = lib.mkEnableOption "configuration required to suppress legacy config warnings";
-    enable2605 = lib.mkOption {
+    "26.05".enable = lib.mkOption {
       type = lib.types.bool;
       default = cfg.enable;
+      description = "stateVersion 26.05";
     };
   };
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
-      (lib.mkIf cfg.enable2605 {
+      (lib.mkIf (svIsEnabled "26.05") {
         programs.neovim = {
           withRuby = false;
           withPython3 = false;

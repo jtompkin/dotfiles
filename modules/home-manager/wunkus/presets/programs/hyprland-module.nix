@@ -107,6 +107,7 @@ in
     };
     wayland.windowManager.hyprland = {
       enable = mkDefault true;
+      configType = "hyprlang";
       systemd.enable = true;
       package = mkDefault null;
       settings = {
