@@ -387,6 +387,7 @@ let
         })
       '';
     mini-tabline.config = appendNewline ''require("mini.tabline").setup()'';
+    mini-visits.config = ''require("mini.visits").setup()'';
     neogen.config = # lua
       ''
         local neogen = require("neogen")
@@ -624,19 +625,19 @@ let
               	end,
               })
               local function config_and_enable(server, config)
-              	vim.lsp.config(server, config)
+              	vim.lsp.config(server, config or {})
               	vim.lsp.enable(server)
               end
               --EMBED${ifSupported "bash" bashlsConfig}
               --EMBED${ifSupported "c" clangdConfig}
-              --EMBED${ifSupported "go" ''config_and_enable("gopls", {})''}
-              --EMBED${ifSupported "just" ''config_and_enable("just", {})''}
+              --EMBED${ifSupported "go" ''config_and_enable("gopls")''}
+              --EMBED${ifSupported "just" ''config_and_enable("just")''}
               --EMBED${ifSupported "lua" emmylua_lsConfig}
               --EMBED${ifSupported "nix" nixdConfig}
               --EMBED${ifSupported "python" pythonConfig}
-              --EMBED${ifSupported "roc" ''config_and_enable("roc_ls", {})''}
-              --EMBED${ifSupported "toml" ''config_and_enable("tombi", {})''}
-              --EMBED${ifSupported "v" ''config_and_enable("v_analyzer", {})''}
+              --EMBED${ifSupported "roc" ''config_and_enable("roc_ls")''}
+              --EMBED${ifSupported "toml" ''config_and_enable("tombi")''}
+              --EMBED${ifSupported "v" ''config_and_enable("v_analyzer")''}
             '';
       };
     nvim-surround.config = appendNewline ''require("nvim-surround").setup({})'';

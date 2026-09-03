@@ -86,10 +86,14 @@ in
           };
         };
         initContent = lib.mkMerge [
-          (lib.mkIf config.programs.zsh.historySubstringSearch.enable ''
-            bindkey -M vicmd 'k' history-substring-search-up
-            bindkey -M vicmd 'j' history-substring-search-down
-          '')
+          (lib.mkIf config.programs.zsh.historySubstringSearch.enable (
+            # Load with (after) home-manager config
+            # https://github.com/nix-community/home-manager/blob/master/modules/programs/zsh/history.nix
+            lib.mkOrder 1251 ''
+              bindkey -M vicmd 'k' history-substring-search-up
+              bindkey -M vicmd 'j' history-substring-search-down
+            ''
+          ))
           (lib.mkIf (cfg.termtitle != null) ''
             zstyle ':zim:termtitle' format '${cfg.termtitle}'
           '')

@@ -149,6 +149,7 @@ in
           "mini-pairs"
           "mini-statusline"
           "mini-surround"
+          "mini-visits"
           # "mini-tabline"
         ]))
         (lib.mkIf (cfg.dist == "oldschool") (enablePluginList [
@@ -214,7 +215,7 @@ in
       ]
       ++ lib.optionals cfg.supportedLangs.python.install [
         # pkgs.ty
-        # pkgs.ruff
+        pkgs.ruff
         pkgs.basedpyright
       ]
       ++ lib.optionals cfg.supportedLangs.roc.install [ pkgs.roc ]
