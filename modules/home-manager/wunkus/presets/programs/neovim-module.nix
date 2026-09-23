@@ -54,10 +54,12 @@ in
         "lua"
         "markdown"
         "nix"
+        "nushell"
         "python"
         "roc"
         "toml"
         "v"
+        "wren"
       ];
       readOnly = true;
       internal = true;
@@ -85,7 +87,11 @@ in
     wunkus.presets.programs.neovim.plugins = {
       enable = mkDefault true;
       pluginMapping = {
-        nvim-treesitter = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
+        nvim-treesitter = pkgs.vimPlugins.nvim-treesitter.withPlugins (
+          _:
+          pkgs.vimPlugins.nvim-treesitter.allGrammars
+          ++ lib.optional cfg.supportedLangs.wren.enable config.mornix.programs.tree-sitter-wren.finalPackage
+        );
       };
       plugins = lib.mkMerge [
         # Give extraData to plugins unconditionally
@@ -213,12 +219,19 @@ in
         pkgs.nixd
         pkgs.nixfmt
       ]
+      ++ lib.optionals cfg.supportedLangs.nushell.install [
+        pkgs.nushell
+        pkgs.nufmt
+      ]
       ++ lib.optionals cfg.supportedLangs.python.install [
         # pkgs.ty
         pkgs.ruff
         pkgs.basedpyright
       ]
       ++ lib.optionals cfg.supportedLangs.roc.install [ pkgs.roc ]
-      ++ lib.optionals cfg.supportedLangs.toml.install [ pkgs.tombi ];
+      ++ lib.optionals cfg.supportedLangs.toml.install [ pkgs.tombi ]
+      ++ lib.optionals cfg.supportedLangs.wren.install [
+        config.mornix.programs.wren-lsp.finalPackage
+      ];
   };
 }

@@ -103,27 +103,6 @@
         inherit (self.nixosModules) lib;
       };
 
-      packages = lib.dotfiles.forAllSystems (
-        system: pkgs: {
-          # WSL fix: https://gist.github.com/mle98/2deb6e0aa1da3aed70a73dad9c29e8f7
-          # niri-patched = niri-flake.packages.${system}.niri-unstable.overrideAttrs {
-          #   patches = [
-          #     (pkgs.writeText "niri-disable-csd.diff" ''
-          #       --- a/src/backend/winit.rs
-          #       +++ b/src/backend/winit.rs
-          #       @@ -38,6 +38,7 @@ impl Winit {
-          #            ) -> Result<Self, winit::Error> {
-          #                let builder = Window::default_attributes()
-          #                    .with_inner_size(LogicalSize::new(1280.0, 800.0))
-          #       +            .with_decorations(false)
-          #                    // .with_resizable(false)
-          #                    .with_title("niri");
-          #                let (backend, winit) = winit::init_from_attributes(builder)?;
-          #     '')
-          #   ];
-          # };
-        }
-      );
       devShells = lib.dotfiles.forAllSystems (
         system: pkgs: {
           default = pkgs.mkShellNoCC {

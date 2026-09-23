@@ -83,6 +83,7 @@ let
           		--EMBED${ifSupported "lua" ''lua = { "stylua" },''}
           		--EMBED${ifSupported "markdown" ''markdown = { "injected", "trim_whitespace" },''}
           		--EMBED${ifSupported "nix" ''nix = { "nixfmt", "injected" },''}
+          		--EMBED${ifSupported "nushell" ''nu = { "nufmt" },''}
           		--EMBED${ifSupported "python" ''python = { "ruff_format", "black", stop_after_first = true },''}
           		--EMBED${ifSupported "roc" ''roc = { "roc" },''}
           		--EMBED${ifSupported "toml" ''toml = { "tombi" },''}
@@ -609,6 +610,17 @@ let
             -- config_and_enable("ty", {})
             -- config_and_enable("ruff", {})
           '';
+        wrenConfig = # lua
+          ''
+            vim.filetype.add({
+            	extension = { wren = "wren" },
+            })
+            config_and_enable("wren_lsp", {
+            	cmd = { "wren-lsp" },
+            	filetypes = { "wren" },
+            	root_markers = { "wren-lsp.json", ".git" },
+            })
+          '';
       in
       {
         # I think I do this to load after completion? Don't know if that matters
@@ -634,10 +646,12 @@ let
               --EMBED${ifSupported "just" ''config_and_enable("just")''}
               --EMBED${ifSupported "lua" emmylua_lsConfig}
               --EMBED${ifSupported "nix" nixdConfig}
+              --EMBED${ifSupported "nushell" ''config_and_enable("nushell")''}
               --EMBED${ifSupported "python" pythonConfig}
               --EMBED${ifSupported "roc" ''config_and_enable("roc_ls")''}
               --EMBED${ifSupported "toml" ''config_and_enable("tombi")''}
               --EMBED${ifSupported "v" ''config_and_enable("v_analyzer")''}
+              --EMBED${ifSupported "wren" wrenConfig}
             '';
       };
     nvim-surround.config = appendNewline ''require("nvim-surround").setup({})'';
