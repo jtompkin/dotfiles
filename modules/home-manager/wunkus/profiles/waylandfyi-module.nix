@@ -65,7 +65,6 @@ in
       };
       swiv.enable = mkDefault true;
       neumenu.enable = mkDefault true;
-      swall.enable = mkDefault true;
       mojito.enable = mkDefault true;
     };
     home.packages = [ cfg.font.package ];
