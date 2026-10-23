@@ -20,31 +20,35 @@ in
   };
   config = lib.mkIf cfg.enable {
     wunkus.presets.programs.zim.enable = lib.mkForce false;
-    home.sessionVariables = {
-      ZVM_LAZY_KEYBINDINGS = "false";
-      ZVM_INIT_MODE = "sourcing";
+    home = {
+      sessionVariables = {
+        ZVM_LAZY_KEYBINDINGS = "false";
+        ZVM_INIT_MODE = "sourcing";
+      };
+      packages = [ pkgs.zsh-patina ];
     };
     programs = {
       zsh = {
         oh-my-zsh.enable = lib.mkForce false;
         defaultKeymap = "viins";
+        setOptions = [ "NO_CLOBBER" ];
         historySubstringSearch = {
           enable = mkDefault true;
           searchUpKey = [ "^K" ];
           searchDownKey = [ "^J" ];
         };
-        setOptions = [ "NO_CLOBBER" ];
-        # Home-manager ZSH plugin module sets this with mkDefault
-        enableCompletion = lib.mkOverride 999 false;
+        # Provided by zimfw-completion
+        enableCompletion = lib.mkForce false;
+        # Provided by zsh-patina
+        syntaxHighlighting.enable = lib.mkForce false;
         autosuggestion.enable = mkDefault true;
-        syntaxHighlighting.enable = mkDefault true;
         zsh-abbr = {
           enable = mkDefault true;
           abbreviations = lib.mkMerge [
             (lib.mkIf config.programs.eza.enable (
               let
                 lsCmd = "eza --group-directories-first";
-                lsLongCmd = "${lsCmd} -lh --git --smart-group";
+                lsLongCmd = "${lsCmd} -lh --git -g --smart-group";
               in
               {
                 ls = lsCmd;
@@ -58,6 +62,9 @@ in
                 "${lsLongCmd} c" = "${lsLongCmd} -schanged";
               }
             ))
+            (lib.mkIf config.programs.fd.enable {
+              fda = "fd -uL";
+            })
             {
               g = "git";
               "git a" = "git add";
@@ -122,6 +129,18 @@ in
             {
               name = "zimfw-completion";
               src = zshPlugins.zimfw-completion.package;
+            }
+            {
+              name = "zsh-patina";
+              src = pkgs.fetchurl {
+                url = "https://raw.githubusercontent.com/michel-kraemer/zsh-patina/refs/tags/${pkgs.zsh-patina.version}/zsh-patina.plugin.zsh";
+                downloadToTemp = true;
+                postFetch = ''
+                  install -Dm644 "$downloadedFile" "$out/zsh-patina.plugin.zsh"
+                '';
+                recursiveHash = true;
+                hash = "sha256-9Y8Wn9CX3bKX6PXtrNm6YdbtF5eumlZjLmcZdGawISw=";
+              };
             }
           ])
         ];
