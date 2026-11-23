@@ -14,19 +14,29 @@ in
     boot.tmp.useTmpfs = mkDefault true;
     wsl = {
       enable = true;
+      useWindowsDriver = mkDefault true;
       defaultUser = mkDefault config.wunkus.settings.username;
       interop.includePath = mkDefault false;
-      docker-desktop.enable = mkDefault true;
+      docker-desktop.enable = mkDefault false;
       extraBin = [
         { src = "/mnt/c/Windows/System32/cmd.exe"; }
         { src = "/mnt/c/Program Files/PowerShell/7/pwsh.exe"; }
         { src = "/mnt/c/Windows/System32/clip.exe"; }
       ];
     };
-    services.openssh.enable = mkDefault true;
-    environment.systemPackages = [
-      pkgs.kmod
-      pkgs.systemd
+    users.users.${config.wunkus.settings.username}.extraGroups = [
+      "video"
     ];
+    services.openssh.enable = mkDefault true;
+    environment = {
+      sessionVariables = {
+        LD_LIBRARY_PATH = [ "/run/opengl-driver/lib" ];
+        GALLIUM_DRIVER = "d3d12";
+      };
+      systemPackages = [
+        pkgs.kmod
+        pkgs.systemd
+      ];
+    };
   };
 }

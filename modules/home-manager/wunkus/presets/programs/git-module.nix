@@ -17,6 +17,7 @@ in
           "Session.vim"
           ".direnv/"
           ".envrc"
+          ".env"
         ];
         settings = {
           user = {
